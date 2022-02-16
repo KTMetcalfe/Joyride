@@ -1,0 +1,7 @@
+{
+    "name": "DBi",
+    "integrations": {
+        "capacitor": {}
+    },
+    "type": "react"
+}
