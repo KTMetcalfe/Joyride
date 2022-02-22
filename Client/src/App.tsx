@@ -34,7 +34,7 @@ const App: React.FC = () => {
     return (
         <IonApp>
             <IonReactRouter>
-                <Route path='/' component={getConnections().length === 0 && false ? Login : Main} />
+                <Route path='/' component={getConnections().length === 0 && true ? Login : Main} />
             </IonReactRouter>
         </IonApp>
     );
