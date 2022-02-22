@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
     appId: 'io.ionic.starter',
-    appName: 'DBi',
+    appName: 'Joyride',
     webDir: 'build',
     bundledWebRuntime: false
 };

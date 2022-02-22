@@ -21,7 +21,7 @@ const Main: React.FC = () => {
     <IonPage ref={pageRef}>
       <IonModal trigger="addConnection" mode='ios' swipeToClose={true} presentingElement={pageRef.current} isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
         <IonToolbar>
-          <IonTitle class='ion-text-center'>Add Connection</IonTitle>
+          <IonTitle class='ion-text-center'>Demo Modal</IonTitle>
           <IonItem slot='end' button onClick={() => setShowModal(false)}></IonItem>
         </IonToolbar>
         <IonGrid>
@@ -72,11 +72,24 @@ const Main: React.FC = () => {
           <IonGrid>
             <IonRow>
               <IonCol>
+                <IonItem lines='none'>
+                  <IonIcon slot='start' icon={tabletLandscapeOutline}></IonIcon>
+                  <IonLabel>Filters</IonLabel>
+                </IonItem>
+                <IonList>
+                  {getTables().map((t) =>
+                    <IonItem button onClick={() => setCurrTable(t)} key={t.name} routerLink={window.location.pathname}>{t.name}</IonItem>
+                  )}
+                </IonList>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
                 <IonAccordionGroup>
                   <IonAccordion value="databases">
                     <IonItem slot="header">
                       <IonIcon slot='start' icon={albumsOutline}></IonIcon>
-                      <IonLabel>Databases</IonLabel>
+                      <IonLabel>Advanced</IonLabel>
                     </IonItem>
                     <IonList slot="content">
                       {getDatabases().map((d) =>
@@ -85,19 +98,6 @@ const Main: React.FC = () => {
                     </IonList>
                   </IonAccordion>
                 </IonAccordionGroup>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <IonItem lines='none'>
-                  <IonIcon slot='start' icon={tabletLandscapeOutline}></IonIcon>
-                  <IonLabel>Tables</IonLabel>
-                </IonItem>
-                <IonList>
-                  {getTables().map((t) =>
-                    <IonItem button onClick={() => setCurrTable(t)} key={t.name} routerLink={window.location.pathname}>{t.name}</IonItem>
-                  )}
-                </IonList>
               </IonCol>
             </IonRow>
           </IonGrid>
@@ -114,7 +114,7 @@ const Main: React.FC = () => {
             <IonRow>
               <IonCol>
                 <IonItem lines='none'>
-                  <IonLabel>Connections</IonLabel>
+                  <IonLabel>Favorites</IonLabel>
                   <IonButton onClick={() => setShowModal(true)}>
                     <IonIcon slot='icon-only' icon={addCircleOutline} />
                   </IonButton>
@@ -131,7 +131,7 @@ const Main: React.FC = () => {
       </IonMenu>
       <IonHeader>
         <IonToolbar>
-          <IonTitle class='ion-text-center'>DBi</IonTitle>
+          <IonTitle class='ion-text-center'>Joyride</IonTitle>
           <IonButtons slot='start'>
             <IonMenuButton menu='start'>
               <IonIcon icon={optionsOutline}></IonIcon>
