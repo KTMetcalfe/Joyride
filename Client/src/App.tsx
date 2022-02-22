@@ -1,6 +1,5 @@
-import { IonAccordion, IonAccordionGroup, IonApp, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonListHeader, IonMenu, IonMenuButton, IonMenuToggle, IonModal, IonPage, IonRoute, IonRouterOutlet, IonRow, IonTab, IonTabBar, IonTabButton, IonTabs, IonText, IonTitle, IonToolbar, setupIonicReact } from '@ionic/react';
-import { accessibilityOutline, addCircleOutline, addOutline, albumsOutline, logIn, optionsOutline, settingsOutline, tabletLandscapeOutline, tabletPortraitOutline } from 'ionicons/icons'
-import React, { FormEventHandler, useRef, useState } from 'react';
+import { IonApp, setupIonicReact } from '@ionic/react';
+import React, {  } from 'react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
