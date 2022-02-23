@@ -19,7 +19,7 @@ const Login: React.FC = () => {
     })
       .then(e => e.json())
       .then(data => JSON.parse(data))
-      .then(result => { if (result.isVerified == true) { setCurrentUser(user!) } })
+      .then(result => { if (result.isVerified === true) { setCurrentUser(user!) } })
       .then(() => { window.location.href = '/' })
   }
 
