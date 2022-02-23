@@ -7,7 +7,7 @@ export const setCurrentUser = async (user: string) => {
         key: 'user',
         value: JSON.stringify(user)
     });
-    console.log(await storage.get({ key: 'user' }));
+    await storage.get({ key: 'user' });
 }
 
 export const getCurrentUser = async () => {

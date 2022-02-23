@@ -25,9 +25,9 @@ class LoginController extends BaseController {
                         throw New Exception('Too many accounts');
                     } else {
                         if (password_verify($pswd, $accArr[0]['pass'])) {
-                            $responseData = json_encode('{isVerified: true}');  
+                            $responseData = json_encode('{"isVerified": true}');  
                         } else {
-                            $responseData = json_encode('{isVerified: false}');  
+                            $responseData = json_encode('{"isVerified": false}');  
                         }
                     }
                 } catch (Error $e) {
