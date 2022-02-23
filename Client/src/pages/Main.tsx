@@ -7,8 +7,7 @@ import StructurePage from './Structure';
 import ContentPage from './Content';
 import QueryPage from './Query';
 
-import { connectionInterface, getConnections, getCurrConnection, getCurrDatabase, getDatabases, getTables, loadConnections, setCurrConnection, setCurrDatabase, setCurrTable } from '../components/vars';
-import { clearStorage, storeConnection } from '../components/StorageService';
+import { clearStorage } from '../components/StorageService';
 
 const Main: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -47,7 +46,7 @@ const Main: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonButton expand='block' onClick={readConnection}>
+                <IonButton expand='block'>
                   <IonIcon slot='icon-only' icon={addCircleOutline} />
                 </IonButton>
               </IonCol>
@@ -77,9 +76,7 @@ const Main: React.FC = () => {
                   <IonLabel>Filters</IonLabel>
                 </IonItem>
                 <IonList>
-                  {getTables().map((t) =>
-                    <IonItem button onClick={() => setCurrTable(t)} key={t.name} routerLink={window.location.pathname}>{t.name}</IonItem>
-                  )}
+
                 </IonList>
               </IonCol>
             </IonRow>
@@ -92,9 +89,7 @@ const Main: React.FC = () => {
                       <IonLabel>Advanced</IonLabel>
                     </IonItem>
                     <IonList slot="content">
-                      {getDatabases().map((d) =>
-                        <IonItem button onClick={() => setCurrDatabase(d)} key={d.name} routerLink={window.location.pathname}>{d.name}</IonItem>
-                      )}
+
                     </IonList>
                   </IonAccordion>
                 </IonAccordionGroup>
@@ -120,9 +115,7 @@ const Main: React.FC = () => {
                   </IonButton>
                 </IonItem>
                 <IonList>
-                  {getConnections().map((c) =>
-                    <IonItem button onClick={() => connect(c)} key={c.name} routerLink={window.location.pathname}>{c.name}</IonItem>
-                  )}
+
                 </IonList>
               </IonCol>
             </IonRow>
@@ -147,50 +140,25 @@ const Main: React.FC = () => {
       <IonContent>
         <IonTabs>
           <IonTabBar slot='bottom'>
-            <IonTabButton tab='structure' href='/structure'>
+            <IonTabButton tab='structure' href='/dashboard/structure'>
               <IonLabel>Structure</IonLabel>
             </IonTabButton>
-            <IonTabButton tab='content' href='/content'>
+            <IonTabButton tab='content' href='/dashboard/content'>
               <IonLabel>Content</IonLabel>
             </IonTabButton>
-            <IonTabButton tab='query' href='/query'>
+            <IonTabButton tab='query' href='/dashboard/query'>
               <IonLabel>Query</IonLabel>
             </IonTabButton>
           </IonTabBar>
           <IonRouterOutlet id='outlet'>
-            <Route path="/structure" component={StructurePage} exact />
-            <Route path="/content" component={ContentPage} exact />
-            <Route path="/query" component={QueryPage} exact />
+            <Route path="/dashboard/structure" component={StructurePage} exact />
+            <Route path="/dashboard/content" component={ContentPage} exact />
+            <Route path="/dashboard/query" component={QueryPage} exact />
           </IonRouterOutlet>
         </IonTabs>
       </IonContent>
     </IonPage>
   )
-}
-
-const connect = (c: connectionInterface) => {
-  setCurrConnection(c);
-  console.log(getCurrDatabase().name);
-}
-
-const readConnection = () => {
-  const name = window.document.getElementById('name') as HTMLInputElement;
-  const ip = window.document.getElementById('ip') as HTMLInputElement;
-  const user = window.document.getElementById('user') as HTMLInputElement;
-  const pswd = window.document.getElementById('pswd') as HTMLInputElement;
-  const ddb = window.document.getElementById('ddb') as HTMLInputElement;
-
-  if (name.value !== '' && ip.value !== '' && user.value !== '' && pswd.value !== '') {
-    storeConnection(
-      name.value,
-      ip.value,
-      user.value,
-      pswd.value,
-      ddb.value
-    );
-
-    return true;
-  } else return false;
 }
 
 export default Main;

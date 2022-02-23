@@ -1,5 +1,5 @@
-import { IonApp, setupIonicReact } from '@ionic/react';
-import React, {  } from 'react';
+import { IonApp, IonSpinner, setupIonicReact } from '@ionic/react';
+import React, { useEffect, useState } from 'react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -26,16 +26,36 @@ import { IonReactRouter } from '@ionic/react-router'
 
 import Main from './pages/Main';
 import Login from './pages/Login';
-import { getConnections } from './components/vars';
+import { getCurrentUser } from './components/StorageService';
 
 setupIonicReact();
 
+const RoutingSystem: React.FC = () => (
+    <IonApp>
+        <IonReactRouter>
+            <Route path='/login' component={Login} />
+            <Route path='/dashboard' component={Main} />
+        </IonReactRouter>
+    </IonApp>
+)
+
 const App: React.FC = () => {
+    const [busy, setBusy] = useState(true);
+
+    useEffect(() => {
+        getCurrentUser().then(u => {
+            if (u) {
+                window.history.replaceState({}, '', '/dashboard');
+            } else {
+                window.history.replaceState({}, '', '/login');
+            }
+            setBusy(false);
+        })
+    })
+
     return (
         <IonApp>
-            <IonReactRouter>
-                <Route path='/' component={getConnections().length === 0 && true ? Login : Main} />
-            </IonReactRouter>
+            {busy ? <IonSpinner /> : <RoutingSystem />}
         </IonApp>
     );
 };

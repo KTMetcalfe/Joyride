@@ -1,6 +1,7 @@
 import { IonPage, IonItem, IonLabel, IonHeader, IonTitle, IonToolbar, IonContent, IonGrid, IonRow, IonCol, IonInput, IonButton, IonButtons, IonIcon, IonList } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
+import { getCurrentUser, setCurrentUser } from "../components/StorageService";
 
 import './Login.css'
 
@@ -37,7 +38,7 @@ const Login: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton expand="block">
+                                <IonButton expand="block" onClick={() => user === undefined ? true : setCurrentUser(user!).then(() => {window.location.href = '/'})}>
                                     <IonIcon slot='icon-only' icon={addCircleOutline} />
                                 </IonButton>
                             </IonCol>

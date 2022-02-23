@@ -1,5 +1,4 @@
 import { IonPage, IonGrid, IonRow, IonCol, IonItem, IonLabel } from "@ionic/react";
-import { getCurrDatabase, getCurrTable } from "../components/vars";
 
 const Structure: React.FC = () => {
     return (
@@ -8,10 +7,10 @@ const Structure: React.FC = () => {
                 <IonRow>
                     <IonCol>
                         <IonItem>
-                            <IonLabel>Table: {getCurrTable().name !== '' ? getCurrTable().name : false}</IonLabel>
+                            <IonLabel>Table:</IonLabel>
                         </IonItem>
                         <IonItem>
-                            <IonLabel>Database: {getCurrDatabase().name !== '' ? getCurrDatabase().name : false}</IonLabel>
+                            <IonLabel>Database:</IonLabel>
                         </IonItem>
                         <IonItem>
                             <IonLabel>Test</IonLabel>
