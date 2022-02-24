@@ -25,37 +25,15 @@ import { Route } from 'react-router';
 import { IonReactRouter } from '@ionic/react-router'
 
 import Main from './pages/Main';
-import Login from './pages/Login';
-import { getCurrentUser } from './components/StorageService';
 
 setupIonicReact();
 
-const RoutingSystem: React.FC = () => (
-    <IonApp>
-        <IonReactRouter>
-            <Route path='/login' component={Login} />
-            <Route path='/dashboard' component={Main} />
-        </IonReactRouter>
-    </IonApp>
-)
-
 const App: React.FC = () => {
-    const [busy, setBusy] = useState(true);
-
-    useEffect(() => {
-        getCurrentUser().then(u => {
-            if (u) {
-                window.history.replaceState({}, '', '/dashboard');
-            } else {
-                window.history.replaceState({}, '', '/login');
-            }
-            setBusy(false);
-        })
-    })
-
     return (
         <IonApp>
-            {busy ? <IonSpinner /> : <RoutingSystem />}
+            <IonReactRouter>
+                <Route path='/' component={Main} />
+            </IonReactRouter>
         </IonApp>
     );
 };

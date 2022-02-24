@@ -1,65 +1,47 @@
-import { IonPage, IonModal, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet } from '@ionic/react';
+import { IonPage, IonModal, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonSpinner } from '@ionic/react';
 import { addCircleOutline, albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline } from 'ionicons/icons';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Route } from 'react-router';
 
 import StructurePage from './Structure';
 import ContentPage from './Content';
 import QueryPage from './Query';
 
-import { clearStorage } from '../components/StorageService';
+import { clearStorage, getCurrentAccount, onLoad, setCurrentAccount } from '../components/StorageService';
+
+import Login from './Login';
+import Signup from './Signup';
 
 const Main: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
-  //const [conns, setConns] = useState<connectionInterface[]>([]);
-  //loadConnections().then(() => setConns(getConnections));
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   const pageRef = useRef();
 
   return (
     <IonPage ref={pageRef}>
-      <IonModal trigger="addConnection" mode='ios' swipeToClose={true} presentingElement={pageRef.current} isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+        <IonModal trigger="addConnection" mode='ios' swipeToClose={true} presentingElement={pageRef.current} isOpen={showLogin} onDidDismiss={() => setShowLogin(false)}>
+          <IonToolbar>
+            <IonTitle class='ion-text-center'>Login</IonTitle>
+            <IonItem slot='end' button onClick={() => setShowLogin(false)}></IonItem>
+          </IonToolbar>
+          <Login />
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonItem onClick={() => setShowSignup(true)}>
+                  <IonLabel>Sign up</IonLabel>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonModal>
+      <IonModal trigger="addConnection" mode='ios' swipeToClose={true} presentingElement={pageRef.current} isOpen={showSignup} onDidDismiss={() => setShowSignup(false)}>
         <IonToolbar>
-          <IonTitle class='ion-text-center'>Demo Modal</IonTitle>
-          <IonItem slot='end' button onClick={() => setShowModal(false)}></IonItem>
+          <IonTitle class='ion-text-center'>Signup</IonTitle>
+          <IonItem slot='end' button onClick={() => setShowSignup(false)}></IonItem>
         </IonToolbar>
-        <IonGrid>
-          <form>
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonInput placeholder='Nickname' id='name' required></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonInput placeholder='Address' id='ip' required></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonInput placeholder='Username' id='user' required></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonInput placeholder='Password' id='pswd' required></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonInput placeholder='Main Database' id='ddb' required></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <IonButton expand='block'>
-                  <IonIcon slot='icon-only' icon={addCircleOutline} />
-                </IonButton>
-              </IonCol>
-            </IonRow>
-          </form>
-          <IonRow>
-            <IonCol>
-              <IonItem button onClick={clearStorage}>
-                <IonLabel>Clear Storage</IonLabel>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+        <Signup />
       </IonModal>
       <IonMenu id='optionsMenu' side='start' contentId='outlet'>
         <IonHeader>
@@ -110,7 +92,10 @@ const Main: React.FC = () => {
               <IonCol>
                 <IonItem lines='none'>
                   <IonLabel>Favorites</IonLabel>
-                  <IonButton onClick={() => setShowModal(true)}>
+                  <IonButton onClick={() => setShowLogin(true)}>
+                    <IonIcon slot='icon-only' icon={addCircleOutline} />
+                  </IonButton>
+                  <IonButton onClick={() => setShowSignup(true)}>
                     <IonIcon slot='icon-only' icon={addCircleOutline} />
                   </IonButton>
                 </IonItem>
@@ -140,20 +125,20 @@ const Main: React.FC = () => {
       <IonContent>
         <IonTabs>
           <IonTabBar slot='bottom'>
-            <IonTabButton tab='structure' href='/dashboard/structure'>
+            <IonTabButton tab='structure' href='/structure'>
               <IonLabel>Structure</IonLabel>
             </IonTabButton>
-            <IonTabButton tab='content' href='/dashboard/content'>
+            <IonTabButton tab='content' href='/content'>
               <IonLabel>Content</IonLabel>
             </IonTabButton>
-            <IonTabButton tab='query' href='/dashboard/query'>
+            <IonTabButton tab='query' href='/query'>
               <IonLabel>Query</IonLabel>
             </IonTabButton>
           </IonTabBar>
           <IonRouterOutlet id='outlet'>
-            <Route path="/dashboard/structure" component={StructurePage} exact />
-            <Route path="/dashboard/content" component={ContentPage} exact />
-            <Route path="/dashboard/query" component={QueryPage} exact />
+            <Route path="/structure" component={StructurePage} exact />
+            <Route path="/content" component={ContentPage} exact />
+            <Route path="/query" component={QueryPage} exact />
           </IonRouterOutlet>
         </IonTabs>
       </IonContent>
@@ -161,4 +146,14 @@ const Main: React.FC = () => {
   )
 }
 
-export default Main;
+const Loader: React.FC = () => {
+  const [busy, setBusy] = useState(true);
+
+  useEffect(() => {
+    onLoad().then(() => setBusy(false))
+  })
+
+  return (busy ? <IonSpinner /> : <Main />)
+}
+
+export default Loader;

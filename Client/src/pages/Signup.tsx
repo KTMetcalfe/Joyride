@@ -1,27 +1,30 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import { setCurrentAccount } from "../components/StorageService";
 
 import './Login.css';
 
-const Login: React.FC = () => {
+const Signup: React.FC = () => {
+  const [email, setEmail] = useState<string>();
   const [user, setUser] = useState<string>();
   const [pswd, setPswd] = useState<string>();
 
-  const verifyLogin = () => {
-    fetch('https://api.kianm.net/index.php/login/verify', {
+  const checkSignup = () => {
+    fetch('https://api.kianm.net/index.php/signup', {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Authorization': 'Basic ' + btoa(user + ':' + pswd)
-      }
+        'Authorization': 'Basic ' + btoa(user + ':' + pswd),
+        'Content-Type': 'application/json'
+      },
+      body: '{"email":"' + email + '"}'
     })
       .then(e => e.json())
       .then(data => JSON.parse(data))
       .then(result => {
-        if (result.isVerified === true) {
-          setCurrentAccount(result.email!, user!, pswd!);
+        if (result.signedUp === true) {
+          setCurrentAccount(email!, user!, pswd!);
         }
       })
   }
@@ -40,6 +43,9 @@ const Login: React.FC = () => {
               <IonCol>
                 <IonList class='login-input'>
                   <IonItem>
+                    <IonInput value={email} placeholder="Email" onIonChange={e => setEmail(e.detail.value!)} />
+                  </IonItem>
+                  <IonItem>
                     <IonInput value={user} placeholder="Username" onIonChange={e => setUser(e.detail.value!)} />
                   </IonItem>
                   <IonItem>
@@ -50,7 +56,7 @@ const Login: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonButton expand="block" onClick={() => { if (user !== undefined && pswd !== undefined) { verifyLogin() } }}>
+                <IonButton expand="block" onClick={() => { if (email !== undefined && user !== undefined && pswd !== undefined) { checkSignup() } }}>
                   <IonIcon slot='icon-only' icon={addCircleOutline} />
                 </IonButton>
               </IonCol>
@@ -62,4 +68,4 @@ const Login: React.FC = () => {
   )
 }
 
-export default Login;
+export default Signup;
