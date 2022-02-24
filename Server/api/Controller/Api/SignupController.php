@@ -1,10 +1,10 @@
 <?php
 require '/joyride/api/Model/AccountModel.php';
-class LoginController extends BaseController {
+class SignupController extends BaseController {
     /**
-     * "/login/verify" Endpoint - Gets a token from a user
+     * "/signup" Endpoint - Gets a token from a user
      */
-    public function verifyAction() {
+    public function signupAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $arrQueryStringParams = $this->getQueryStringParams();
@@ -14,22 +14,16 @@ class LoginController extends BaseController {
                 $user = $_SERVER['PHP_AUTH_USER'];
                 $pswd = $_SERVER['PHP_AUTH_PW'];
 
+                $body = file_get_contents('php://input');
+                $email = json_encode($body)['email'];
+
                 try {
                     $accountModel = new AccountModel();
-    
-                    $accArr = $accountModel->getAccount($user);
 
-                    if (count($accArr) < 1) {
-                        throw New Exception('No account found');
-                    } else if (count($accArr) > 1) {
-                        throw New Exception('Too many accounts');
-                    } else {
-                        if (password_verify($pswd, $accArr[0]['pass'])) {
-                            $responseData = json_encode(sprintf('{"isVerified": true, "email": "%s"}', $accArr[0]['email']));  
-                        } else {
-                            $responseData = json_encode('{"isVerified": false}');  
-                        }
-                    }
+                    $pass = password_hash($pswd, PASSWORD_BCRYPT);
+                    $accArr = $accountModel->addAccount($email, $user, $pass);
+
+                    $responseData = json_encode('{"signedUp": true}');
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                     $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';

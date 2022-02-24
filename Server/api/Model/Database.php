@@ -27,6 +27,15 @@ class Database {
         return false;
     }
 
+    public function execute($query = "", $params = []) {
+        try {
+            $statement = $this->executeStatement($query, $params);
+            $statement->close();
+        } catch (Exception $e) {
+            throw New Exception( $e->getMessage() );
+        }
+    }
+
     private function executeStatement($query = "", $params = []) {
         try {
             $statement = $this->connection->prepare( $query );
