@@ -25,15 +25,23 @@ import { Route } from 'react-router';
 import { IonReactRouter } from '@ionic/react-router'
 
 import Main from './pages/Main';
+import { onLoad } from './components/StorageService';
 
 setupIonicReact();
 
 const App: React.FC = () => {
+    const [busy, setBusy] = useState(true);
+
+    useEffect(() => {
+        onLoad().then(() => setBusy(false))
+    })
+
     return (
         <IonApp>
-            <IonReactRouter>
-                <Route path='/' component={Main} />
-            </IonReactRouter>
+            {busy ? <IonSpinner /> :
+                <IonReactRouter>
+                    <Route path='/' component={Main} />
+                </IonReactRouter>}
         </IonApp>
     );
 };

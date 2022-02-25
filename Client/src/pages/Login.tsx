@@ -6,11 +6,14 @@ import { setCurrentAccount } from "../components/StorageService";
 import './Login.css';
 
 const Login: React.FC = () => {
-  const [user, setUser] = useState<string>();
-  const [pswd, setPswd] = useState<string>();
+  const [user, setUser] = useState<string>('');
+  const [pswd, setPswd] = useState<string>('');
 
-  const verifyLogin = () => {
-    fetch('https://api.kianm.net/index.php/login/verify', {
+  const validateLogin = () => {
+    window.document.getElementById('login-output')!.style.display = "none";
+    window.document.getElementById('loginErr')!.innerHTML = "";
+
+    fetch('https://api.kianm.net/index.php/login/validate', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -18,10 +21,14 @@ const Login: React.FC = () => {
       }
     })
       .then(e => e.json())
-      .then(data => JSON.parse(data))
       .then(result => {
         if (result.isVerified === true) {
           setCurrentAccount(result.email!, user!, pswd!);
+          window.document.getElementById('loginErr')!.innerHTML = "Logged in";
+          window.document.getElementById('login-output')!.style.display = "block";
+        } else {
+          window.document.getElementById('loginErr')!.innerHTML = "Username or password incorrect";
+          window.document.getElementById('login-output')!.style.display = "block";
         }
       })
   }
@@ -50,7 +57,21 @@ const Login: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonButton expand="block" onClick={() => { if (user !== undefined && pswd !== undefined) { verifyLogin() } }}>
+                <IonItem id='login-output'>
+                  <IonLabel id='loginErr' class='ion-text-center'></IonLabel>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+              <IonButton expand="block" onClick={() => {
+                  if (user !== '' && pswd !== '') {
+                    validateLogin()
+                  } else {
+                    window.document.getElementById('login-output')!.style.display = "block";
+                    window.document.getElementById('loginErr')!.innerHTML = "Please enter all information";
+                  }
+                }}>
                   <IonIcon slot='icon-only' icon={addCircleOutline} />
                 </IonButton>
               </IonCol>

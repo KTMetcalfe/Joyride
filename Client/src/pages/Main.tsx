@@ -15,7 +15,7 @@ import Signup from './Signup';
 const Main: React.FC = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-
+  
   const pageRef = useRef();
 
   return (
@@ -146,14 +146,4 @@ const Main: React.FC = () => {
   )
 }
 
-const Loader: React.FC = () => {
-  const [busy, setBusy] = useState(true);
-
-  useEffect(() => {
-    onLoad().then(() => setBusy(false))
-  })
-
-  return (busy ? <IonSpinner /> : <Main />)
-}
-
-export default Loader;
+export default Main;

@@ -2,9 +2,9 @@
 require '/joyride/api/Model/AccountModel.php';
 class LoginController extends BaseController {
     /**
-     * "/login/verify" Endpoint - Gets a token from a user
+     * "/login/validate" Endpoint - Gets a token from a user
      */
-    public function verifyAction() {
+    public function validateAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $arrQueryStringParams = $this->getQueryStringParams();

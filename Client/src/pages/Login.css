@@ -18,7 +18,7 @@
     border-radius: 10px;
 }
 
-#login-output {
+#signup-output, #login-output {
     border-radius: 10px;
     display: none;
 }

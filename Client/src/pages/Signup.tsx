@@ -11,7 +11,7 @@ const Signup: React.FC = () => {
   const [pswd, setPswd] = useState<string>('');
 
   const checkSignup = () => {
-    window.document.getElementById('login-output')!.style.display = "none";
+    window.document.getElementById('signup-output')!.style.display = "none";
     window.document.getElementById('signupErr')!.innerHTML = "";
 
     fetch('https://api.kianm.net/index.php/signup', {
@@ -27,9 +27,11 @@ const Signup: React.FC = () => {
       .then(result => {
         if (result.signedUp === true) {
           setCurrentAccount(email!, user!, pswd!);
+          window.document.getElementById('signupErr')!.innerHTML = "Signed up";
+          window.document.getElementById('signup-output')!.style.display = "block";
         } else if (result.error === "username_taken") {
           window.document.getElementById('signupErr')!.innerHTML = "Username taken";
-          window.document.getElementById('login-output')!.style.display = "block";
+          window.document.getElementById('signup-output')!.style.display = "block";
         }
       })
   }
@@ -61,7 +63,7 @@ const Signup: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonItem id='login-output'>
+                <IonItem id='signup-output'>
                   <IonLabel id='signupErr' class='ion-text-center'></IonLabel>
                 </IonItem>
               </IonCol>
@@ -72,7 +74,7 @@ const Signup: React.FC = () => {
                   if (email !== '' && user !== '' && pswd !== '') {
                     checkSignup()
                   } else {
-                    window.document.getElementById('login-output')!.style.display = "block";
+                    window.document.getElementById('signup-output')!.style.display = "block";
                     window.document.getElementById('signupErr')!.innerHTML = "Please enter all information";
                   }
                 }}>
