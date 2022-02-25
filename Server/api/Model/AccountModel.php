@@ -7,7 +7,7 @@ class AccountModel extends Database {
     }
 
     public function addAccount($email, $user, $pass) {
-        return $this->execute(sprintf("INSERT INTO accounts ('email', 'user', 'pass') VALUES ('%s', '%s', '%s')", $email, $user, $pass));
+        return $this->execute(sprintf("INSERT INTO accounts (email, user, pass) VALUES ('%s', '%s', '%s')", $email, $user, $pass));
     }
 }
 ?>

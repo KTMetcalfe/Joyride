@@ -21,12 +21,12 @@ const Signup: React.FC = () => {
       body: '{"email":"' + email + '"}'
     })
       .then(e => e.json())
-      .then(data => JSON.parse(data))
-      .then(result => {
-        if (result.signedUp === true) {
-          setCurrentAccount(email!, user!, pswd!);
-        }
-      })
+      // .then(data => JSON.parse(data))
+      // .then(result => {
+      //   if (result.signedUp === true) {
+      //     setCurrentAccount(email!, user!, pswd!);
+      //   }
+      // })
   }
 
   return (

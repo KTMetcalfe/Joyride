@@ -19,16 +19,12 @@ class LoginController extends BaseController {
     
                     $accArr = $accountModel->getAccount($user);
 
-                    if (count($accArr) < 1) {
-                        throw New Exception('No account found');
+                    if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+                        $responseData = sprintf('{"isVerified": true, "email": "%s"}', $accArr[0]['email']);  
                     } else if (count($accArr) > 1) {
                         throw New Exception('Too many accounts');
                     } else {
-                        if (password_verify($pswd, $accArr[0]['pass'])) {
-                            $responseData = json_encode(sprintf('{"isVerified": true, "email": "%s"}', $accArr[0]['email']));  
-                        } else {
-                            $responseData = json_encode('{"isVerified": false}');  
-                        }
+                        $responseData = '{"isVerified": false}';
                     }
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
