@@ -1,11 +1,11 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import { setCurrentAccount } from "../components/StorageService";
 
 import './Login.css';
 
-const Login: React.FC = () => {
+const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [user, setUser] = useState<string>('');
   const [pswd, setPswd] = useState<string>('');
 
@@ -26,6 +26,7 @@ const Login: React.FC = () => {
           setCurrentAccount(result.email!, user!, pswd!);
           window.document.getElementById('loginErr')!.innerHTML = "Logged in";
           window.document.getElementById('login-output')!.style.display = "block";
+          onDismiss();
         } else {
           window.document.getElementById('loginErr')!.innerHTML = "Username or password incorrect";
           window.document.getElementById('login-output')!.style.display = "block";
@@ -37,7 +38,10 @@ const Login: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle class='ion-text-center'>Joyride</IonTitle>
+          <IonTitle class='ion-text-center'>Login</IonTitle>
+          <IonButtons slot='end'>
+            <IonButton onClick={() => onDismiss()}>Close</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -64,7 +68,7 @@ const Login: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol>
-              <IonButton expand="block" onClick={() => {
+                <IonButton expand="block" onClick={() => {
                   if (user !== '' && pswd !== '') {
                     validateLogin()
                   } else {

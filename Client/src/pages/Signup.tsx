@@ -1,11 +1,11 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import { setCurrentAccount } from "../components/StorageService";
 
 import './Login.css';
 
-const Signup: React.FC = () => {
+const Signup: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<string>('');
   const [pswd, setPswd] = useState<string>('');
@@ -29,6 +29,7 @@ const Signup: React.FC = () => {
           setCurrentAccount(email!, user!, pswd!);
           window.document.getElementById('signupErr')!.innerHTML = "Signed up";
           window.document.getElementById('signup-output')!.style.display = "block";
+          onDismiss();
         } else if (result.error === "username_taken") {
           window.document.getElementById('signupErr')!.innerHTML = "Username taken";
           window.document.getElementById('signup-output')!.style.display = "block";
@@ -40,7 +41,10 @@ const Signup: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle class='ion-text-center'>Joyride</IonTitle>
+          <IonTitle class='ion-text-center'>Signup</IonTitle>
+          <IonButtons slot='end'>
+            <IonButton onClick={() => onDismiss()}>Close</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>

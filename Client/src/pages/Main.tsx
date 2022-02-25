@@ -1,4 +1,4 @@
-import { IonPage, IonModal, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonSpinner } from '@ionic/react';
+import { IonPage, IonModal, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonSpinner, useIonModal } from '@ionic/react';
 import { addCircleOutline, albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Route } from 'react-router';
@@ -15,34 +15,43 @@ import Signup from './Signup';
 const Main: React.FC = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  
+
   const pageRef = useRef();
+
+  const handlePresentLogin = () => {
+    presentLogin({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: pageRef.current
+    })
+  };
+
+  const handleDismissLogin = () => {
+    dismissLogin();
+  };
+
+  const [presentLogin, dismissLogin] = useIonModal(Login, {
+    onDismiss: handleDismissLogin
+  })
+
+  const handlePresentSignup = () => {
+    presentSignup({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: pageRef.current
+    })
+  };
+
+  const handleDismissSignup = () => {
+    dismissSignup();
+  };
+
+  const [presentSignup, dismissSignup] = useIonModal(Signup, {
+    onDismiss: handleDismissSignup
+  })
 
   return (
     <IonPage ref={pageRef}>
-        <IonModal trigger="addConnection" mode='ios' swipeToClose={true} presentingElement={pageRef.current} isOpen={showLogin} onDidDismiss={() => setShowLogin(false)}>
-          <IonToolbar>
-            <IonTitle class='ion-text-center'>Login</IonTitle>
-            <IonItem slot='end' button onClick={() => setShowLogin(false)}></IonItem>
-          </IonToolbar>
-          <Login />
-          <IonGrid>
-            <IonRow>
-              <IonCol>
-                <IonItem onClick={() => setShowSignup(true)}>
-                  <IonLabel>Sign up</IonLabel>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonModal>
-      <IonModal trigger="addConnection" mode='ios' swipeToClose={true} presentingElement={pageRef.current} isOpen={showSignup} onDidDismiss={() => setShowSignup(false)}>
-        <IonToolbar>
-          <IonTitle class='ion-text-center'>Signup</IonTitle>
-          <IonItem slot='end' button onClick={() => setShowSignup(false)}></IonItem>
-        </IonToolbar>
-        <Signup />
-      </IonModal>
       <IonMenu id='optionsMenu' side='start' contentId='outlet'>
         <IonHeader>
           <IonToolbar>
@@ -92,10 +101,10 @@ const Main: React.FC = () => {
               <IonCol>
                 <IonItem lines='none'>
                   <IonLabel>Favorites</IonLabel>
-                  <IonButton onClick={() => setShowLogin(true)}>
+                  <IonButton onClick={handlePresentLogin}>
                     <IonIcon slot='icon-only' icon={addCircleOutline} />
                   </IonButton>
-                  <IonButton onClick={() => setShowSignup(true)}>
+                  <IonButton onClick={handlePresentSignup}>
                     <IonIcon slot='icon-only' icon={addCircleOutline} />
                   </IonButton>
                 </IonItem>
