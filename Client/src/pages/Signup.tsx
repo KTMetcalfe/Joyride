@@ -5,7 +5,7 @@ import { setCurrentAccount } from "../components/StorageService";
 
 import './Login.css';
 
-const Signup: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
+const Signup: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<string>('');
   const [pswd, setPswd] = useState<string>('');
@@ -43,7 +43,7 @@ const Signup: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         <IonToolbar>
           <IonTitle class='ion-text-center'>Signup</IonTitle>
           <IonButtons slot='end'>
-            <IonButton onClick={() => onDismiss()}>Close</IonButton>
+            <IonButton onClick={onDismiss}>Close</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>

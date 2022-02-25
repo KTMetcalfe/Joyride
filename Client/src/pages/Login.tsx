@@ -1,13 +1,33 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons, useIonModal } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { setCurrentAccount } from "../components/StorageService";
 
 import './Login.css';
+import Signup from "./Signup";
 
 const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
+  const handlePresentSignup = () => {
+    presentSignup({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: pageRef.current
+    })
+  };
+
+  const handleDismissSignup = () => {
+    dismissSignup();
+    onDismiss();
+  };
+
+  const [presentSignup, dismissSignup] = useIonModal(Signup, {
+    onDismiss: handleDismissSignup
+  })
+
   const [user, setUser] = useState<string>('');
   const [pswd, setPswd] = useState<string>('');
+
+  const pageRef = useRef();
 
   const validateLogin = () => {
     window.document.getElementById('login-output')!.style.display = "none";
@@ -35,7 +55,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   }
 
   return (
-    <IonPage>
+    <IonPage ref={pageRef}>
       <IonHeader>
         <IonToolbar>
           <IonTitle class='ion-text-center'>Login</IonTitle>
@@ -78,6 +98,9 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                 }}>
                   <IonIcon slot='icon-only' icon={addCircleOutline} />
                 </IonButton>
+                <IonButtons>
+                  <IonButton onClick={handlePresentSignup}>Signup</IonButton>
+                </IonButtons>
               </IonCol>
             </IonRow>
           </IonGrid>

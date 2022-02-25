@@ -13,9 +13,6 @@ import Login from './Login';
 import Signup from './Signup';
 
 const Main: React.FC = () => {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
-
   const pageRef = useRef();
 
   const handlePresentLogin = () => {
