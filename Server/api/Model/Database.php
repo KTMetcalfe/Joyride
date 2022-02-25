@@ -27,10 +27,12 @@ class Database {
         return false;
     }
 
-    public function execute($query = "", $params = []) {
+    public function insert($query = "", $params = []) {
         try {
             $statement = $this->executeStatement($query, $params);
             $statement->close();
+        } catch (mysqli_sql_exception $e) {
+            throw New mysqli_sql_exception( $e->getMessage(), $e->getCode() );
         } catch (Exception $e) {
             throw New Exception( $e->getMessage() );
         }
@@ -51,6 +53,8 @@ class Database {
             $statement->execute();
 
             return $statement;
+        } catch (mysqli_sql_exception $e) {
+            throw New mysqli_sql_exception( $e->getMessage(), $e->getCode() );
         } catch (Exception $e) {
             throw New Exception( $e->getMessage() );
         }

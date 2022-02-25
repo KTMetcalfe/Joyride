@@ -26,7 +26,14 @@ class SignupController extends BaseController
                     $pass = password_hash($pswd, PASSWORD_BCRYPT);
                     $accountModel->addAccount($email, $user, $pass);
 
-                    $responseData = sprintf('{"signedUp":"%s"}', $email);
+                    $responseData = '{"signedUp":true}';
+                } catch (mysqli_sql_exception $e) {
+                    if ($e->getCode() === 1062) {
+                        $strErrorDesc = 'username_taken';
+                        $strErrorHeader = 'HTTP/1.1 400 Bad Request';
+                    } else {
+                        throw New mysqli_sql_exception( $e->getMessage(), $e->getCode() );
+                    }
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
                     $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
