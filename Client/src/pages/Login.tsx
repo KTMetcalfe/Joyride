@@ -14,6 +14,10 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
       presentingElement: pageRef.current
     })
   };
+  
+  const handleCloseSignup = () => {
+    dismissSignup();
+  }
 
   const handleDismissSignup = () => {
     dismissSignup();
@@ -21,7 +25,8 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   };
 
   const [presentSignup, dismissSignup] = useIonModal(Signup, {
-    onDismiss: handleDismissSignup
+    onDismiss: handleDismissSignup,
+    onClose: handleCloseSignup
   })
 
   const [user, setUser] = useState<string>('');

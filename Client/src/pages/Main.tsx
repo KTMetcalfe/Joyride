@@ -44,7 +44,8 @@ const Main: React.FC = () => {
   };
 
   const [presentSignup, dismissSignup] = useIonModal(Signup, {
-    onDismiss: handleDismissSignup
+    onDismiss: handleDismissSignup,
+    onClose: handleDismissSignup
   })
 
   return (
