@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import { setCurrentAccount } from "../components/StorageService";
@@ -6,11 +6,14 @@ import { setCurrentAccount } from "../components/StorageService";
 import './Login.css';
 
 const Signup: React.FC = () => {
-  const [email, setEmail] = useState<string>();
-  const [user, setUser] = useState<string>();
-  const [pswd, setPswd] = useState<string>();
+  const [email, setEmail] = useState<string>('');
+  const [user, setUser] = useState<string>('');
+  const [pswd, setPswd] = useState<string>('');
 
   const checkSignup = () => {
+    window.document.getElementById('login-output')!.style.display = "none";
+    window.document.getElementById('signupErr')!.innerHTML = "";
+
     fetch('https://api.kianm.net/index.php/signup', {
       method: 'POST',
       mode: 'cors',
@@ -24,8 +27,9 @@ const Signup: React.FC = () => {
       .then(result => {
         if (result.signedUp === true) {
           setCurrentAccount(email!, user!, pswd!);
-        } else {
-          console.log(result.error);
+        } else if (result.error === "username_taken") {
+          window.document.getElementById('signupErr')!.innerHTML = "Username taken";
+          window.document.getElementById('login-output')!.style.display = "block";
         }
       })
   }
@@ -57,7 +61,21 @@ const Signup: React.FC = () => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonButton expand="block" onClick={() => { if (email !== undefined && user !== undefined && pswd !== undefined) { checkSignup() } }}>
+                <IonItem id='login-output'>
+                  <IonLabel id='signupErr' class='ion-text-center'></IonLabel>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonButton expand="block" onClick={() => {
+                  if (email !== '' && user !== '' && pswd !== '') {
+                    checkSignup()
+                  } else {
+                    window.document.getElementById('login-output')!.style.display = "block";
+                    window.document.getElementById('signupErr')!.innerHTML = "Please enter all information";
+                  }
+                }}>
                   <IonIcon slot='icon-only' icon={addCircleOutline} />
                 </IonButton>
               </IonCol>

@@ -17,3 +17,8 @@
 .login-input {
     border-radius: 10px;
 }
+
+#login-output {
+    border-radius: 10px;
+    display: none;
+}
