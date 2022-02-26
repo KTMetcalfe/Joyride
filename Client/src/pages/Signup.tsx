@@ -26,7 +26,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
       .then(e => e.json())
       .then(result => {
         if (result.signedUp === true) {
-          setCurrentAccount(email!, user!, pswd!);
+          setCurrentAccount(email!, user!, pswd!, 0);
           window.document.getElementById('signupErr')!.innerHTML = "Signed up";
           window.document.getElementById('signup-output')!.style.display = "block";
           onDismiss();

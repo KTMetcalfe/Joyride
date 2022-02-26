@@ -50,7 +50,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
       .then(e => e.json())
       .then(result => {
         if (result.isVerified === true) {
-          setCurrentAccount(result.email!, user!, pswd!);
+          setCurrentAccount(result.email!, user!, pswd!, result.priveledge!);
           window.document.getElementById('loginErr')!.innerHTML = "Logged in";
           window.document.getElementById('login-output')!.style.display = "block";
           onDismiss();

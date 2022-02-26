@@ -20,7 +20,7 @@ class LoginController extends BaseController {
                     $accArr = $accountModel->getAccount($user);
 
                     if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
-                        $responseData = sprintf('{"isVerified": true, "email": "%s"}', $accArr[0]['email']);  
+                        $responseData = sprintf('{"isVerified": true, "email": "%s", "priveledge":%b}', $accArr[0]['email'], $accArr[0]['priveledge']);  
                     } else if (count($accArr) > 1) {
                         throw New Exception('Too many accounts');
                     } else {
