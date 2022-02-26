@@ -24,13 +24,17 @@ export const getCurrentAccount = async () => {
 }
 
 export const onLoad = async () => {
-    const { value } = await storage.get({ key: 'account' });
-    let acc = JSON.parse(value as string);
-    let account = JSON.parse(acc);
-    
-    curr_email = account.email;
-    curr_user = account.user;
-    curr_pswd = account.pswd;
+    try {
+        const { value } = await storage.get({ key: 'account' });
+        let acc = JSON.parse(value as string);
+        let account = JSON.parse(acc);
+
+        curr_email = account.email;
+        curr_user = account.user;
+        curr_pswd = account.pswd;
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 export const clearStorage = async () => {
