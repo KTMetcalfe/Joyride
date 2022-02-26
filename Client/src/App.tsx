@@ -27,7 +27,7 @@ import { IonReactRouter } from '@ionic/react-router'
 import Main from './pages/Main';
 import { onLoad } from './components/StorageService';
 
-setupIonicReact();
+setupIonicReact({ swipeBackEnabled: false });
 
 const App: React.FC = () => {
     const [busy, setBusy] = useState(true);

@@ -129,7 +129,7 @@ const Main: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent id='outlet'>
         <IonTabs>
           <IonTabBar slot='bottom'>
             <IonTabButton tab='structure' href='/structure'>
@@ -142,7 +142,7 @@ const Main: React.FC = () => {
               <IonLabel>Query</IonLabel>
             </IonTabButton>
           </IonTabBar>
-          <IonRouterOutlet id='outlet'>
+          <IonRouterOutlet>
             <Route path="/structure" component={StructurePage} exact />
             <Route path="/content" component={ContentPage} exact />
             <Route path="/query" component={QueryPage} exact />
