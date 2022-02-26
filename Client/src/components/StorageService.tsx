@@ -27,14 +27,33 @@ export const getCurrentAccount = async () => {
 
 export const onLoad = async () => {
     try {
+        console.log("Checking user...");
+
         const { value } = await storage.get({ key: 'account' });
+
         let acc = JSON.parse(value as string);
         let account = JSON.parse(acc);
 
-        curr_email = account.email;
-        curr_user = account.user;
-        curr_pswd = account.pswd;
-        curr_priv = account.priv;
+        await fetch('https://api.kianm.net/index.php/login/validate', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Authorization': 'Basic ' + btoa(account.user + ':' + account.pswd)
+            }
+        })
+            .then(e => e.json())
+            .then(result => {
+                if (result.isVerified === true) {
+                    curr_email = result.email;
+                    curr_user = account.user;
+                    curr_pswd = account.pswd;
+                    curr_priv = result.priveledge;
+                    console.log("User validated");
+                } else {
+                    console.log("Mismatch between local and remote user");
+                }
+            })
+
     } catch (e) {
         console.error(e);
     }
