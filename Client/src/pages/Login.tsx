@@ -7,6 +7,9 @@ import './Login.css';
 import Signup from "./Signup";
 
 const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
+  const [user, setUser] = useState<string>('');
+  const [pswd, setPswd] = useState<string>('');
+
   const handlePresentSignup = () => {
     presentSignup({
       mode: 'ios',
@@ -26,11 +29,10 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
 
   const [presentSignup, dismissSignup] = useIonModal(Signup, {
     onDismiss: handleDismissSignup,
-    onClose: handleCloseSignup
+    onClose: handleCloseSignup,
+    userInput: user,
+    pswdInput: pswd
   })
-
-  const [user, setUser] = useState<string>('');
-  const [pswd, setPswd] = useState<string>('');
 
   const pageRef = useRef();
 

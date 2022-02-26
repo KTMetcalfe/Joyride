@@ -5,10 +5,10 @@ import { setCurrentAccount } from "../components/StorageService";
 
 import './Login.css';
 
-const Signup: React.FC<{ onDismiss: () => void; onClose: () => void }> = ({ onDismiss, onClose }) => {
+const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: string; pswdInput: string; }> = ({ onDismiss, onClose, userInput, pswdInput }) => {
   const [email, setEmail] = useState<string>('');
-  const [user, setUser] = useState<string>('');
-  const [pswd, setPswd] = useState<string>('');
+  const [user, setUser] = useState<string>(userInput === undefined ? '' : userInput);
+  const [pswd, setPswd] = useState<string>(pswdInput === undefined ? '' : pswdInput);
 
   const checkSignup = () => {
     window.document.getElementById('signup-output')!.style.display = "none";
