@@ -47,7 +47,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent color='light'>
         <div className="login-pane">
           <IonGrid class="login-grid">
             <IonRow>
@@ -74,7 +74,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonButton expand="block" onClick={() => {
+                <IonButton color="secondary" expand="block" onClick={() => {
                   if (email !== '' && user !== '' && pswd !== '') {
                     checkSignup()
                   } else {

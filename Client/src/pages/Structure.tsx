@@ -1,4 +1,4 @@
-import { IonPage, IonGrid, IonRow, IonCol, IonItem, IonLabel, useIonModal, IonButton, IonIcon } from "@ionic/react";
+import { IonPage, IonGrid, IonRow, IonCol, IonItem, IonLabel, useIonModal, IonButton, IonIcon, IonContent, IonList } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useRef } from "react";
 import { curr_email, curr_priv, curr_pswd, curr_user } from "../components/StorageService";
@@ -42,36 +42,38 @@ const Structure: React.FC<{ pageRef: any }> = ({ pageRef }) => {
 
     return (
         <IonPage>
-            <IonGrid>
-                <IonRow>
-                    <IonCol>
-                        <IonButton onClick={handlePresentLogin} expand='block'>
-                            Login
-                        </IonButton>
-                    </IonCol>
-                    <IonCol>
-                        <IonButton onClick={handlePresentSignup} expand='block'>
-                            Signup
-                        </IonButton>
-                    </IonCol>
-                </IonRow>
-                <IonRow>
-                    <IonCol>
-                        <IonItem>
-                            <IonLabel>Email: {curr_email}</IonLabel>
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel>User: {curr_user}</IonLabel>
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel>Password: {curr_pswd}</IonLabel>
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel>Priveledge: {curr_priv}</IonLabel>
-                        </IonItem>
-                    </IonCol>
-                </IonRow>
-            </IonGrid>
+            <IonContent class='ion-padding'>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            <IonButton color="secondary" onClick={handlePresentLogin} expand='block'>
+                                Login
+                            </IonButton>
+                        </IonCol>
+                        <IonCol>
+                            <IonButton color="secondary" onClick={handlePresentSignup} expand='block'>
+                                Signup
+                            </IonButton>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonLabel>Email: {curr_email}</IonLabel>
+                            </IonItem>
+                            <IonItem>
+                                <IonLabel>User: {curr_user}</IonLabel>
+                            </IonItem>
+                            <IonItem>
+                                <IonLabel>Password: {curr_pswd}</IonLabel>
+                            </IonItem>
+                            <IonItem>
+                                <IonLabel>Priveledge: {curr_priv}</IonLabel>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
         </IonPage>
     )
 }

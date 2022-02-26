@@ -95,7 +95,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <IonButton expand="block" onClick={() => {
+                <IonButton color="secondary" expand="block" onClick={() => {
                   if (user !== '' && pswd !== '') {
                     validateLogin()
                   } else {
@@ -105,8 +105,8 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                 }}>
                   <IonIcon slot='icon-only' icon={addCircleOutline} />
                 </IonButton>
-                <IonButtons>
-                  <IonButton onClick={handlePresentSignup}>Signup</IonButton>
+                <IonButtons class='center-buttons'>
+                  <IonButton color="secondary" onClick={handlePresentSignup}>Signup</IonButton>
                 </IonButtons>
               </IonCol>
             </IonRow>

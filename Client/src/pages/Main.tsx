@@ -79,12 +79,12 @@ const Main: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle class='ion-text-center'>Joyride</IonTitle>
-          <IonButtons slot='start'>
+          <IonButtons slot='start' class='ion-padding-start'>
             <IonMenuButton menu='start'>
               <IonIcon icon={optionsOutline}></IonIcon>
             </IonMenuButton>
           </IonButtons>
-          <IonButtons slot='end'>
+          <IonButtons slot='end' class='ion-padding-end'>
             <IonMenuButton menu='end'>
               <IonIcon icon={accessibilityOutline}></IonIcon>
             </IonMenuButton>
