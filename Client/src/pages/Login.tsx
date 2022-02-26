@@ -17,7 +17,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
       presentingElement: pageRef.current
     })
   };
-  
+
   const handleCloseSignup = () => {
     dismissSignup();
   }

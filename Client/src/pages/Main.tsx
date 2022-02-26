@@ -1,7 +1,7 @@
 import { IonPage, IonModal, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonSpinner, useIonModal } from '@ionic/react';
-import { addCircleOutline, albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline } from 'ionicons/icons';
+import { addCircleOutline, albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { Route } from 'react-router';
+import { Redirect, Route } from 'react-router';
 
 import StructurePage from './Structure';
 import ContentPage from './Content';
@@ -13,43 +13,10 @@ import Login from './Login';
 import Signup from './Signup';
 
 const Main: React.FC = () => {
-  const pageRef = useRef();
-
-  const handlePresentLogin = () => {
-    presentLogin({
-      mode: 'ios',
-      swipeToClose: true,
-      presentingElement: pageRef.current
-    })
-  };
-
-  const handleDismissLogin = () => {
-    dismissLogin();
-  };
-
-  const [presentLogin, dismissLogin] = useIonModal(Login, {
-    onDismiss: handleDismissLogin
-  })
-
-  const handlePresentSignup = () => {
-    presentSignup({
-      mode: 'ios',
-      swipeToClose: true,
-      presentingElement: pageRef.current
-    })
-  };
-
-  const handleDismissSignup = () => {
-    dismissSignup();
-  };
-
-  const [presentSignup, dismissSignup] = useIonModal(Signup, {
-    onDismiss: handleDismissSignup,
-    onClose: handleDismissSignup
-  })
+  const mainRef = useRef();
 
   return (
-    <IonPage ref={pageRef}>
+    <IonPage ref={mainRef}>
       <IonMenu id='optionsMenu' side='start' contentId='outlet'>
         <IonHeader>
           <IonToolbar>
@@ -98,13 +65,8 @@ const Main: React.FC = () => {
             <IonRow>
               <IonCol>
                 <IonItem lines='none'>
+                  <IonIcon slot='start' icon={starOutline}></IonIcon>
                   <IonLabel>Favorites</IonLabel>
-                  <IonButton onClick={handlePresentLogin}>
-                    <IonIcon slot='icon-only' icon={addCircleOutline} />
-                  </IonButton>
-                  <IonButton onClick={handlePresentSignup}>
-                    <IonIcon slot='icon-only' icon={addCircleOutline} />
-                  </IonButton>
                 </IonItem>
                 <IonList>
 
@@ -143,9 +105,10 @@ const Main: React.FC = () => {
             </IonTabButton>
           </IonTabBar>
           <IonRouterOutlet>
-            <Route path="/structure" component={StructurePage} exact />
+            <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
             <Route path="/content" component={ContentPage} exact />
             <Route path="/query" component={QueryPage} exact />
+            <Route path="/" render={() => <Redirect to="/structure" />} exact={true} />
           </IonRouterOutlet>
         </IonTabs>
       </IonContent>
