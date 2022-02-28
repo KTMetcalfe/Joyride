@@ -2,10 +2,10 @@ import { Storage, StoragePlugin } from '@capacitor/storage';
 
 const storage: StoragePlugin = Storage;
 
-export var curr_email: string;
-export var curr_user: string;
-export var curr_pswd: string;
-export var curr_priv: number;
+export var curr_email: string = '';
+export var curr_user: string = '';
+export var curr_pswd: string = '';
+export var curr_priv: number = 0;
 
 export const setCurrentAccount = async (email: string, user: string, pswd: string, priv: number) => {
     await storage.set({
@@ -33,6 +33,10 @@ export const onLoad = async () => {
 
         let acc = JSON.parse(value as string);
         let account = JSON.parse(acc);
+
+        if (account === null) {
+            throw new Error("No account in storage")
+        }
 
         await fetch('https://api.kianm.net/index.php/login/validate', {
             method: 'POST',

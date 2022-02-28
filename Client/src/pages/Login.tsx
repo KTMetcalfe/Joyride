@@ -3,7 +3,7 @@ import { addCircleOutline } from "ionicons/icons";
 import { useRef, useState } from "react";
 import { setCurrentAccount } from "../components/StorageService";
 
-import './Login.css';
+import './Modal.css';
 import Signup from "./Signup";
 
 const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
@@ -72,11 +72,11 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="login-pane">
-          <IonGrid class="login-grid">
+        <div className="form-pane">
+          <IonGrid class="form-grid">
             <IonRow>
               <IonCol>
-                <IonList class='login-input'>
+                <IonList class='form-input'>
                   <IonItem>
                     <IonInput value={user} placeholder="Username" onIonChange={e => setUser(e.detail.value!)} />
                   </IonItem>

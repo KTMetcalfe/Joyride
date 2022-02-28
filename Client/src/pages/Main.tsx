@@ -1,4 +1,4 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet } from '@ionic/react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal } from '@ionic/react';
 import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline } from 'ionicons/icons';
 import React, { useRef } from 'react';
 import { Redirect, Route } from 'react-router';
@@ -6,11 +6,47 @@ import { Redirect, Route } from 'react-router';
 import StructurePage from './Structure';
 import ContentPage from './Content';
 import QueryPage from './Query';
+import Login from './Login';
+import Signup from './Signup';
+import { curr_user } from '../components/StorageService';
+import AddVehicle from './AddVehicle';
 
 
 
 const Main: React.FC = () => {
   const mainRef = useRef();
+
+  const handlePresentLogin = () => {
+    presentLogin({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: mainRef.current
+    })
+  };
+
+  const handleDismissLogin = () => {
+    dismissLogin();
+  };
+
+  const [presentLogin, dismissLogin] = useIonModal(Login, {
+    onDismiss: handleDismissLogin
+  })
+
+  const handlePresentAddVehicle = () => {
+    presentAddVehicle({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: mainRef.current
+    })
+  };
+
+  const handleDismissAddVehicle = () => {
+    dismissAddVehicle();
+  };
+
+  const [presentAddVehicle, dismissAddVehicle] = useIonModal(AddVehicle, {
+    onDismiss: handleDismissAddVehicle
+  })
 
   return (
     <IonPage ref={mainRef}>
@@ -59,15 +95,37 @@ const Main: React.FC = () => {
         </IonHeader>
         <IonContent>
           <IonGrid>
+            {curr_user === '' ?
+              <IonRow>
+                <IonCol>
+                  <IonButton color="secondary" onClick={handlePresentLogin} expand='block'>
+                    Login
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+              : false}
+            {curr_user !== '' ?
+              <IonRow>
+                <IonCol>
+                  <IonButton color="secondary" onClick={handlePresentAddVehicle} expand='block'>
+                    Add vehicle
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+              : false}
             <IonRow>
               <IonCol>
-                <IonItem lines='none'>
-                  <IonIcon slot='start' icon={starOutline}></IonIcon>
-                  <IonLabel>Favorites</IonLabel>
-                </IonItem>
-                <IonList>
+                <IonAccordionGroup>
+                  <IonAccordion>
+                    <IonItem slot="header">
+                      <IonIcon slot='start' icon={starOutline}></IonIcon>
+                      <IonLabel>Favorites</IonLabel>
+                    </IonItem>
+                    <IonList slot="content">
 
-                </IonList>
+                    </IonList>
+                  </IonAccordion>
+                </IonAccordionGroup>
               </IonCol>
             </IonRow>
           </IonGrid>

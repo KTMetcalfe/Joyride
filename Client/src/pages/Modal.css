@@ -1,4 +1,4 @@
-.login-pane {
+.form-pane {
     margin: auto;
     max-width: 750px;
     display: flex;
@@ -8,17 +8,17 @@
     padding: 10%;
 }
 
-.login-grid {
+.form-grid {
     background-color: var(--ion-color-primary);
     border-radius: 10px;
     padding: 5%;
 }
 
-.login-input {
+.form-input {
     border-radius: 10px;
 }
 
-#signup-output, #login-output {
+#signup-output, #login-output, #add-output{
     border-radius: 10px;
     display: none;
 }

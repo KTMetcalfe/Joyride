@@ -1,5 +1,5 @@
 import { IonPage, IonGrid, IonRow, IonCol, IonItem, IonLabel, useIonModal, IonButton, IonContent } from "@ionic/react";
-import { curr_email, curr_priv, curr_pswd, curr_user } from "../components/StorageService";
+import { clearStorage, curr_email, curr_priv, curr_pswd, curr_user } from "../components/StorageService";
 import Login from "./Login";
 import Signup from "./Signup";
 
@@ -67,6 +67,13 @@ const Structure: React.FC<{ pageRef: any }> = ({ pageRef }) => {
                             <IonItem>
                                 <IonLabel>Priveledge: {curr_priv}</IonLabel>
                             </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonButton color="danger" onClick={() => clearStorage()} expand='block' href='/'>
+                                Clear Storage
+                            </IonButton>
                         </IonCol>
                     </IonRow>
                 </IonGrid>
