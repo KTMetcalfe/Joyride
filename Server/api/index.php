@@ -17,13 +17,19 @@ if (isset($uri[2]) && $uri[2] == 'login') {
     require "/joyride/api/Controller/Api/LoginController.php";
 
     $objFeedController = new LoginController();
-    $strMethodName = $uri[3] . 'Action';
+    $strMethodName = $uri[3].'Action';
     $objFeedController->{$strMethodName}();
 } else if (isset($uri[2]) && $uri[2] == 'signup') {
     require "/joyride/api/Controller/Api/SignupController.php";
 
     $objFeedController = new SignupController();
     $strMethodName = 'signupAction';
+    $objFeedController->{$strMethodName}();
+} else if (isset($uri[2]) && $uri[2] == 'vehicles') {
+    require "/joyride/api/Controller/Api/VehiclesController.php";
+
+    $objFeedController = new VehiclesController();
+    $strMethodName = $uri[3].'Action';
     $objFeedController->{$strMethodName}();
 } else {
     header("HTTP/1.1 404 Not Found");
