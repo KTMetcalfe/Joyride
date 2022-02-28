@@ -1,16 +1,13 @@
-import { IonPage, IonModal, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonSpinner, useIonModal } from '@ionic/react';
-import { addCircleOutline, albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline } from 'ionicons/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet } from '@ionic/react';
+import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline } from 'ionicons/icons';
+import React, { useRef } from 'react';
 import { Redirect, Route } from 'react-router';
 
 import StructurePage from './Structure';
 import ContentPage from './Content';
 import QueryPage from './Query';
 
-import { clearStorage, getCurrentAccount, onLoad, setCurrentAccount } from '../components/StorageService';
 
-import Login from './Login';
-import Signup from './Signup';
 
 const Main: React.FC = () => {
   const mainRef = useRef();

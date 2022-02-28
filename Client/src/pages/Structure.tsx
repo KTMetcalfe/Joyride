@@ -1,9 +1,6 @@
-import { IonPage, IonGrid, IonRow, IonCol, IonItem, IonLabel, useIonModal, IonButton, IonIcon, IonContent, IonList } from "@ionic/react";
-import { addCircleOutline } from "ionicons/icons";
-import { useRef } from "react";
+import { IonPage, IonGrid, IonRow, IonCol, IonItem, IonLabel, useIonModal, IonButton, IonContent } from "@ionic/react";
 import { curr_email, curr_priv, curr_pswd, curr_user } from "../components/StorageService";
 import Login from "./Login";
-import Main from "./Main";
 import Signup from "./Signup";
 
 const Structure: React.FC<{ pageRef: any }> = ({ pageRef }) => {
