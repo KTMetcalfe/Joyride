@@ -66,16 +66,16 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                                         <IonInput value={model} placeholder="Model" onIonChange={e => setModel(e.detail.value!)} />
                                     </IonItem>
                                     <IonItem>
-                                        <IonInput value={mileage} placeholder="Mileage" onIonChange={e => setMileage(e.detail.value!)} />
+                                        <IonInput type="number" value={mileage} placeholder="Mileage" onIonChange={e => setMileage(e.detail.value!)} />
                                     </IonItem>
                                     <IonItem>
-                                        <IonInput value={price} placeholder="Price" onIonChange={e => setPrice(e.detail.value!)} />
+                                        <IonInput type="number" value={price} placeholder="Price" onIonChange={e => setPrice(e.detail.value!)} />
                                     </IonItem>
                                     <IonItem>
-                                        <IonInput value={year} placeholder="Year" onIonChange={e => setYear(e.detail.value!)} />
+                                        <IonInput type="number" value={year} placeholder="Year" onIonChange={e => setYear(e.detail.value!)} />
                                     </IonItem>
                                     <IonItem>
-                                        <IonInput value={capacity} placeholder="Capacity" onIonChange={e => setCapacity(e.detail.value!)} />
+                                        <IonInput type="number" value={capacity} placeholder="Capacity" onIonChange={e => setCapacity(e.detail.value!)} />
                                     </IonItem>
                                 </IonList>
                             </IonCol>
@@ -91,7 +91,12 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                             <IonCol>
                                 <IonButton color="secondary" expand="block" onClick={() => {
                                     if (make !== '' && model !== '' && mileage !== '' && price !== '' && year !== '' && capacity !== '') {
-                                        checkAdd()
+                                        if (!isNaN(Number(mileage)) && !isNaN(Number(price)) && !isNaN(Number(year)) && !isNaN(Number(capacity))) {
+                                            checkAdd()
+                                        } else {
+                                            window.document.getElementById('add-output')!.style.display = "block";
+                                            window.document.getElementById('addErr')!.innerHTML = "Please enter valid numbers";
+                                        }
                                     } else {
                                         window.document.getElementById('add-output')!.style.display = "block";
                                         window.document.getElementById('addErr')!.innerHTML = "Please enter all information";
