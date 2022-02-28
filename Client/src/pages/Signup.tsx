@@ -30,6 +30,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
           window.document.getElementById('signupErr')!.innerHTML = "Signed up";
           window.document.getElementById('signup-output')!.style.display = "block";
           onDismiss();
+          window.location.reload();
         } else if (result.error === "username_taken") {
           window.document.getElementById('signupErr')!.innerHTML = "Username taken";
           window.document.getElementById('signup-output')!.style.display = "block";

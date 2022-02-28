@@ -54,6 +54,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
           window.document.getElementById('loginErr')!.innerHTML = "Logged in";
           window.document.getElementById('login-output')!.style.display = "block";
           onDismiss();
+          window.location.reload();
         } else {
           window.document.getElementById('loginErr')!.innerHTML = "Username or password incorrect";
           window.document.getElementById('login-output')!.style.display = "block";

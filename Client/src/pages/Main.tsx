@@ -8,10 +8,9 @@ import ContentPage from './Content';
 import QueryPage from './Query';
 import Login from './Login';
 import Signup from './Signup';
-import { curr_user } from '../components/StorageService';
+import { curr_priv, curr_user } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
-
-
+import AdminPage from './Admin';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
@@ -158,12 +157,18 @@ const Main: React.FC = () => {
             <IonTabButton tab='query' href='/query'>
               <IonLabel>Query</IonLabel>
             </IonTabButton>
+            {curr_priv >= 2 ?
+              <IonTabButton tab='admin' href='/admin'>
+                <IonLabel>Admin</IonLabel>
+              </IonTabButton>
+              : false}
           </IonTabBar>
           <IonRouterOutlet>
             <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
             <Route path="/content" component={ContentPage} exact />
             <Route path="/query" component={QueryPage} exact />
             <Route path="/" render={() => <Redirect to="/structure" />} exact={true} />
+            <Route path="/admin" render={() => curr_priv >= 2 ? <AdminPage /> : <Redirect to="/structure" />} exact />
           </IonRouterOutlet>
         </IonTabs>
       </IonContent>
