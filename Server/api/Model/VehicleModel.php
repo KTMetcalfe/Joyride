@@ -9,9 +9,5 @@ class VehicleModel extends Database {
     public function listVehiclesAdmin() {
         return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'", "NO"));
     }
-
-    public function addVehicle($make, $model, $mileage, $price, $year, $capacity) {
-        return $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity) VALUES ('%s', '%s', %f, %f, %f, %f)", $make, $model, $mileage, $price, $year, $capacity));
-    }
 }
 ?>

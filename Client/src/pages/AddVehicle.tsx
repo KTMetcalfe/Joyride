@@ -26,12 +26,12 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
             },
             body:
                 '{"make":"' + make
-                + '","model":"' + model
-                + '","mileage":' + mileage
-                + ',"price":' + price
-                + ',"year":' + year
-                + ',"capacity":' + capacity
-                + '}'
+                + '","model:"' + model
+                + '","mileage:"' + mileage
+                + '","price:"' + price
+                + '","year:"' + year
+                + '","capacity:"' + capacity
+                + '"}'
         })
             .then(e => e.json())
             .then(result => {
