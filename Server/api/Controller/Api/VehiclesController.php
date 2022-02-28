@@ -107,7 +107,7 @@ class VehiclesController extends BaseController
                         $capacity = $body->{'capacity'};
 
                         $vehicleModel = new VehicleModel();
-                        $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity);
+                        $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user);
 
                         $responseData = '{"added":true}';
                     } else if (count($accArr) > 1) {

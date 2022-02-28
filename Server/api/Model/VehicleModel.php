@@ -10,8 +10,8 @@ class VehicleModel extends Database {
         return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'", "NO"));
     }
 
-    public function addVehicle($make, $model, $mileage, $price, $year, $capacity) {
-        return $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity) VALUES ('%s', '%s', %f, %f, %f, %f)", $make, $model, $mileage, $price, $year, $capacity));
+    public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user) {
+        return $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user) VALUES ('%s', '%s', %f, %f, %f, %f, '%s')", $make, $model, $mileage, $price, $year, $capacity, $user));
     }
 }
 ?>
