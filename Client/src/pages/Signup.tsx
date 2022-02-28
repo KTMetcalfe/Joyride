@@ -47,7 +47,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent color='light'>
+      <IonContent>
         <div className="login-pane">
           <IonGrid class="login-grid">
             <IonRow>
