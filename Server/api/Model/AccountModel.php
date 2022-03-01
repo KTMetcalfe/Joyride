@@ -39,7 +39,7 @@ class AccountModel extends Database {
                 if (array_search($id, $favorites) === false) {
                     array_push($favorites, $id);
 
-                    return $this->insert(sprintf("UPDATE accounts SET favorites='%s' WHERE user='%s'", json_encode($favorites), $user));
+                    return $this->insert(sprintf("UPDATE accounts SET favorites='%s' WHERE user='%s'", json_encode(array_values($favorites)), $user));
                 } else {
                     exit;
                 }
@@ -58,7 +58,7 @@ class AccountModel extends Database {
             if (gettype($favorites) == "array" && count($favorites) > 0) {
                 if (($key = array_search($id, $favorites)) !== false) {
                     unset($favorites[$key]);
-                    return $this->insert(sprintf("UPDATE accounts SET favorites='%s' WHERE user='%s'", json_encode($favorites), $user));
+                    return $this->insert(sprintf("UPDATE accounts SET favorites='%s' WHERE user='%s'", json_encode(array_values($favorites)), $user));
                 } else {
                     exit;
                 }
