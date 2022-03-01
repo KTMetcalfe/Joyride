@@ -18,6 +18,10 @@ class VehicleModel extends Database {
         return $this->insert(sprintf("UPDATE vehicles SET approved='%s' WHERE id=%f", "YES", $id));
     }
 
+    public function removeVehicle($id) {
+        return $this->insert(sprintf("DELETE FROM vehicles WHERE id=%f", $id));
+    }
+
     public function updateVehicle($id, $make, $model, $mileage, $price, $year, $capacity) {
         return $this->insert(sprintf("UPDATE vehicles SET make='%s', model='%s', mileage=%f, price=%f, model_year=%f, capacity=%f WHERE id=%f", $make, $model, $mileage, $price, $year, $capacity, $id));
     }

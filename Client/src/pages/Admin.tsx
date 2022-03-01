@@ -40,6 +40,24 @@ const AdminPage: React.FC = () => {
             })
     }
 
+    const removeVehicle = ($id: number) => {
+        fetch('https://api.kianm.net/index.php/vehicles/remove', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+                'Content-Type': 'application/json'
+            },
+            body: '{"id":"' + $id + '"}'
+        })
+            .then(e => e.json())
+            .then(result => {
+                if (result.removed === true) {
+                    console.log(result);
+                }
+            })
+    }
+
     return busy ? <IonSpinner /> : (
         <IonPage>
             <IonContent>
@@ -77,7 +95,7 @@ const AdminPage: React.FC = () => {
                                         </IonButton>
                                     </IonCol>
                                     <IonCol>
-                                        <IonButton>
+                                        <IonButton onClick={() => removeVehicle(v.id)}>
                                             <IonIcon slot='icon-only' icon={removeCircleOutline} />
                                         </IonButton>
                                     </IonCol>
