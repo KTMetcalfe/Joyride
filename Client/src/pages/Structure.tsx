@@ -39,7 +39,7 @@ const Structure: React.FC<{ pageRef: any }> = ({ pageRef }) => {
 
     return (
         <IonPage>
-            <IonContent class='ion-padding'>
+            <IonContent class='ion-padding' forceOverscroll={false}>
                 <IonGrid>
                     <IonRow>
                         <IonCol>
