@@ -5,7 +5,7 @@ import { curr_user, curr_pswd } from "../components/StorageService";
 
 const AdminPage: React.FC = () => {
     const [busy, setBusy] = useState(true);
-    const [list, setList] = useState(Array<any>());
+    const [list, setList] = useState<Array<any>>();
 
     useEffect(() => {
         fetch('https://api.kianm.net/index.php/vehicles/list?admin=true', {
@@ -65,7 +65,7 @@ const AdminPage: React.FC = () => {
                     <IonListHeader>
                         <IonLabel class='ion-text-center'>Vehicles</IonLabel>
                     </IonListHeader>
-                    {list.map(v =>
+                    {list?.map(v =>
                         <IonItem key={v.id}>
                             <IonGrid>
                                 <IonRow>

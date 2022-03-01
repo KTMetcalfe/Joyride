@@ -5,7 +5,7 @@ import { curr_user, curr_pswd, setCurrentAccount, onLoad, curr_priv } from "../c
 
 const Query: React.FC = () => {
   const [busy, setBusy] = useState(true);
-  const [list, setList] = useState(Array<any>());
+  const [list, setList] = useState<Array<any>>();
 
   useEffect(() => {
     fetch('https://api.kianm.net/index.php/vehicles/list', {
@@ -44,7 +44,7 @@ const Query: React.FC = () => {
           <IonListHeader>
             <IonLabel class='ion-text-center'>Vehicles</IonLabel>
           </IonListHeader>
-          {list.map(v =>
+          {list?.map(v =>
             <IonItem key={v.id}>
               <IonGrid>
                 <IonRow>
