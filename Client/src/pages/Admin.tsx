@@ -1,5 +1,5 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner } from "@ionic/react"
-import { addCircleOutline, heartOutline } from "ionicons/icons";
+import { addCircleOutline, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd } from "../components/StorageService";
 
@@ -55,12 +55,12 @@ const AdminPage: React.FC = () => {
                                     <IonCol>{v.user}</IonCol>
                                     <IonCol>
                                         <IonButton>
-                                            <IonIcon slot='icon-only' icon={heartOutline} />
+                                            <IonIcon slot='icon-only' icon={addCircleOutline} />
                                         </IonButton>
                                     </IonCol>
                                     <IonCol>
                                         <IonButton>
-                                            <IonIcon slot='icon-only' icon={addCircleOutline} />
+                                            <IonIcon slot='icon-only' icon={removeCircleOutline} />
                                         </IonButton>
                                     </IonCol>
                                 </IonRow>
