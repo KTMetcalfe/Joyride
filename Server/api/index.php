@@ -31,6 +31,12 @@ if (isset($uri[2]) && $uri[2] == 'login') {
     $objFeedController = new VehiclesController();
     $strMethodName = $uri[3].'Action';
     $objFeedController->{$strMethodName}();
+} else if (isset($uri[2]) && $uri[2] == 'account') {
+    require "/joyride/api/Controller/Api/AccountController.php";
+
+    $objFeedController = new AccountController();
+    $strMethodName = $uri[3].'Action';
+    $objFeedController->{$strMethodName}();
 } else {
     header("HTTP/1.1 404 Not Found");
     exit();
