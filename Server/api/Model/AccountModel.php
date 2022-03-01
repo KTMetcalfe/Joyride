@@ -22,7 +22,7 @@ class AccountModel extends Database {
                     $out .= sprintf(" OR id=%f", $id);
                 }
                 $out = substr($out, 4);
-        
+
                 return $this->select("SELECT * FROM vehicles WHERE " . $out);
             };
         }
@@ -66,4 +66,3 @@ class AccountModel extends Database {
         }
     }
 }
-?>

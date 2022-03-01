@@ -1,23 +1,47 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner } from "@ionic/react"
-import { heartOutline, removeCircleOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonPage, IonRow, IonSpinner } from "@ionic/react"
+import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
+import React from "react";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd, setCurrentAccount, onLoad, curr_priv } from "../components/StorageService";
+import { curr_user, curr_pswd, curr_priv, setRefresh, refresh } from "../components/StorageService";
 
 const Query: React.FC = () => {
   const [busy, setBusy] = useState(true);
+  const [update, setUpdate] = useState(false);
   const [list, setList] = useState<Array<any>>();
+  const [favorites, setFavorites] = useState<Array<any>>();
 
-  useEffect(() => {
-    fetch('https://api.kianm.net/index.php/vehicles/list', {
+  const getFavorites = async () => {
+    await fetch('https://api.kianm.net/index.php/account/favorites', {
       method: 'GET',
-      mode: 'cors'
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
     })
       .then(e => e.json())
       .then(result => {
-        setList(result);
-        setBusy(false);
+        setFavorites(result)
       })
+  }
+
+  useEffect(() => {
+    if (busy || refresh || update) {
+      fetch('https://api.kianm.net/index.php/vehicles/list', {
+        method: 'GET',
+        mode: 'cors'
+      })
+        .then(e => e.json())
+        .then(result => {
+          getFavorites().then(() => {
+            setList(result);
+            setBusy(false);
+          });
+        })
+      setUpdate(false);
+      setRefresh(false);
+    }
   })
+
 
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
@@ -28,6 +52,7 @@ const Query: React.FC = () => {
       },
       body: '{"id":' + $id + '}'
     })
+      .then(() => setUpdate(true))
   }
 
   const removeVehicle = ($id: number) => {
@@ -45,57 +70,65 @@ const Query: React.FC = () => {
         if (result.removed === true) {
           console.log(result);
         }
+        setUpdate(true);
       })
   }
 
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonContent>
-        <IonList inset={true}>
-          <IonListHeader>
-            <IonLabel class='ion-text-center'>Vehicles</IonLabel>
-          </IonListHeader>
-          {list?.map(v =>
-            <IonItem key={v.id}>
-              <IonGrid>
+        {list?.map(v =>
+          <IonCard key={v.id}>
+            <IonCardHeader>
+              <IonCardSubtitle>Vehicle</IonCardSubtitle>
+              <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <IonGrid color='danger'>
                 <IonRow>
-                  <IonCol>Make:</IonCol>
-                  <IonCol>{v.make}</IonCol>
-                  <IonCol>Model:</IonCol>
-                  <IonCol>{v.model}</IonCol>
-                </IonRow>
-                <IonRow>
-                  <IonCol>Mileage:</IonCol>
-                  <IonCol>{v.mileage}</IonCol>
-                  <IonCol>Price:</IonCol>
-                  <IonCol>{v.price}</IonCol>
-                </IonRow>
-                <IonRow>
-                  <IonCol>Year:</IonCol>
-                  <IonCol>{v.model_year}</IonCol>
-                  <IonCol>Capacity:</IonCol>
-                  <IonCol>{v.capacity}</IonCol>
-                </IonRow>
-                <IonRow>
-                  <IonCol>User:</IonCol>
-                  <IonCol>{v.user}</IonCol>
                   <IonCol>
-                    <IonButton onClick={() => addFavorite(v.id)}>
-                      <IonIcon slot='icon-only' icon={heartOutline} />
-                    </IonButton>
+                    <IonLabel>Price: </IonLabel>
+                    <IonLabel>{v.price}</IonLabel>
+                  </IonCol>
+                  <IonCol>
+                    <IonLabel>Mileage: </IonLabel>
+                    <IonLabel>{v.mileage}</IonLabel>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol>
+                    <IonLabel>Capacity: </IonLabel>
+                    <IonLabel>{v.capacity}</IonLabel>
+                  </IonCol>
+                  <IonCol>
+                    <IonLabel>User: </IonLabel>
+                    <IonLabel>{v.user}</IonLabel>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol />
+                  <IonCol />
+                  <IonCol>
+                    <IonButtons class='center-buttons'>
+                      <IonButton onClick={() => addFavorite(v.id)} size='small' fill='clear' color='primary'>
+                        <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
+                      </IonButton>
+                    </IonButtons>
                   </IonCol>
                   {curr_priv >= 1 ?
                     <IonCol>
-                      <IonButton onClick={() => removeVehicle(v.id)}>
-                        <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                      </IonButton>
+                      <IonButtons class='center-buttons'>
+                        <IonButton onClick={() => removeVehicle(v.id)} size='small' fill='clear' color='danger'>
+                          <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                        </IonButton>
+                      </IonButtons>
                     </IonCol>
                     : false}
                 </IonRow>
               </IonGrid>
-            </IonItem>
-          )}
-        </IonList>
+            </IonCardContent>
+          </IonCard>
+        )}
       </IonContent>
     </IonPage>
   )

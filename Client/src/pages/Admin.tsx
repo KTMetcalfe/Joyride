@@ -20,7 +20,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         setList(result);
         setBusy(false);
       })
-  })
+  }, [])
 
   const approveVehicle = ($id: number) => {
     fetch('https://api.kianm.net/index.php/vehicles/approve', {

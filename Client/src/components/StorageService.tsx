@@ -2,6 +2,11 @@ import { Storage, StoragePlugin } from '@capacitor/storage';
 
 const storage: StoragePlugin = Storage;
 
+export var refresh: boolean;
+export const setRefresh = (value: boolean) => {
+  refresh = value;
+}
+
 export var curr_email: string = '';
 export var curr_user: string = '';
 export var curr_pswd: string = '';

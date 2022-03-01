@@ -8,7 +8,7 @@ import ContentPage from './Content';
 import QueryPage from './Query';
 import Login from './Login';
 import Signup from './Signup';
-import { curr_priv, curr_pswd, curr_user } from '../components/StorageService';
+import { curr_priv, curr_pswd, curr_user, refresh, setRefresh } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminPage from './Admin';
 
@@ -32,6 +32,7 @@ const Main: React.FC = () => {
   }
 
   const removeFavorite = ($id: number) => {
+    setRefresh(true);
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
       method: 'POST',
       mode: 'cors',
@@ -40,7 +41,7 @@ const Main: React.FC = () => {
       },
       body: '{"id":' + $id + '}'
     })
-      .then(() => getFavorites())
+      .then(() => {getFavorites()})
   }
 
   const handlePresentLogin = () => {
@@ -130,7 +131,7 @@ const Main: React.FC = () => {
           </IonGrid>
         </IonContent>
       </IonMenu>
-      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => getFavorites()}>
+      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => { getFavorites()}}>
         <IonHeader>
           <IonToolbar>
             <IonTitle class="ion-text-center">Account</IonTitle>
@@ -230,7 +231,7 @@ const Main: React.FC = () => {
           <IonRouterOutlet>
             <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
             <Route path="/content" component={ContentPage} exact />
-            <Route path="/query" component={QueryPage} exact />
+            <Route path="/query" render={() => (<QueryPage />)} exact />
             <Route path="/" render={() => <Redirect to="/structure" />} exact={true} />
           </IonRouterOutlet>
         </IonTabs>
