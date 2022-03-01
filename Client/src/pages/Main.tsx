@@ -1,6 +1,6 @@
 import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal } from '@ionic/react';
-import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline } from 'ionicons/icons';
-import React, { useRef } from 'react';
+import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline, removeCircleOutline } from 'ionicons/icons';
+import React, { useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
 import StructurePage from './Structure';
@@ -8,12 +8,40 @@ import ContentPage from './Content';
 import QueryPage from './Query';
 import Login from './Login';
 import Signup from './Signup';
-import { curr_priv, curr_user } from '../components/StorageService';
+import { curr_priv, curr_pswd, curr_user } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminPage from './Admin';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
+
+  const [list, setList] = useState<Array<any>>();
+
+  const getFavorites = () => {
+    fetch('https://api.kianm.net/index.php/account/favorites', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setList(result)
+      })
+  }
+
+  const removeFavorite = ($id: number) => {
+    fetch('https://api.kianm.net/index.php/account/removeFavorite', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"id":' + $id + '}'
+    })
+      .then(() => getFavorites())
+  }
 
   const handlePresentLogin = () => {
     presentLogin({
@@ -86,7 +114,7 @@ const Main: React.FC = () => {
           </IonGrid>
         </IonContent>
       </IonMenu>
-      <IonMenu id='accountMenu' side='end' contentId='outlet'>
+      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => getFavorites()}>
         <IonHeader>
           <IonToolbar>
             <IonTitle class="ion-text-center">Account</IonTitle>
@@ -121,7 +149,23 @@ const Main: React.FC = () => {
                       <IonLabel>Favorites</IonLabel>
                     </IonItem>
                     <IonList slot="content">
-
+                      {list?.map(v =>
+                        <IonItem key={v.id}>
+                          <IonGrid>
+                            <IonRow>
+                              <IonCol>Model:</IonCol>
+                              <IonCol>{v.model}</IonCol>
+                              <IonCol>Year:</IonCol>
+                              <IonCol>{v.model_year}</IonCol>
+                              <IonCol>
+                                <IonButton onClick={() => removeFavorite(v.id)}>
+                                  <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                                </IonButton>
+                              </IonCol>
+                            </IonRow>
+                          </IonGrid>
+                        </IonItem>
+                      )}
                     </IonList>
                   </IonAccordion>
                 </IonAccordionGroup>

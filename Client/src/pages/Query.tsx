@@ -19,6 +19,17 @@ const Query: React.FC = () => {
       })
   })
 
+  const addFavorite = ($id: number) => {
+    fetch('https://api.kianm.net/index.php/account/addFavorite', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"id":' + $id + '}'
+    })
+  }
+
   const removeVehicle = ($id: number) => {
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
       method: 'POST',
@@ -69,7 +80,7 @@ const Query: React.FC = () => {
                   <IonCol>User:</IonCol>
                   <IonCol>{v.user}</IonCol>
                   <IonCol>
-                    <IonButton>
+                    <IonButton onClick={() => addFavorite(v.id)}>
                       <IonIcon slot='icon-only' icon={heartOutline} />
                     </IonButton>
                   </IonCol>
