@@ -72,7 +72,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent forceOverscroll={false}>
         <div className="form-pane">
           <IonGrid class="form-grid">
             <IonRow>

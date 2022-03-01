@@ -48,7 +48,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent forceOverscroll={false}>
         <div className="form-pane">
           <IonGrid class="form-grid">
             <IonRow>

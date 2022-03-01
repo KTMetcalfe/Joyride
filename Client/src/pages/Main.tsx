@@ -55,7 +55,7 @@ const Main: React.FC = () => {
             <IonTitle class="ion-text-center">Options</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent>
+        <IonContent forceOverscroll={false}>
           <IonGrid>
             <IonRow>
               <IonCol>
@@ -92,7 +92,7 @@ const Main: React.FC = () => {
             <IonTitle class="ion-text-center">Account</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent>
+        <IonContent forceOverscroll={false}>
           <IonGrid>
             {curr_user === '' ?
               <IonRow>
