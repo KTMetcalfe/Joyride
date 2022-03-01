@@ -145,7 +145,7 @@ const Main: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent id='outlet'>
+      <IonContent id='outlet' forceOverscroll={false}>
         <IonTabs>
           <IonTabBar slot='bottom'>
             <IonTabButton tab='structure' href='/structure'>
