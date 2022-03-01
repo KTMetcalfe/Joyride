@@ -22,6 +22,24 @@ const AdminPage: React.FC = () => {
             })
     })
 
+    const approveVehicle = ($id: number) => {
+        fetch('https://api.kianm.net/index.php/vehicles/approve', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+                'Content-Type': 'application/json'
+            },
+            body: '{"id":"' + $id + '"}'
+        })
+            .then(e => e.json())
+            .then(result => {
+                if (result.approved === true) {
+                    console.log(result);
+                }
+            })
+    }
+
     return busy ? <IonSpinner /> : (
         <IonPage>
             <IonContent>
@@ -54,7 +72,7 @@ const AdminPage: React.FC = () => {
                                     <IonCol>User:</IonCol>
                                     <IonCol>{v.user}</IonCol>
                                     <IonCol>
-                                        <IonButton>
+                                        <IonButton onClick={() => approveVehicle(v.id)}>
                                             <IonIcon slot='icon-only' icon={addCircleOutline} />
                                         </IonButton>
                                     </IonCol>
