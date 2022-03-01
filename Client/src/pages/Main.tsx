@@ -75,6 +75,22 @@ const Main: React.FC = () => {
     onDismiss: handleDismissAddVehicle
   })
 
+  const handlePresentAdmin = () => {
+    presentAdmin({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: mainRef.current
+    })
+  };
+
+  const handleDismissAdmin = () => {
+    dismissAdmin();
+  };
+
+  const [presentAdmin, dismissAdmin] = useIonModal(AdminPage, {
+    onDismiss: handleDismissAdmin
+  })
+
   return (
     <IonPage ref={mainRef}>
       <IonMenu id='optionsMenu' side='start' contentId='outlet'>
@@ -122,6 +138,15 @@ const Main: React.FC = () => {
         </IonHeader>
         <IonContent forceOverscroll={false}>
           <IonGrid>
+            {curr_priv >= 2 ?
+              <IonRow>
+                <IonCol>
+                  <IonButton color="danger" onClick={handlePresentAdmin} expand='block'>
+                    Admin
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+              : false}
             {curr_user === '' ?
               <IonRow>
                 <IonCol>
@@ -201,18 +226,12 @@ const Main: React.FC = () => {
             <IonTabButton tab='query' href='/query'>
               <IonLabel>Query</IonLabel>
             </IonTabButton>
-            {curr_priv >= 2 ?
-              <IonTabButton tab='admin' href='/admin'>
-                <IonLabel>Admin</IonLabel>
-              </IonTabButton>
-              : false}
           </IonTabBar>
           <IonRouterOutlet>
             <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
             <Route path="/content" component={ContentPage} exact />
             <Route path="/query" component={QueryPage} exact />
             <Route path="/" render={() => <Redirect to="/structure" />} exact={true} />
-            <Route path="/admin" render={() => curr_priv >= 2 ? <AdminPage /> : <Redirect to="/structure" />} exact />
           </IonRouterOutlet>
         </IonTabs>
       </IonContent>
