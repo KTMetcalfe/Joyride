@@ -10,12 +10,32 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' LIMIT %d, %d", "YES", $offset, $limit));
   }
 
+  public function checkVehicles($ids) {
+    $out = "";
+    foreach($ids as $id) {
+      $out .= sprintf(" OR id=%d", $id);
+    }
+    $out = substr($out, 4);
+
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "YES", $out));
+  }
+
   public function listVehiclesAdmin() {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'", "NO"));
   }
 
   public function listVehiclesAdminLimited($offset, $limit) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' LIMIT %d, %d", "NO", $offset, $limit));
+  }
+
+  public function checkVehiclesAdmin($ids) {
+    $out = "";
+    foreach($ids as $id) {
+      $out .= sprintf(" OR id=%d", $id);
+    }
+    $out = substr($out, 4);
+
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "YES", $out));
   }
 
   public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user) {

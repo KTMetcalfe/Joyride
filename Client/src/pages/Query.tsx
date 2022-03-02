@@ -11,26 +11,59 @@ const Query: React.FC = () => {
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
 
-  const updateList = (offset: number, limit: number) => {
-    fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + offset + '&limit=' + limit, {
-      method: 'GET',
-      mode: 'cors'
+  const checkList = async () => {
+    return await fetch('https://api.kianm.net/index.php/vehicles/list', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(list)
     })
-      .then(e => e.json())
-      .then(result => {
-        if (curr_user !== '' && curr_pswd !== '') {
-          getFavorites();
-        }
-        setList([
-          ...list,
-          ...result,
-        ])
+  }
+
+  const updateList = (limit: number) => {
+    if (list.length > 0) {
+      checkList()
+        .then(e => e.json())
+        .then(safeList => {
+          fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
+            method: 'GET',
+            mode: 'cors'
+          })
+            .then(e => e.json())
+            .then(newList => {
+              if (curr_user !== '' && curr_pswd !== '') {
+                getFavorites();
+              }
+              setList([
+                ...safeList,
+                ...newList
+              ])
+            })
+        })
+    } else {
+      fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
+        method: 'GET',
+        mode: 'cors'
       })
+        .then(e => e.json())
+        .then(newList => {
+          if (curr_user !== '' && curr_pswd !== '') {
+            getFavorites();
+          }
+          setList([
+            ...list,
+            ...newList
+          ])
+        })
+    }
+
   }
 
   const reloadList = (ev: any) => {
     setTimeout(() => {
-      updateList(list.length, 10);
+      updateList(10);
       ev.target.complete();
       if (list.length >= 1000) {
         setIsInfiniteDisabled(true);
@@ -69,7 +102,7 @@ const Query: React.FC = () => {
     //   setUpdate(false);
     //   setRefresh(false);
     // }
-    updateList(list.length, 20);
+    updateList(20);
     setBusy(false);
     setUpdate(false);
     setRefresh(false);
