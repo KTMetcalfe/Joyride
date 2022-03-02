@@ -19,7 +19,7 @@ class AccountModel extends Database {
             if (gettype($favorites) == "array" && count($favorites) > 0) {
                 $out = "";
                 foreach ($favorites as $id) {
-                    $out .= sprintf(" OR id=%f", $id);
+                    $out .= sprintf(" OR id=%d", $id);
                 }
                 $out = substr($out, 4);
 
@@ -46,7 +46,7 @@ class AccountModel extends Database {
             }
         }
 
-        return $this->insert(sprintf("UPDATE accounts SET favorites='[%f]' WHERE user='%s'", $id, $user));
+        return $this->insert(sprintf("UPDATE accounts SET favorites='[%d]' WHERE user='%s'", $id, $user));
     }
 
     public function removeFavorite($user, $id) {
