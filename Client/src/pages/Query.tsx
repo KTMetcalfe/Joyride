@@ -32,10 +32,11 @@ const Query: React.FC = () => {
       })
         .then(e => e.json())
         .then(result => {
-          getFavorites().then(() => {
-            setList(result);
-            setBusy(false);
-          });
+          if (curr_user !== '' && curr_pswd !== '') {
+            getFavorites();
+          }
+          setList(result);
+          setBusy(false);
         })
       setUpdate(false);
       setRefresh(false);
@@ -119,13 +120,15 @@ const Query: React.FC = () => {
                 <IonRow>
                   <IonCol />
                   <IonCol />
-                  <IonCol>
-                    <IonButtons class='center-buttons'>
-                      <IonButton onClick={() => { favorites?.filter(e => e.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id) }} size='small' fill='clear' color='primary'>
-                        <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
-                      </IonButton>
-                    </IonButtons>
-                  </IonCol>
+                  {curr_user != '' ?
+                    <IonCol>
+                      <IonButtons class='center-buttons'>
+                        <IonButton onClick={() => { favorites?.filter(e => e.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id) }} size='small' fill='clear' color='primary'>
+                          <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
+                        </IonButton>
+                      </IonButtons>
+                    </IonCol>
+                    : false}
                   {curr_priv >= 1 ?
                     <IonCol>
                       <IonButtons class='center-buttons'>
