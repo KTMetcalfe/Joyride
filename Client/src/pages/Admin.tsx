@@ -6,6 +6,7 @@ import { curr_user, curr_pswd, setRefresh } from "../components/StorageService";
 const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [busy, setBusy] = useState(true);
   const [list, setList] = useState<Array<any>>();
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     fetch('https://api.kianm.net/index.php/vehicles/list?admin=true', {
@@ -20,7 +21,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         setList(result);
         setBusy(false);
       })
-  }, [])
+  }, [busy, update])
 
   const approveVehicle = ($id: number) => {
     setRefresh(true);
@@ -38,6 +39,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         if (result.approved === true) {
           console.log(result);
         }
+        setUpdate(true);
       })
   }
 
@@ -57,6 +59,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         if (result.removed === true) {
           console.log(result);
         }
+        setUpdate(true);
       })
   }
 
