@@ -42,9 +42,20 @@ const Query: React.FC = () => {
     }
   })
 
-
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"id":' + $id + '}'
+    })
+      .then(() => setUpdate(true))
+  }
+
+  const removeFavorite = ($id: number) => {
+    fetch('https://api.kianm.net/index.php/account/removeFavorite', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -110,7 +121,7 @@ const Query: React.FC = () => {
                   <IonCol />
                   <IonCol>
                     <IonButtons class='center-buttons'>
-                      <IonButton onClick={() => addFavorite(v.id)} size='small' fill='clear' color='primary'>
+                      <IonButton onClick={() => { favorites?.filter(e => e.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id) }} size='small' fill='clear' color='primary'>
                         <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
                       </IonButton>
                     </IonButtons>

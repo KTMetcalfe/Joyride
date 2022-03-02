@@ -41,7 +41,7 @@ const Main: React.FC = () => {
       },
       body: '{"id":' + $id + '}'
     })
-      .then(() => {getFavorites()})
+      .then(() => { getFavorites() })
   }
 
   const handlePresentLogin = () => {
@@ -131,7 +131,7 @@ const Main: React.FC = () => {
           </IonGrid>
         </IonContent>
       </IonMenu>
-      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => { getFavorites()}}>
+      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => { getFavorites() }}>
         <IonHeader>
           <IonToolbar>
             <IonTitle class="ion-text-center">Account</IonTitle>
