@@ -1,7 +1,7 @@
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
 import { addCircleOutline, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd } from "../components/StorageService";
+import { curr_user, curr_pswd, setRefresh } from "../components/StorageService";
 
 const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [busy, setBusy] = useState(true);
@@ -23,6 +23,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }, [])
 
   const approveVehicle = ($id: number) => {
+    setRefresh(true);
     fetch('https://api.kianm.net/index.php/vehicles/approve', {
       method: 'POST',
       mode: 'cors',
@@ -41,6 +42,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }
 
   const removeVehicle = ($id: number) => {
+    setRefresh(true);
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
       method: 'POST',
       mode: 'cors',
