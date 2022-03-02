@@ -120,7 +120,7 @@ const Query: React.FC = () => {
                 <IonRow>
                   <IonCol />
                   <IonCol />
-                  {curr_user != '' ?
+                  {curr_user !== '' ?
                     <IonCol>
                       <IonButtons class='center-buttons'>
                         <IonButton onClick={() => { favorites?.filter(e => e.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id) }} size='small' fill='clear' color='primary'>

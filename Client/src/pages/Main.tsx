@@ -131,7 +131,7 @@ const Main: React.FC = () => {
           </IonGrid>
         </IonContent>
       </IonMenu>
-      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => { getFavorites() }}>
+      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => { if (curr_user !== '') { getFavorites() } }}>
         <IonHeader>
           <IonToolbar>
             <IonTitle class="ion-text-center">Account</IonTitle>
