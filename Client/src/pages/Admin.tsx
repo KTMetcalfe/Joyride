@@ -16,6 +16,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       method: 'POST',
       mode: 'cors',
       headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(list)
@@ -29,7 +30,10 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         .then(safeList => {
           fetch('https://api.kianm.net/index.php/vehicles/list?admin=true&offset=' + safeList.length + '&limit=' + limit, {
             method: 'GET',
-            mode: 'cors'
+            mode: 'cors',
+            headers: {
+              'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+            }
           })
             .then(e => e.json())
             .then(newList => {
@@ -42,7 +46,10 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     } else {
       fetch('https://api.kianm.net/index.php/vehicles/list?admin=true&offset=' + list.length + '&limit=' + limit, {
         method: 'GET',
-        mode: 'cors'
+        mode: 'cors',
+        headers: {
+          'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+        }
       })
         .then(e => e.json())
         .then(newList => {
