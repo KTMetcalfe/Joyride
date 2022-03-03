@@ -10,6 +10,20 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' LIMIT %d, %d", "YES", $offset, $limit));
   }
 
+  public function listVehiclesFiltered($filter, $offset, $limit) {
+    $out = "";
+
+    if ($filter->{'year_start'} && $filter->{'year_start'}) {
+      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_start'};
+    } else if ($filter->{'year_start'}) {
+      $out .= ' AND model_year > ' . $filter->{'year_start'};
+    } else if ($filter->{'year_end'}) {
+      $out .= ' AND model_year < ' . $filter->{'year_end'};
+    }
+
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "YES", $out, $offset, $limit));
+  }
+
   public function checkVehicles($ids) {
     $out = "";
     foreach($ids as $id) {
@@ -26,6 +40,20 @@ class VehicleModel extends Database {
 
   public function listVehiclesAdminLimited($offset, $limit) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' LIMIT %d, %d", "NO", $offset, $limit));
+  }
+
+  public function listVehiclesAdminFiltered($filter, $offset, $limit) {
+    $out = "";
+
+    if ($filter->{'year_start'} && $filter->{'year_start'}) {
+      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_start'};
+    } else if ($filter->{'year_start'}) {
+      $out .= ' AND model_year > ' . $filter->{'year_start'};
+    } else if ($filter->{'year_end'}) {
+      $out .= ' AND model_year < ' . $filter->{'year_end'};
+    }
+
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "NO", $out, $offset, $limit));
   }
 
   public function checkVehiclesAdmin($ids) {

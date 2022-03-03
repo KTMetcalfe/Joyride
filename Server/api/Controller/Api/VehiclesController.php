@@ -92,14 +92,22 @@ class VehiclesController extends BaseController {
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass']) && $accArr[0]['priveledge'] >= 2) {
             $data = file_get_contents('php://input');
             $body = json_decode($data);
-            $ids = [];
 
-            foreach ($body as $vehicle) {
-              array_push($ids, $vehicle->id);
+            if (isset($arrQueryStringParams['offset']) && $arrQueryStringParams['limit']) {
+              $filter = $body;
+
+              $vehicleModel = new VehicleModel();
+              $vehicles = $vehicleModel->listVehiclesAdminFiltered($filter, $offset, $limit);
+            } else {
+              $ids = [];
+  
+              foreach ($body as $vehicle) {
+                array_push($ids, $vehicle->id);
+              }
+  
+              $vehicleModel = new VehicleModel();
+              $vehicles = $vehicleModel->checkVehiclesAdmin($ids);
             }
-
-            $vehicleModel = new VehicleModel();
-            $vehicles = $vehicleModel->checkVehiclesAdmin($ids);
 
             $responseData = json_encode($vehicles);
           } else if (count($accArr) > 1) {
@@ -116,14 +124,22 @@ class VehiclesController extends BaseController {
         try {
           $data = file_get_contents('php://input');
           $body = json_decode($data);
-          $ids = [];
 
-          foreach ($body as $vehicle) {
-            array_push($ids, $vehicle->id);
+          if (isset($arrQueryStringParams['offset']) && $arrQueryStringParams['limit']) {
+            $filter = $body;
+
+            $vehicleModel = new VehicleModel();
+            $vehicles = $vehicleModel->listVehiclesFiltered($filter, $offset, $limit);
+          } else {
+            $ids = [];
+
+            foreach ($body as $vehicle) {
+              array_push($ids, $vehicle->id);
+            }
+
+            $vehicleModel = new VehicleModel();
+            $vehicles = $vehicleModel->checkVehicles($ids);
           }
-
-          $vehicleModel = new VehicleModel();
-          $vehicles = $vehicleModel->checkVehicles($ids);
 
           $responseData = json_encode($vehicles);
         } catch (mysqli_sql_exception $e) {

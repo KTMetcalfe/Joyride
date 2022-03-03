@@ -2,9 +2,14 @@ import { Storage, StoragePlugin } from '@capacitor/storage';
 
 const storage: StoragePlugin = Storage;
 
-export var refresh: boolean;
+export var refresh: boolean = false;
 export const setRefresh = (value: boolean) => {
   refresh = value;
+}
+
+export var filter: Array<any> = [];
+export const setFilter = (value: Array<any>) => {
+  filter = value;
 }
 
 export var curr_email: string = '';

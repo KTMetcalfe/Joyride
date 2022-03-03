@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardS
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd, curr_priv, setRefresh, refresh } from "../components/StorageService";
+import { curr_user, curr_pswd, curr_priv, setRefresh, refresh, filter } from "../components/StorageService";
 
 const Query: React.FC = () => {
   const [busy, setBusy] = useState(true);
@@ -27,36 +27,80 @@ const Query: React.FC = () => {
       checkList()
         .then(e => e.json())
         .then(safeList => {
-          fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
-            method: 'GET',
-            mode: 'cors'
-          })
-            .then(e => e.json())
-            .then(newList => {
-              if (curr_user !== '' && curr_pswd !== '') {
-                getFavorites();
-              }
-              setList([
-                ...safeList,
-                ...newList
-              ])
+          if (filter.length > 0) {
+            // TODO Filter API call
+            fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
+              method: 'POST',
+              mode: 'cors',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(filter)
             })
+              .then(e => e.json())
+              .then(newList => {
+                if (curr_user !== '' && curr_pswd !== '') {
+                  getFavorites();
+                }
+                setList([
+                  ...safeList,
+                  ...newList
+                ])
+              })
+          } else {
+            fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
+              method: 'GET',
+              mode: 'cors'
+            })
+              .then(e => e.json())
+              .then(newList => {
+                if (curr_user !== '' && curr_pswd !== '') {
+                  getFavorites();
+                }
+                setList([
+                  ...safeList,
+                  ...newList
+                ])
+              })
+          }
         })
     } else {
-      fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
-        method: 'GET',
-        mode: 'cors'
-      })
-        .then(e => e.json())
-        .then(newList => {
-          if (curr_user !== '' && curr_pswd !== '') {
-            getFavorites();
-          }
-          setList([
-            ...list,
-            ...newList
-          ])
+      if (filter.length > 0) {
+        // TODO Filter API call
+        fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(filter)
         })
+          .then(e => e.json())
+          .then(newList => {
+            if (curr_user !== '' && curr_pswd !== '') {
+              getFavorites();
+            }
+            setList([
+              ...list,
+              ...newList
+            ])
+          })
+      } else {
+        fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
+          method: 'GET',
+          mode: 'cors'
+        })
+          .then(e => e.json())
+          .then(newList => {
+            if (curr_user !== '' && curr_pswd !== '') {
+              getFavorites();
+            }
+            setList([
+              ...list,
+              ...newList
+            ])
+          })
+      }
     }
   }
 
@@ -105,14 +149,15 @@ const Query: React.FC = () => {
     setBusy(false);
     setUpdate(false);
     setRefresh(false);
-  }, [busy, update, refresh])
+  }, [busy, update, refresh, filter])
 
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+        'Content-Type': 'application/json'
       },
       body: '{"id":' + $id + '}'
     })
@@ -124,7 +169,8 @@ const Query: React.FC = () => {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+        'Content-Type': 'application/json'
       },
       body: '{"id":' + $id + '}'
     })
