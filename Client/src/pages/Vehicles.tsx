@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
 
-const Query: React.FC = () => {
+const Vehicles: React.FC = () => {
   const [busy, setBusy] = useState(true);
   const [update, setUpdate] = useState(false);
   const [list, setList] = useState<Array<any>>([]);
@@ -285,4 +285,4 @@ const Query: React.FC = () => {
   )
 }
 
-export default Query;
+export default Vehicles;

@@ -1,18 +1,17 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonInput, IonSelect, IonSelectOption, useIonPopover } from '@ionic/react';
-import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline, removeCircleOutline, refreshCircleOutline } from 'ionicons/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover } from '@ionic/react';
+import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline } from 'ionicons/icons';
+import React, { useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
 import StructurePage from './Structure';
-import ContentPage from './Content';
-import QueryPage from './Query';
-import Login from './Login';
-import Signup from './Signup';
-import { curr_priv, curr_pswd, curr_user, filter, resetQuery, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
+import VehiclesPage from './Vehicles';
+import LoginModal from './Login';
+import { curr_priv, curr_pswd, curr_user, filter, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
-import AdminPage from './Admin';
+import AdminModal from './Admin';
 
 import './Main.css';
+import AdminPage from './Admin';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
@@ -76,7 +75,7 @@ const Main: React.FC = () => {
     dismissLogin();
   };
 
-  const [presentLogin, dismissLogin] = useIonModal(Login, {
+  const [presentLogin, dismissLogin] = useIonModal(LoginModal, {
     onDismiss: handleDismissLogin
   })
 
@@ -108,7 +107,7 @@ const Main: React.FC = () => {
     dismissAdmin();
   };
 
-  const [presentAdmin, dismissAdmin] = useIonModal(AdminPage, {
+  const [presentAdmin, dismissAdmin] = useIonModal(AdminModal, {
     onDismiss: handleDismissAdmin
   })
 
@@ -141,7 +140,7 @@ const Main: React.FC = () => {
             <IonRow>
               <IonCol>
                 <IonItem lines='none'>
-                  <IonIcon slot='start' icon={tabletLandscapeOutline}></IonIcon>
+                  <IonIcon slot='start' icon={filterOutline}></IonIcon>
                   <IonLabel>Filters</IonLabel>
                 </IonItem>
                 <IonList>
@@ -158,21 +157,6 @@ const Main: React.FC = () => {
                     </IonSelect>
                   </IonItem>
                 </IonList>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <IonAccordionGroup>
-                  <IonAccordion value="databases">
-                    <IonItem slot="header">
-                      <IonIcon slot='start' icon={albumsOutline}></IonIcon>
-                      <IonLabel>Advanced</IonLabel>
-                    </IonItem>
-                    <IonList slot="content">
-
-                    </IonList>
-                  </IonAccordion>
-                </IonAccordionGroup>
               </IonCol>
             </IonRow>
           </IonGrid>
@@ -257,7 +241,7 @@ const Main: React.FC = () => {
           </IonButtons>
           <IonButtons slot='end' class='ion-padding-end'>
             <IonMenuButton menu='end'>
-              <IonIcon icon={accessibilityOutline}></IonIcon>
+              <IonIcon icon={personOutline}></IonIcon>
             </IonMenuButton>
           </IonButtons>
         </IonToolbar>
@@ -265,21 +249,17 @@ const Main: React.FC = () => {
       <IonContent id='outlet' forceOverscroll={false}>
         <IonTabs>
           <IonTabBar slot='bottom'>
+            <IonTabButton tab='vehicles' href='/vehicles'>
+              <IonLabel>Vehicles</IonLabel>
+            </IonTabButton>
             <IonTabButton tab='structure' href='/structure'>
               <IonLabel>Structure</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab='content' href='/content'>
-              <IonLabel>Content</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab='query' href='/query'>
-              <IonLabel>Query</IonLabel>
             </IonTabButton>
           </IonTabBar>
           <IonRouterOutlet>
             <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
-            <Route path="/content" component={ContentPage} exact />
-            <Route path="/query" render={() => (<QueryPage />)} exact />
-            <Route path="/" render={() => <Redirect to="/structure" />} exact={true} />
+            <Route path="/vehicles" render={() => (<VehiclesPage />)} exact />
+            <Route path="/" render={() => <Redirect to="/vehicles" />} exact={true} />
           </IonRouterOutlet>
         </IonTabs>
       </IonContent>
