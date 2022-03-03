@@ -173,24 +173,6 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                       <IonLabel>{v.user}</IonLabel>
                     </IonCol>
                   </IonRow>
-                  <IonRow>
-                    <IonCol />
-                    <IonCol />
-                    <IonCol>
-                      <IonButtons class="center-buttons">
-                        <IonButton onClick={() => approveVehicle(v.id)}>
-                          <IonIcon slot='icon-only' icon={addCircleOutline} />
-                        </IonButton>
-                      </IonButtons>
-                    </IonCol>
-                    <IonCol>
-                      <IonButtons class="center-buttons">
-                        <IonButton onClick={() => removeVehicle(v.id)}>
-                          <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                        </IonButton>
-                      </IonButtons>
-                    </IonCol>
-                  </IonRow>
                 </IonGrid>
               </IonCardContent>
             </IonCard>

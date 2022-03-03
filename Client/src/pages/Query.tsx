@@ -242,28 +242,6 @@ const Query: React.FC = () => {
                       <IonLabel>{v.user}</IonLabel>
                     </IonCol>
                   </IonRow>
-                  <IonRow>
-                    <IonCol />
-                    <IonCol />
-                    {curr_user !== '' ?
-                      <IonCol>
-                        <IonButtons class='center-buttons'>
-                          <IonButton onClick={() => { favorites?.filter(e => e.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id) }} size='small' fill='clear' color='primary'>
-                            <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
-                          </IonButton>
-                        </IonButtons>
-                      </IonCol>
-                      : false}
-                    {curr_priv >= 1 ?
-                      <IonCol>
-                        <IonButtons class='center-buttons'>
-                          <IonButton onClick={() => removeVehicle(v.id)} size='small' fill='clear' color='danger'>
-                            <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                          </IonButton>
-                        </IonButtons>
-                      </IonCol>
-                      : false}
-                  </IonRow>
                 </IonGrid>
               </IonCardContent>
             </IonCard>

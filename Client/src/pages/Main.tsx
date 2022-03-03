@@ -141,18 +141,7 @@ const Main: React.FC = () => {
                   <IonLabel>Filters</IonLabel>
                 </IonItem>
                 <IonList>
-                  <IonItem>
-                    <IonLabel>Min</IonLabel>
-                    <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearStart(e.detail.value!)}>
-                      {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
-                    </IonSelect>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>Max</IonLabel>
-                    <IonSelect mode='ios' value={yearEnd} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearEnd(e.detail.value!)}>
-                      {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
-                    </IonSelect>
-                  </IonItem>
+                  
                 </IonList>
               </IonCol>
             </IonRow>
@@ -174,7 +163,7 @@ const Main: React.FC = () => {
           </IonGrid>
         </IonContent>
       </IonMenu>
-      <IonMenu id='accountMenu' side='end' contentId='outlet' onIonDidOpen={() => { if (curr_user !== '') { getFavorites() } }}>
+      <IonMenu id='accountMenu' side='end' contentId='outlet'>
         <IonHeader>
           <IonToolbar>
             <IonTitle class="ion-text-center">Account</IonTitle>
@@ -200,15 +189,6 @@ const Main: React.FC = () => {
                 </IonCol>
               </IonRow>
               : false}
-            {curr_user !== '' ?
-              <IonRow>
-                <IonCol>
-                  <IonButton color="secondary" onClick={handlePresentAddVehicle} expand='block'>
-                    Add vehicle
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-              : false}
             <IonRow>
               <IonCol>
                 <IonAccordionGroup>
@@ -218,23 +198,7 @@ const Main: React.FC = () => {
                       <IonLabel>Favorites</IonLabel>
                     </IonItem>
                     <IonList slot="content">
-                      {list?.map(v =>
-                        <IonItem key={v.id}>
-                          <IonGrid>
-                            <IonRow>
-                              <IonCol>Model:</IonCol>
-                              <IonCol>{v.model}</IonCol>
-                              <IonCol>Year:</IonCol>
-                              <IonCol>{v.model_year}</IonCol>
-                              <IonCol>
-                                <IonButton onClick={() => removeFavorite(v.id)}>
-                                  <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                                </IonButton>
-                              </IonCol>
-                            </IonRow>
-                          </IonGrid>
-                        </IonItem>
-                      )}
+                      
                     </IonList>
                   </IonAccordion>
                 </IonAccordionGroup>
