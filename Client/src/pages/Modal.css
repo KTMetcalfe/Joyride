@@ -26,3 +26,7 @@
 .center-buttons {
     justify-content: center;
 }
+
+.trans-background {
+    background-color: transparent;
+}

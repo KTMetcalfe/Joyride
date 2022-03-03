@@ -153,15 +153,15 @@ const Query: React.FC = () => {
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonContent forceOverscroll={true}>
-        <IonList>
+        <IonList class='trans-background' mode='ios'>
           {list?.map(v =>
-            <IonCard key={'query-' + v.id}>
+            <IonCard key={v.id}>
               <IonCardHeader>
                 <IonCardSubtitle>Vehicle</IonCardSubtitle>
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonGrid color='danger'>
+                <IonGrid>
                   <IonRow>
                     <IonCol>
                       <IonLabel>Price: </IonLabel>

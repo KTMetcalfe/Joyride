@@ -141,18 +141,18 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent forceOverscroll={true}>
-        <IonList>
+        <IonList class='trans-background' mode='ios'>
           <IonListHeader>
             <IonLabel class='ion-text-center'>Vehicles</IonLabel>
           </IonListHeader>
           {list?.map(v =>
-            <IonCard key={'admin-' + v.id}>
+            <IonCard key={v.id}>
               <IonCardHeader>
                 <IonCardSubtitle>Vehicle</IonCardSubtitle>
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonGrid color='danger'>
+                <IonGrid>
                   <IonRow>
                     <IonCol>
                       <IonLabel>Price: </IonLabel>
