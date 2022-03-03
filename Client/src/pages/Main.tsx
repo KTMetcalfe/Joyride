@@ -1,4 +1,4 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover } from '@ionic/react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter } from '@ionic/react';
 import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
@@ -6,7 +6,7 @@ import { Redirect, Route } from 'react-router';
 import StructurePage from './Structure';
 import VehiclesPage from './Vehicles';
 import LoginModal from './Login';
-import { curr_priv, curr_pswd, curr_user, filter, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
+import { clearStorage, curr_priv, curr_pswd, curr_user, filter, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminModal from './Admin';
 
@@ -230,6 +230,19 @@ const Main: React.FC = () => {
             </IonRow>
           </IonGrid>
         </IonContent>
+        <IonFooter>
+          <div className='footer-bg'>
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonButtons class='center-buttons'>
+                    <IonButton fill='clear' color='primary' onClick={() => {clearStorage(); window.location.reload()}}>Sign out</IonButton>
+                  </IonButtons>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </div>
+        </IonFooter>
       </IonMenu>
       <IonHeader>
         <IonToolbar>

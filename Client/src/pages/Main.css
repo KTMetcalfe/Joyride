@@ -1,3 +1,11 @@
 /* .year-pop {
   height: 200px;
 } */
+
+.center-buttons {
+    justify-content: center;
+}
+
+.footer-bg {
+  background-color: var(--ion-color-step-50);
+}
