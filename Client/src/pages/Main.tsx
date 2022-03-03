@@ -128,7 +128,7 @@ const Main: React.FC = () => {
                 </IonItem>
                 <IonList>
                   <IonItem>
-                    <IonInput value={yearStart} placeholder="Min" type='number' onIonChange={e => setYearStart(e.detail.value!)}></IonInput>
+                    <IonInput value={yearStart} placeholder="Min" type='number' onIonChange={e => setYearStart(e.detail.value!)} tabIndex={1}></IonInput>
                   </IonItem>
                   <IonItem>
                     <IonInput value={yearEnd} placeholder="Max" type='number' onIonChange={e => setYearEnd(e.detail.value!)}></IonInput>
