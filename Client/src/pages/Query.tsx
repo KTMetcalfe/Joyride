@@ -17,7 +17,6 @@ const Query: React.FC = () => {
   };
 
   const checkList = async () => {
-    console.log(list)
     return await fetch('https://api.kianm.net/index.php/vehicles/list', {
       method: 'POST',
       mode: 'cors',
@@ -29,13 +28,11 @@ const Query: React.FC = () => {
   }
 
   const updateList = (limit: number) => {
-    console.log(filter)
     if (list.length > 0) {
       checkList()
         .then(e => e.json())
         .then(safeList => {
           if (JSON.stringify(filter) !== JSON.stringify(baseFilter)) {
-            console.log('filtered')
             // TODO Filter API call
             fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
               method: 'POST',
@@ -50,14 +47,10 @@ const Query: React.FC = () => {
                 if (curr_user !== '' && curr_pswd !== '') {
                   getFavorites();
                 }
-                console.log(list)
-                console.log(safeList)
-                console.log(newList)
                 setList([
                   ...safeList,
                   ...newList
                 ])
-                console.log(list)
               })
           } else {
             fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
