@@ -1,4 +1,4 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonInput } from '@ionic/react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonInput, IonSelect, IonSelectOption } from '@ionic/react';
 import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline, removeCircleOutline, refreshCircleOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
@@ -11,6 +11,8 @@ import Signup from './Signup';
 import { curr_priv, curr_pswd, curr_user, filter, resetQuery, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminPage from './Admin';
+
+import './Main.css';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
@@ -25,7 +27,7 @@ const Main: React.FC = () => {
       "year_start": yearStart,
       "year_end": yearEnd
     }
-    
+
     if (JSON.stringify(newFilter) != JSON.stringify(filter)) {
       setFilter(newFilter);
       setResetQuery(true);
@@ -110,6 +112,18 @@ const Main: React.FC = () => {
     onDismiss: handleDismissAdmin
   })
 
+  let years = [];
+  for (let year = new Date().getFullYear(); year >= 1900; year--) {
+    years.push(year);
+  }
+  
+  const customPopoverOptions = {
+    header: 'Hair Color',
+    subHeader: 'Select your hair color',
+    message: 'Only select your dominant hair color',
+    className: 'year-pop'
+  };
+
   return (
     <IonPage ref={mainRef}>
       <IonMenu id='optionsMenu' side='start' contentId='outlet' onIonDidClose={() => updateFilter()}>
@@ -128,10 +142,16 @@ const Main: React.FC = () => {
                 </IonItem>
                 <IonList>
                   <IonItem>
-                    <IonInput value={yearStart} placeholder="Min" type='number' onIonChange={e => setYearStart(e.detail.value!)} tabIndex={1}></IonInput>
+                    <IonLabel>Min</IonLabel>
+                    <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearStart(e.detail.value!)}>
+                      {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
+                    </IonSelect>
                   </IonItem>
                   <IonItem>
-                    <IonInput value={yearEnd} placeholder="Max" type='number' onIonChange={e => setYearEnd(e.detail.value!)}></IonInput>
+                    <IonLabel>Max</IonLabel>
+                    <IonSelect mode='ios' value={yearEnd} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearEnd(e.detail.value!)}>
+                      {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
+                    </IonSelect>
                   </IonItem>
                 </IonList>
               </IonCol>
