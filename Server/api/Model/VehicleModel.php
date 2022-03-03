@@ -11,14 +11,16 @@ class VehicleModel extends Database {
   }
 
   public function listVehiclesFiltered($filter, $offset, $limit) {
-    $out = "";
+    $yearStart = isset($filter->{'year_start'}) ? $filter->{'year_start'} : '';
+    $yearEnd = isset($filter->{'year_end'}) ? $filter->{'year_end'} : '';
 
-    if (isset($filter->{'year_start'}) && isset($filter->{'year_end'})) {
-      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_end'};
-    } else if (isset($filter->{'year_start'})) {
-      $out .= ' AND model_year > ' . $filter->{'year_start'};
-    } else if (isset($filter->{'year_end'})) {
-      $out .= ' AND model_year < ' . $filter->{'year_end'};
+    $out = "";
+    if ($yearStart != '' && $yearEnd != '') {
+      $out .= ' AND model_year BETWEEN ' . $yearStart . ' AND ' . $yearEnd;
+    } else if ($yearStart != '') {
+      $out .= ' AND model_year >= ' . $yearStart;
+    } else if ($yearStart != '') {
+      $out .= ' AND model_year <= ' . $yearEnd;
     }
 
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "YES", $out, $offset, $limit));

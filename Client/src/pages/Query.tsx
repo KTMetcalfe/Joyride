@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardS
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd, curr_priv, setRefresh, refresh, filter } from "../components/StorageService";
+import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
 
 const Query: React.FC = () => {
   const [busy, setBusy] = useState(true);
@@ -11,7 +11,13 @@ const Query: React.FC = () => {
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
 
+  const baseFilter = {
+    "year_start": '',
+    "year_end": ''
+  };
+
   const checkList = async () => {
+    console.log(list)
     return await fetch('https://api.kianm.net/index.php/vehicles/list', {
       method: 'POST',
       mode: 'cors',
@@ -23,11 +29,13 @@ const Query: React.FC = () => {
   }
 
   const updateList = (limit: number) => {
+    console.log(filter)
     if (list.length > 0) {
       checkList()
         .then(e => e.json())
         .then(safeList => {
-          if (Object.keys(filter).length > 0) {
+          if (JSON.stringify(filter) !== JSON.stringify(baseFilter)) {
+            console.log('filtered')
             // TODO Filter API call
             fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
               method: 'POST',
@@ -42,10 +50,14 @@ const Query: React.FC = () => {
                 if (curr_user !== '' && curr_pswd !== '') {
                   getFavorites();
                 }
+                console.log(list)
+                console.log(safeList)
+                console.log(newList)
                 setList([
                   ...safeList,
                   ...newList
                 ])
+                console.log(list)
               })
           } else {
             fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
@@ -65,7 +77,7 @@ const Query: React.FC = () => {
           }
         })
     } else {
-      if (Object.keys(filter).length > 0) {
+      if (JSON.stringify(filter) !== JSON.stringify(baseFilter)) {
         // TODO Filter API call
         fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
           method: 'POST',
@@ -145,11 +157,20 @@ const Query: React.FC = () => {
     //   setUpdate(false);
     //   setRefresh(false);
     // }
-    updateList(20);
-    setBusy(false);
-    setUpdate(false);
-    setRefresh(false);
-  }, [busy, update, refresh, filter])
+    if (busy || update || refreshQuery || resetQuery || JSON.stringify(list) === JSON.stringify([])) {
+      if (resetQuery) {
+        setList([]);
+
+        setResetQuery(false);
+      } else {
+        updateList(20);
+
+        setBusy(false);
+        setUpdate(false);
+        setRefreshQuery(false);
+      }
+    }
+  }, [busy, update, refreshQuery, resetQuery, list])
 
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {

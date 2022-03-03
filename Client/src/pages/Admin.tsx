@@ -1,7 +1,7 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
 import { addCircleOutline, heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd, setRefresh, curr_priv } from "../components/StorageService";
+import { curr_user, curr_pswd, setRefreshQuery, curr_priv } from "../components/StorageService";
 
 import './Modal.css'
 
@@ -91,7 +91,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }, [busy, update])
 
   const approveVehicle = ($id: number) => {
-    setRefresh(true);
+    setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/vehicles/approve', {
       method: 'POST',
       mode: 'cors',
@@ -111,7 +111,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }
 
   const removeVehicle = ($id: number) => {
-    setRefresh(true);
+    setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
       method: 'POST',
       mode: 'cors',

@@ -2,14 +2,21 @@ import { Storage, StoragePlugin } from '@capacitor/storage';
 
 const storage: StoragePlugin = Storage;
 
-export var refresh: boolean = false;
-export const setRefresh = (value: boolean) => {
-  refresh = value;
+export var refreshQuery: boolean = false;
+export const setRefreshQuery = (value: boolean) => {
+  refreshQuery = value;
 }
 
-export var filter: object = {};
+export var filter: object = {
+  "year_start": '',
+  "year_end": ''
+};
 export const setFilter = (value: object) => {
   filter = value;
+}
+export var resetQuery: boolean = false;
+export const setResetQuery = (value: boolean) => {
+  resetQuery = value;
 }
 
 export var curr_email: string = '';

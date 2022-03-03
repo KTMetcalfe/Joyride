@@ -1,6 +1,6 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal } from '@ionic/react';
-import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline, removeCircleOutline } from 'ionicons/icons';
-import React, { useRef, useState } from 'react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonInput } from '@ionic/react';
+import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline, removeCircleOutline, refreshCircleOutline } from 'ionicons/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
 import StructurePage from './Structure';
@@ -8,14 +8,32 @@ import ContentPage from './Content';
 import QueryPage from './Query';
 import Login from './Login';
 import Signup from './Signup';
-import { curr_priv, curr_pswd, curr_user, refresh, setRefresh } from '../components/StorageService';
+import { curr_priv, curr_pswd, curr_user, filter, resetQuery, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminPage from './Admin';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
 
-  const [list, setList] = useState<Array<any>>();
+  const [list, setList] = useState<Array<any>>([]);
+  const [yearStart, setYearStart] = useState('');
+  const [yearEnd, setYearEnd] = useState('');
+  const [updateState, setUpdateState] = useState(false);
+
+  const updateFilter = () => {
+    const newFilter = {
+      "year_start": yearStart,
+      "year_end": yearEnd
+    }
+    
+    if (JSON.stringify(newFilter) != JSON.stringify(filter)) {
+      setFilter(newFilter);
+      setResetQuery(true);
+
+      setUpdateState(true);
+      setUpdateState(false);
+    }
+  }
 
   const getFavorites = () => {
     fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -32,7 +50,7 @@ const Main: React.FC = () => {
   }
 
   const removeFavorite = ($id: number) => {
-    setRefresh(true);
+    setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
       method: 'POST',
       mode: 'cors',
@@ -94,7 +112,7 @@ const Main: React.FC = () => {
 
   return (
     <IonPage ref={mainRef}>
-      <IonMenu id='optionsMenu' side='start' contentId='outlet'>
+      <IonMenu id='optionsMenu' side='start' contentId='outlet' onIonDidClose={() => updateFilter()}>
         <IonHeader>
           <IonToolbar>
             <IonTitle class="ion-text-center">Options</IonTitle>
@@ -109,7 +127,12 @@ const Main: React.FC = () => {
                   <IonLabel>Filters</IonLabel>
                 </IonItem>
                 <IonList>
-
+                  <IonItem>
+                    <IonInput value={yearStart} placeholder="Min" type='number' onIonChange={e => setYearStart(e.detail.value!)}></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonInput value={yearEnd} placeholder="Max" type='number' onIonChange={e => setYearEnd(e.detail.value!)}></IonInput>
+                  </IonItem>
                 </IonList>
               </IonCol>
             </IonRow>
