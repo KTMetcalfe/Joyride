@@ -15,11 +15,11 @@ class VehicleModel extends Database {
     $yearEnd = isset($filter->{'year_end'}) ? $filter->{'year_end'} : '';
 
     $out = "";
-    if ($yearStart != '' && $yearEnd != '') {
+    if ($yearStart != 0 && $yearEnd != 0) {
       $out .= ' AND model_year BETWEEN ' . $yearStart . ' AND ' . $yearEnd;
-    } else if ($yearStart != '') {
+    } else if ($yearStart != 0) {
       $out .= ' AND model_year >= ' . $yearStart;
-    } else if ($yearStart != '') {
+    } else if ($yearStart != 0) {
       $out .= ' AND model_year <= ' . $yearEnd;
     }
 

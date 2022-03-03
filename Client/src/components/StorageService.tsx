@@ -8,8 +8,8 @@ export const setRefreshQuery = (value: boolean) => {
 }
 
 export var filter: object = {
-  "year_start": '',
-  "year_end": ''
+  "year_start": 0,
+  "year_end": 0
 };
 export const setFilter = (value: object) => {
   filter = value;

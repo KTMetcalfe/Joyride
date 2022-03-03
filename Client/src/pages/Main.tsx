@@ -1,4 +1,4 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonInput, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonInput, IonSelect, IonSelectOption, useIonPopover } from '@ionic/react';
 import { albumsOutline, tabletLandscapeOutline, optionsOutline, accessibilityOutline, starOutline, removeCircleOutline, refreshCircleOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
@@ -18,8 +18,8 @@ const Main: React.FC = () => {
   const mainRef = useRef();
 
   const [list, setList] = useState<Array<any>>([]);
-  const [yearStart, setYearStart] = useState('');
-  const [yearEnd, setYearEnd] = useState('');
+  const [yearStart, setYearStart] = useState(0);
+  const [yearEnd, setYearEnd] = useState(0);
   const [updateState, setUpdateState] = useState(false);
 
   const updateFilter = () => {
@@ -112,15 +112,19 @@ const Main: React.FC = () => {
     onDismiss: handleDismissAdmin
   })
 
-  let years = [];
+  let years: Array<number> = [];
   for (let year = new Date().getFullYear(); year >= 1900; year--) {
     years.push(year);
   }
-  
+
+  // Dummy popover
+  useIonPopover(
+    <IonList>
+      {years.map(year => <IonItem button onClick={() => setYearStart(year)} key={year}>{year}</IonItem>)}
+    </IonList>
+  )
+
   const customPopoverOptions = {
-    header: 'Hair Color',
-    subHeader: 'Select your hair color',
-    message: 'Only select your dominant hair color',
     className: 'year-pop'
   };
 
@@ -149,7 +153,7 @@ const Main: React.FC = () => {
                   </IonItem>
                   <IonItem>
                     <IonLabel>Max</IonLabel>
-                    <IonSelect mode='ios' value={yearEnd} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearEnd(e.detail.value!)}>
+                    <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearEnd(e.detail.value!)}>
                       {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
                     </IonSelect>
                   </IonItem>
