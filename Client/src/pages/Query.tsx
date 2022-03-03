@@ -58,7 +58,6 @@ const Query: React.FC = () => {
           ])
         })
     }
-
   }
 
   const reloadList = (ev: any) => {
@@ -156,7 +155,7 @@ const Query: React.FC = () => {
       <IonContent forceOverscroll={true}>
         <IonList>
           {list?.map(v =>
-            <IonCard key={v.id}>
+            <IonCard key={'query-' + v.id}>
               <IonCardHeader>
                 <IonCardSubtitle>Vehicle</IonCardSubtitle>
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>

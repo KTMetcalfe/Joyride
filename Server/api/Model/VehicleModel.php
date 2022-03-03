@@ -35,7 +35,7 @@ class VehicleModel extends Database {
     }
     $out = substr($out, 4);
 
-    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "YES", $out));
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "NO", $out));
   }
 
   public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user) {
