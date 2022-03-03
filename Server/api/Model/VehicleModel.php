@@ -13,11 +13,11 @@ class VehicleModel extends Database {
   public function listVehiclesFiltered($filter, $offset, $limit) {
     $out = "";
 
-    if ($filter->{'year_start'} && $filter->{'year_start'}) {
-      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_start'};
-    } else if ($filter->{'year_start'}) {
+    if (isset($filter->{'year_start'}) && isset($filter->{'year_end'})) {
+      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_end'};
+    } else if (isset($filter->{'year_start'})) {
       $out .= ' AND model_year > ' . $filter->{'year_start'};
-    } else if ($filter->{'year_end'}) {
+    } else if (isset($filter->{'year_end'})) {
       $out .= ' AND model_year < ' . $filter->{'year_end'};
     }
 
@@ -45,11 +45,11 @@ class VehicleModel extends Database {
   public function listVehiclesAdminFiltered($filter, $offset, $limit) {
     $out = "";
 
-    if ($filter->{'year_start'} && $filter->{'year_start'}) {
-      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_start'};
-    } else if ($filter->{'year_start'}) {
+    if (isset($filter->{'year_start'}) && isset($filter->{'year_end'})) {
+      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_end'};
+    } else if (isset($filter->{'year_start'})) {
       $out .= ' AND model_year > ' . $filter->{'year_start'};
-    } else if ($filter->{'year_end'}) {
+    } else if (isset($filter->{'year_end'})) {
       $out .= ' AND model_year < ' . $filter->{'year_end'};
     }
 

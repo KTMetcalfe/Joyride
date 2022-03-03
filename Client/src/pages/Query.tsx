@@ -27,7 +27,7 @@ const Query: React.FC = () => {
       checkList()
         .then(e => e.json())
         .then(safeList => {
-          if (filter.length > 0) {
+          if (Object.keys(filter).length > 0) {
             // TODO Filter API call
             fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
               method: 'POST',
@@ -65,7 +65,7 @@ const Query: React.FC = () => {
           }
         })
     } else {
-      if (filter.length > 0) {
+      if (Object.keys(filter).length > 0) {
         // TODO Filter API call
         fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
           method: 'POST',

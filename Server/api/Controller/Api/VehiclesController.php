@@ -94,17 +94,19 @@ class VehiclesController extends BaseController {
             $body = json_decode($data);
 
             if (isset($arrQueryStringParams['offset']) && $arrQueryStringParams['limit']) {
+              $offset = $arrQueryStringParams['offset'];
+              $limit = $arrQueryStringParams['limit'];
               $filter = $body;
 
               $vehicleModel = new VehicleModel();
               $vehicles = $vehicleModel->listVehiclesAdminFiltered($filter, $offset, $limit);
             } else {
               $ids = [];
-  
+
               foreach ($body as $vehicle) {
                 array_push($ids, $vehicle->id);
               }
-  
+
               $vehicleModel = new VehicleModel();
               $vehicles = $vehicleModel->checkVehiclesAdmin($ids);
             }
@@ -126,6 +128,8 @@ class VehiclesController extends BaseController {
           $body = json_decode($data);
 
           if (isset($arrQueryStringParams['offset']) && $arrQueryStringParams['limit']) {
+            $offset = $arrQueryStringParams['offset'];
+            $limit = $arrQueryStringParams['limit'];
             $filter = $body;
 
             $vehicleModel = new VehicleModel();

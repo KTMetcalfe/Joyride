@@ -7,8 +7,8 @@ export const setRefresh = (value: boolean) => {
   refresh = value;
 }
 
-export var filter: Array<any> = [];
-export const setFilter = (value: Array<any>) => {
+export var filter: object = {};
+export const setFilter = (value: object) => {
   filter = value;
 }
 
