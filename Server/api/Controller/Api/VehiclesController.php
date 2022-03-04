@@ -386,7 +386,7 @@ class VehiclesController extends BaseController {
             $id = $body->{'id'};
 
             $vehicleModel = new VehicleModel();
-            $vehicles = $vehicleModel->getVehicle($id);
+            $vehicles = $vehicleModel->getVehicleAdmin($id);
 
             $responseData = json_encode($vehicles);
           } else if (count($accArr) > 1) {
@@ -400,8 +400,19 @@ class VehiclesController extends BaseController {
           $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
         }
       } else {
-        $strErrorDesc = 'Not Authorized';
-        $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+        try {
+            $data = file_get_contents('php://input');
+            $body = json_decode($data);
+            $id = $body->{'id'};
+
+            $vehicleModel = new VehicleModel();
+            $vehicles = $vehicleModel->getVehicle($id);
+
+            $responseData = json_encode($vehicles);
+        } catch (Error $e) {
+          $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+          $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        }
       }
     } else {
       $strErrorDesc = 'Method not supported';

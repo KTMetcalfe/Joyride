@@ -169,7 +169,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                      <IonLabel>Max year: </IonLabel>
+                        <IonLabel>Max year: </IonLabel>
                         <IonChip>
                           <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} onIonChange={e => setYearEnd(e.detail.value!)}>
                             {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
@@ -303,7 +303,7 @@ const Main: React.FC = () => {
           </IonTabBar>
           <IonRouterOutlet>
             <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
-            <Route path="/vehicles" render={() => (<VehiclesPage />)} exact />
+            <Route path="/vehicles" render={() => (<VehiclesPage mainRef={mainRef} />)} exact />
             <Route path="/" render={() => <Redirect to="/vehicles" />} exact={true} />
           </IonRouterOutlet>
         </IonTabs>

@@ -85,6 +85,10 @@ class VehicleModel extends Database {
   }
 
   public function getVehicle($id) {
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE id=%d AND approved='%s'", $id, 'YES'));
+  }
+
+  public function getVehicleAdmin($id) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE id=%d", $id));
   }
 }

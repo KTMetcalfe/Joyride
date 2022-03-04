@@ -1,10 +1,11 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
+import VehicleCard from "./VehicleCard";
 
-const Vehicles: React.FC = () => {
+const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [busy, setBusy] = useState(true);
   const [update, setUpdate] = useState(false);
   const [list, setList] = useState<Array<any>>([]);
@@ -210,12 +211,32 @@ const Vehicles: React.FC = () => {
       })
   }
 
+  const [selectedID, setSelectedID] = useState(0);
+
+  const handlePresentVehicle = (id: number) => {
+    setSelectedID(id);
+    presentVehicle({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: mainRef.current
+    });
+  };
+
+  const handleDismissVehicle = () => {
+    dismissVehicle();
+  };
+
+  const [presentVehicle, dismissVehicle] = useIonModal(VehicleCard, {
+    id: selectedID,
+    onDismiss: handleDismissVehicle
+  })
+
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonContent forceOverscroll={true}>
         <IonList class='trans-background' mode='ios'>
           {list?.map(v =>
-            <IonCard key={v.id}>
+            <IonCard key={v.id} onClick={() => {handlePresentVehicle(v.id)}}>
               <IonCardHeader>
                 <IonCardSubtitle>Vehicle</IonCardSubtitle>
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
