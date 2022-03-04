@@ -250,40 +250,48 @@ const Main: React.FC = () => {
                 </IonCol>
               </IonRow>
               : false}
-            <IonRow>
-              <IonCol>
-                <IonAccordionGroup>
-                  <IonAccordion>
-                    <IonItem slot="header">
-                      <IonIcon slot='start' icon={starOutline}></IonIcon>
-                      <IonLabel>Favorites</IonLabel>
-                    </IonItem>
-                    <IonList slot="content">
-                      {list?.map(v =>
-                        <IonItem key={v.id}>
-                          <IonGrid>
-                            <IonRow>
-                              <IonCol>Model:</IonCol>
-                              <IonCol>{v.model}</IonCol>
-                              <IonCol>Year:</IonCol>
-                              <IonCol>{v.model_year}</IonCol>
-                              <IonCol>
-                                <IonButton onClick={() => removeFavorite(v.id)}>
-                                  <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                                </IonButton>
-                              </IonCol>
-                              <IonCol>
-                                <IonButton onClick={() => handlePresentVehicle(v.id)}>View</IonButton>
-                              </IonCol>
-                            </IonRow>
-                          </IonGrid>
-                        </IonItem>
-                      )}
-                    </IonList>
-                  </IonAccordion>
-                </IonAccordionGroup>
-              </IonCol>
-            </IonRow>
+            {curr_user === '' ?
+              true
+              :
+              <IonRow>
+                <IonCol>
+                  <IonAccordionGroup>
+                    <IonAccordion>
+                      <IonItem slot="header">
+                        <IonIcon slot='start' icon={starOutline}></IonIcon>
+                        <IonLabel>Favorites</IonLabel>
+                      </IonItem>
+                      <IonList slot="content">
+                        {list.length === 0 ?
+                          <IonItem>
+                            <IonLabel>No favorites</IonLabel>
+                          </IonItem>
+                          :
+                          list?.map(v =>
+                            <IonItem key={v.id}>
+                              <IonGrid>
+                                <IonRow>
+                                  <IonCol>Model:</IonCol>
+                                  <IonCol>{v.model}</IonCol>
+                                  <IonCol>Year:</IonCol>
+                                  <IonCol>{v.model_year}</IonCol>
+                                  <IonCol>
+                                    <IonButton onClick={() => removeFavorite(v.id)}>
+                                      <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                                    </IonButton>
+                                  </IonCol>
+                                  <IonCol>
+                                    <IonButton onClick={() => handlePresentVehicle(v.id)}>View</IonButton>
+                                  </IonCol>
+                                </IonRow>
+                              </IonGrid>
+                            </IonItem>
+                          )}
+                      </IonList>
+                    </IonAccordion>
+                  </IonAccordionGroup>
+                </IonCol>
+              </IonRow>}
           </IonGrid>
         </IonContent>
         <IonFooter>
