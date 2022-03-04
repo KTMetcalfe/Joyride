@@ -102,7 +102,9 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   }
 
   useEffect(() => {
-    getFavorites();
+    if (curr_user !== '' && curr_pswd !== '') {
+      getFavorites();
+    }
     getVehicle();
     setUpdate(false);
   }, [update])
