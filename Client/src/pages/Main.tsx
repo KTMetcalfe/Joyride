@@ -11,6 +11,7 @@ import AddVehicle from './AddVehicle';
 import AdminModal from './Admin';
 
 import './Main.css';
+import VehicleCard from './VehicleCard';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
@@ -125,6 +126,26 @@ const Main: React.FC = () => {
   const customPopoverOptions = {
     className: 'year-pop'
   };
+
+  const [selectedID, setSelectedID] = useState(0);
+
+  const handlePresentVehicle = (id: number) => {
+    setSelectedID(id);
+    presentVehicle({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: mainRef.current
+    });
+  };
+
+  const handleDismissVehicle = () => {
+    dismissVehicle();
+  };
+
+  const [presentVehicle, dismissVehicle] = useIonModal(VehicleCard, {
+    id: selectedID,
+    onDismiss: handleDismissVehicle
+  })
 
   return (
     <IonPage ref={mainRef}>
@@ -250,6 +271,9 @@ const Main: React.FC = () => {
                                 <IonButton onClick={() => removeFavorite(v.id)}>
                                   <IonIcon slot='icon-only' icon={removeCircleOutline} />
                                 </IonButton>
+                              </IonCol>
+                              <IonCol>
+                                <IonButton onClick={() => handlePresentVehicle(v.id)}>View</IonButton>
                               </IonCol>
                             </IonRow>
                           </IonGrid>

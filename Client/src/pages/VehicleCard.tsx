@@ -116,7 +116,11 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       </IonHeader>
       <IonContent forceOverscroll={false}>
         {vehicle === undefined ?
-          <IonLabel class='ion-text-center'>Vehicle not found</IonLabel>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle class='ion-text-center'>Vehicle not found</IonCardTitle>
+          </IonCardHeader>
+        </IonCard>
           :
           <IonCard key={vehicle.id}>
             <IonCardHeader>
