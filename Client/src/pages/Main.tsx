@@ -156,7 +156,7 @@ const Main: React.FC = () => {
                       <IonCol>
                         <IonLabel>Min year: </IonLabel>
                         <IonChip>
-                          <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearStart(e.detail.value!)}>
+                          <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} onIonChange={e => setYearStart(e.detail.value!)}>
                             {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
                           </IonSelect>
                           {yearStart !== 0 ?
@@ -171,7 +171,7 @@ const Main: React.FC = () => {
                       <IonCol>
                       <IonLabel>Max year: </IonLabel>
                         <IonChip>
-                          <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearEnd(e.detail.value!)}>
+                          <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} onIonChange={e => setYearEnd(e.detail.value!)}>
                             {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
                           </IonSelect>
                           {yearEnd !== 0 ?

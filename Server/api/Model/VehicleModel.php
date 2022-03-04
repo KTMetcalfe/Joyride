@@ -19,7 +19,7 @@ class VehicleModel extends Database {
       $out .= ' AND model_year BETWEEN ' . $yearStart . ' AND ' . $yearEnd;
     } else if ($yearStart != 0) {
       $out .= ' AND model_year >= ' . $yearStart;
-    } else if ($yearStart != 0) {
+    } else if ($yearEnd != 0) {
       $out .= ' AND model_year <= ' . $yearEnd;
     }
 
