@@ -1,4 +1,4 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter } from '@ionic/react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter, IonChip } from '@ionic/react';
 import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
@@ -169,8 +169,8 @@ const Main: React.FC = () => {
         </IonHeader>
         <IonContent forceOverscroll={false}>
           {curr_user !== '' ?
-            <IonItem lines='none'>
-              <IonLabel class='ion-text-center'>Hello, {curr_user}</IonLabel>
+            <IonItem lines='none' color='primary'>
+              <IonLabel class='ion-text-center'>Welcome, {curr_user}</IonLabel>
             </IonItem>
             : false}
           <IonGrid>
