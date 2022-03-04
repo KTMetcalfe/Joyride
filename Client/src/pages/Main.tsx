@@ -11,7 +11,6 @@ import AddVehicle from './AddVehicle';
 import AdminModal from './Admin';
 
 import './Main.css';
-import AdminPage from './Admin';
 
 const Main: React.FC = () => {
   const mainRef = useRef();
@@ -27,7 +26,7 @@ const Main: React.FC = () => {
       "year_end": yearEnd
     }
 
-    if (JSON.stringify(newFilter) != JSON.stringify(filter)) {
+    if (JSON.stringify(newFilter) !== JSON.stringify(filter)) {
       setFilter(newFilter);
       setResetQuery(true);
 
@@ -169,6 +168,11 @@ const Main: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent forceOverscroll={false}>
+          {curr_user !== '' ?
+            <IonItem lines='none'>
+              <IonLabel class='ion-text-center'>Hello, {curr_user}</IonLabel>
+            </IonItem>
+            : false}
           <IonGrid>
             {curr_priv >= 2 ?
               <IonRow>
@@ -236,7 +240,7 @@ const Main: React.FC = () => {
               <IonRow>
                 <IonCol>
                   <IonButtons class='center-buttons'>
-                    <IonButton fill='clear' color='primary' onClick={() => {clearStorage(); window.location.reload()}}>Sign out</IonButton>
+                    <IonButton fill='clear' color='primary' onClick={() => { clearStorage(); window.location.reload() }}>Sign out</IonButton>
                   </IonButtons>
                 </IonCol>
               </IonRow>
