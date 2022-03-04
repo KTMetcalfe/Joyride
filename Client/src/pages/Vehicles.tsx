@@ -236,7 +236,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       <IonContent forceOverscroll={true}>
         <IonList class='trans-background' mode='ios'>
           {list?.map(v =>
-            <IonCard key={v.id} onClick={() => {handlePresentVehicle(v.id)}}>
+            <IonCard key={v.id} onClick={() => { handlePresentVehicle(v.id) }}>
               <IonCardHeader>
                 <IonCardSubtitle>Vehicle</IonCardSubtitle>
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
@@ -269,7 +269,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                     {curr_user !== '' ?
                       <IonCol>
                         <IonButtons class='center-buttons'>
-                          <IonButton onClick={() => { favorites?.filter(e => e.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id) }} size='small' fill='clear' color='primary'>
+                          <IonButton onClick={e => { favorites?.filter(d => d.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id); e.stopPropagation() }} size='small' fill='clear' color='primary'>
                             <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
                           </IonButton>
                         </IonButtons>
@@ -278,7 +278,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                     {curr_priv >= 1 ?
                       <IonCol>
                         <IonButtons class='center-buttons'>
-                          <IonButton onClick={() => removeVehicle(v.id)} size='small' fill='clear' color='danger'>
+                          <IonButton onClick={e => { removeVehicle(v.id); e.stopPropagation() }} size='small' fill='clear' color='danger'>
                             <IonIcon slot='icon-only' icon={removeCircleOutline} />
                           </IonButton>
                         </IonButtons>

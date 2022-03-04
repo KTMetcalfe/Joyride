@@ -1,7 +1,7 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
-import { curr_priv, curr_pswd, curr_user } from "../components/StorageService";
+import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
 
 const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDismiss }) => {
   const [vehicle, setVehicle] = useState<any>({});
@@ -23,6 +23,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   }
 
   const addFavorite = ($id: number) => {
+    setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
       method: 'POST',
       mode: 'cors',
@@ -36,6 +37,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   }
 
   const removeFavorite = ($id: number) => {
+    setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
       method: 'POST',
       mode: 'cors',
@@ -49,6 +51,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   }
 
   const removeVehicle = ($id: number) => {
+    setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
       method: 'POST',
       mode: 'cors',
