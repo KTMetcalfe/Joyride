@@ -1,5 +1,5 @@
 import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter, IonChip } from '@ionic/react';
-import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline } from 'ionicons/icons';
+import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, closeOutline } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
@@ -141,6 +141,14 @@ const Main: React.FC = () => {
                 <IonItem lines='none'>
                   <IonIcon slot='start' icon={filterOutline}></IonIcon>
                   <IonLabel>Filters</IonLabel>
+                  <IonButtons>
+                    <IonButton color='primary' fill='clear' onClick={() => {
+                      setYearStart(0);
+                      setYearEnd(0);
+                    }}>
+                      Clear
+                    </IonButton>
+                  </IonButtons>
                 </IonItem>
                 <IonList>
                   <IonItem>
@@ -148,12 +156,26 @@ const Main: React.FC = () => {
                     <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearStart(e.detail.value!)}>
                       {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
                     </IonSelect>
+                    {yearStart !== 0 ?
+                      <IonButtons>
+                        <IonButton color='primary' fill='clear' onClick={() => setYearStart(0)}>
+                          <IonIcon slot='icon-only' icon={closeOutline} />
+                        </IonButton>
+                      </IonButtons>
+                      : false}
                   </IonItem>
                   <IonItem>
                     <IonLabel>Max</IonLabel>
                     <IonSelect mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} okText="Vroom" cancelText="Kerplut" onIonChange={e => setYearEnd(e.detail.value!)}>
                       {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
                     </IonSelect>
+                    {yearEnd !== 0 ?
+                      <IonButtons>
+                        <IonButton color='primary' fill='clear' onClick={() => setYearEnd(0)}>
+                          <IonIcon slot='icon-only' icon={closeOutline} />
+                        </IonButton>
+                      </IonButtons>
+                      : false}
                   </IonItem>
                 </IonList>
               </IonCol>
