@@ -209,10 +209,10 @@ class VehiclesController extends BaseController {
 
             $images = $_FILES;
             for ($i = 0; $i < count($_FILES); $i++) {
-              move_uploaded_file($images['image-'.$i]['tmp_name'], './files/vehicle_images/'.$id.'-'.$i.'.jpg');
+              move_uploaded_file($images['image-' . $i]['tmp_name'], './files/vehicle_images/' . $id . '-' . $i . '.jpg');
             }
 
-            $responseData = '{"added":true,"id":'.$id.'}';
+            $responseData = '{"added":true,"id":' . $id . '}';
           } else if (count($accArr) > 1) {
             throw new Exception('Too many accounts');
           } else {
@@ -405,14 +405,14 @@ class VehiclesController extends BaseController {
         }
       } else {
         try {
-            $data = file_get_contents('php://input');
-            $body = json_decode($data);
-            $id = $body->{'id'};
+          $data = file_get_contents('php://input');
+          $body = json_decode($data);
+          $id = $body->{'id'};
 
-            $vehicleModel = new VehicleModel();
-            $vehicles = $vehicleModel->getVehicle($id);
+          $vehicleModel = new VehicleModel();
+          $vehicles = $vehicleModel->getVehicle($id);
 
-            $responseData = json_encode($vehicles);
+          $responseData = json_encode($vehicles);
         } catch (Error $e) {
           $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
           $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
