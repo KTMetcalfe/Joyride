@@ -86,10 +86,12 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                   <IonItem>
                     <IonInput type="number" value={capacity} placeholder="Capacity" onIonChange={e => setCapacity(e.detail.value!)} />
                   </IonItem>
-                  <IonItem>
-                    <input type='file' id='image-input' />
-                  </IonItem>
                 </IonList>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <input className='image-input' type='file' id='image-input' />
               </IonCol>
             </IonRow>
             <IonRow>

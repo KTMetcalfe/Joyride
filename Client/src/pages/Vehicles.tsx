@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -110,6 +110,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
         setRefreshQuery(false);
       }
     }
+    // eslint-disable-next-line
   }, [busy, update, refreshQuery, resetQuery, list])
 
   const addFavorite = ($id: number) => {
@@ -192,7 +193,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                   {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
                     <SwiperSlide key={i}>
                       <IonCard className='image-slider'>
-                        <img src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                        <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
                       </IonCard>
                     </SwiperSlide>
                   )}
