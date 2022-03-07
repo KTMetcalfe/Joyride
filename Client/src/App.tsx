@@ -1,5 +1,5 @@
 import { IonApp, IonSpinner, setupIonicReact } from '@ionic/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

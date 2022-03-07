@@ -1,8 +1,8 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
-import { addCircleOutline, heart, heartOutline, removeCircleOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
+import { addCircleOutline, removeCircleOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { curr_user, curr_pswd, setRefreshQuery, curr_priv } from "../components/StorageService";
+import { curr_user, curr_pswd, setRefreshQuery } from "../components/StorageService";
 
 import './Modal.css'
 
@@ -65,9 +65,10 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
 
   useEffect(() => {
     updateList(20);
-    
+
     setBusy(false);
     setUpdate(false);
+    // eslint-disable-next-line
   }, [busy, update])
 
   const approveVehicle = ($id: number) => {
@@ -107,7 +108,9 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
           console.log(result);
         }
         setUpdate(true);
+        // eslint-disable-next-line
       })
+      // eslint-disable-next-line
   }
 
   return busy ? <IonSpinner /> : (

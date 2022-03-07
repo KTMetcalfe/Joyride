@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
-import { addCircleOutline, image } from "ionicons/icons";
+import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import { curr_pswd, curr_user } from "../components/StorageService";
 

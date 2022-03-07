@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -107,6 +107,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
     }
     getVehicle();
     setUpdate(false);
+    // eslint-disable-next-line
   }, [update])
 
   return (

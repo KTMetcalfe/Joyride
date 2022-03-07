@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, IonThumbnail, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -108,6 +108,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
         setRefreshQuery(false);
       }
     }
+    // eslint-disable-next-line
   }, [busy, update, refreshQuery, resetQuery, list])
 
   const addFavorite = ($id: number) => {
