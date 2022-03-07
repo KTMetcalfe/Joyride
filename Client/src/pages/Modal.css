@@ -1,39 +1,39 @@
 .form-pane {
-    margin: auto;
-    max-width: 750px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 10%;
+    margin: auto !important;
+    max-width: 750px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    padding: 10% !important;
 }
 
 .form-grid {
-    background-color: var(--ion-color-primary);
-    border-radius: 10px;
-    padding: 5%;
+    background-color: var(--ion-color-primary) !important;
+    border-radius: 10px !important;
+    padding: 5% !important;
 }
 
 .form-input {
-    border-radius: 10px;
+    border-radius: 10px !important;
 }
 
 #signup-output, #login-output, #add-output{
-    border-radius: 10px;
-    display: none;
+    border-radius: 10px !important;
+    display: none !important;
 }
 
 .center-buttons {
-    justify-content: center;
+    justify-content: center !important;
 }
 
 .trans-background {
-    background-color: transparent;
+    background-color: transparent !important;
 }
 
 .image-slider {
-  width: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 500px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
