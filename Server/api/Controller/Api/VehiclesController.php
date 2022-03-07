@@ -204,9 +204,15 @@ class VehiclesController extends BaseController {
             $capacity = $_POST['capacity'];
 
             $vehicleModel = new VehicleModel();
-            $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user);
+            $lastInsertedID = $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user);
+            $id = $lastInsertedID[0]['LAST_INSERT_ID()'];
 
-            $responseData = '{"added":true}';
+            $images = $_FILES;
+            for ($i = 0; $i < count($_FILES); $i++) {
+              move_uploaded_file($images['image-'.$i]['tmp_name'], './files/vehicle_images/'.$id.'-'.$i.'.jpg');
+            }
+
+            $responseData = '{"added":true,"id":'.$id.'}';
           } else if (count($accArr) > 1) {
             throw new Exception('Too many accounts');
           } else {

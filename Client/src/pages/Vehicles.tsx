@@ -28,85 +28,44 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     })
   }
 
+  const getVehicles = (currList: Array<any>, limit: number) => {
+    // Changes fetch if filter is set
+    (JSON.stringify(filter) !== JSON.stringify(baseFilter) ?
+      fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + currList.length + '&limit=' + limit, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(filter)
+      })
+      :
+      fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + currList.length + '&limit=' + limit, {
+        method: 'GET',
+        mode: 'cors'
+      })
+    )
+      .then(e => e.json())
+      .then(newList => {
+        if (curr_user !== '' && curr_pswd !== '') {
+          getFavorites();
+        }
+        setList([
+          ...list,
+          ...newList
+        ])
+      })
+  }
+
   const updateList = (limit: number) => {
     if (list.length > 0) {
       checkList()
         .then(e => e.json())
         .then(safeList => {
-          if (JSON.stringify(filter) !== JSON.stringify(baseFilter)) {
-            // TODO Filter API call
-            fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
-              method: 'POST',
-              mode: 'cors',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(filter)
-            })
-              .then(e => e.json())
-              .then(newList => {
-                if (curr_user !== '' && curr_pswd !== '') {
-                  getFavorites();
-                }
-                setList([
-                  ...safeList,
-                  ...newList
-                ])
-              })
-          } else {
-            fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + safeList.length + '&limit=' + limit, {
-              method: 'GET',
-              mode: 'cors'
-            })
-              .then(e => e.json())
-              .then(newList => {
-                if (curr_user !== '' && curr_pswd !== '') {
-                  getFavorites();
-                }
-                setList([
-                  ...safeList,
-                  ...newList
-                ])
-              })
-          }
+          getVehicles(safeList, limit);
         })
     } else {
-      if (JSON.stringify(filter) !== JSON.stringify(baseFilter)) {
-        // TODO Filter API call
-        fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(filter)
-        })
-          .then(e => e.json())
-          .then(newList => {
-            if (curr_user !== '' && curr_pswd !== '') {
-              getFavorites();
-            }
-            setList([
-              ...list,
-              ...newList
-            ])
-          })
-      } else {
-        fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + list.length + '&limit=' + limit, {
-          method: 'GET',
-          mode: 'cors'
-        })
-          .then(e => e.json())
-          .then(newList => {
-            if (curr_user !== '' && curr_pswd !== '') {
-              getFavorites();
-            }
-            setList([
-              ...list,
-              ...newList
-            ])
-          })
-      }
+      getVehicles(list, limit);
     }
   }
 
@@ -135,22 +94,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   }
 
   useEffect(() => {
-    // if (busy || refresh || update) {
-    //   fetch('https://api.kianm.net/index.php/vehicles/list', {
-    //     method: 'GET',
-    //     mode: 'cors'
-    //   })
-    //     .then(e => e.json())
-    //     .then(result => {
-    //       if (curr_user !== '' && curr_pswd !== '') {
-    //         getFavorites();
-    //       }
-    //       setList(result);
-    //       setBusy(false);
-    //     })
-    //   setUpdate(false);
-    //   setRefresh(false);
-    // }
     if (busy || update || refreshQuery || resetQuery || JSON.stringify(list) === JSON.stringify([])) {
       if (resetQuery) {
         setList([]);
