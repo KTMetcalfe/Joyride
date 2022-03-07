@@ -196,14 +196,12 @@ class VehiclesController extends BaseController {
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
-            $data = file_get_contents('php://input');
-            $body = json_decode($data);
-            $make = $body->{'make'};
-            $model = $body->{'model'};
-            $mileage = $body->{'mileage'};
-            $price = $body->{'price'};
-            $year = $body->{'year'};
-            $capacity = $body->{'capacity'};
+            $make = $_POST['make'];
+            $model = $_POST['model'];
+            $mileage = $_POST['mileage'];
+            $price = $_POST['price'];
+            $year = $_POST['year'];
+            $capacity = $_POST['capacity'];
 
             $vehicleModel = new VehicleModel();
             $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user);

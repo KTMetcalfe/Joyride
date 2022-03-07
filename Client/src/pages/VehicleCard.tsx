@@ -64,9 +64,8 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       .then(e => e.json())
       .then(result => {
         if (result.removed === true) {
-          console.log(result);
+          setUpdate(true);
         }
-        setUpdate(true);
       })
   }
 
