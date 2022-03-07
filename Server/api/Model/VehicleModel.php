@@ -69,7 +69,12 @@ class VehicleModel extends Database {
   }
 
   public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, $imageCount) {
-    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user, image_count) VALUES ('%s', '%s', %d, %d, %d, %d, '%s', %d)", $make, $model, $mileage, $price, $year, $capacity, $user, $imageCount));
+    $images = [];
+    for ($i = 0; $i < $imageCount; $i++) {
+      array_push($images, $i);
+    }
+
+    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user, images) VALUES ('%s', '%s', %d, %d, %d, %d, '%s', '%s')", $make, $model, $mileage, $price, $year, $capacity, $user, json_encode($images)));
     return $this->select("SELECT LAST_INSERT_ID();");
   }
 
