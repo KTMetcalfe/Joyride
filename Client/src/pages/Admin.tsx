@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_user, curr_pswd, setRefreshQuery } from "../components/StorageService";
 
-import './Modal.css'
+import './Modal.css';
 
 const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [busy, setBusy] = useState(true);
