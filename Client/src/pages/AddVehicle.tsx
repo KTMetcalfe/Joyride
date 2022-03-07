@@ -3,7 +3,7 @@ import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import { curr_pswd, curr_user } from "../components/StorageService";
 
-import './Modal.css'
+import './Modal.css';
 
 const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [make, setMake] = useState<string>('');
