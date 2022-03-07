@@ -1,6 +1,7 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
 import { addCircleOutline, heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_user, curr_pswd, setRefreshQuery, curr_priv } from "../components/StorageService";
 
 import './Modal.css'
@@ -23,41 +24,32 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     })
   }
 
+  const getVehicles = (currList: Array<any>, limit: number) => {
+    fetch('https://api.kianm.net/index.php/vehicles/list?admin=true&offset=' + currList.length + '&limit=' + limit, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(newList => {
+        setList([
+          ...currList,
+          ...newList
+        ])
+      })
+  }
+
   const updateList = (limit: number) => {
     if (list.length > 0) {
       checkList()
         .then(e => e.json())
         .then(safeList => {
-          fetch('https://api.kianm.net/index.php/vehicles/list?admin=true&offset=' + safeList.length + '&limit=' + limit, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-              'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
-            }
-          })
-            .then(e => e.json())
-            .then(newList => {
-              setList([
-                ...safeList,
-                ...newList
-              ])
-            })
+          getVehicles(safeList, limit);
         })
     } else {
-      fetch('https://api.kianm.net/index.php/vehicles/list?admin=true&offset=' + list.length + '&limit=' + limit, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
-        }
-      })
-        .then(e => e.json())
-        .then(newList => {
-          setList([
-            ...list,
-            ...newList
-          ])
-        })
+      getVehicles(list, limit);
     }
   }
 
@@ -72,20 +64,8 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }
 
   useEffect(() => {
-    // fetch('https://api.kianm.net/index.php/vehicles/list?admin=true', {
-    //   method: 'GET',
-    //   mode: 'cors',
-    //   headers: {
-    //     'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
-    //   }
-    // })
-    //   .then(e => e.json())
-    //   .then(result => {
-    //     setList(result);
-    //     setBusy(false);
-    //   })
-    //   setUpdate(false);
     updateList(20);
+    
     setBusy(false);
     setUpdate(false);
   }, [busy, update])
@@ -152,6 +132,15 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
+                <Swiper>
+                  {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
+                    <SwiperSlide key={i}>
+                      <IonCard>
+                        <IonImg src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                      </IonCard>
+                    </SwiperSlide>
+                  )}
+                </Swiper>
                 <IonGrid>
                   <IonRow>
                     <IonCol>

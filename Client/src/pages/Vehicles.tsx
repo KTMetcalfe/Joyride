@@ -1,9 +1,10 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, IonThumbnail, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
 import VehicleCard from "./VehicleCard";
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [busy, setBusy] = useState(true);
@@ -185,11 +186,15 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonList>
-                  {JSON.parse(v.images).map((i: number) =>
-                    <img key={i} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                <Swiper>
+                  {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
+                    <SwiperSlide key={i}>
+                      <IonCard>
+                        <IonImg src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                      </IonCard>
+                    </SwiperSlide>
                   )}
-                </IonList>
+                </Swiper>
                 <IonGrid>
                   <IonRow>
                     <IonCol>

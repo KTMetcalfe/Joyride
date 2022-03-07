@@ -21,7 +21,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
     let images = input.files;
 
     let formData = new FormData();
-    for (let i = 0; i < images; i++) {
+    for (let i = 0; i < images.length; i++) {
       if (images[i] !== undefined) {
         formData.append('image-' + i, images[i]);
       }

@@ -1,6 +1,7 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
 
 const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDismiss }) => {
@@ -120,11 +121,11 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       </IonHeader>
       <IonContent forceOverscroll={false}>
         {vehicle === undefined ?
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle class='ion-text-center'>Vehicle not found</IonCardTitle>
-          </IonCardHeader>
-        </IonCard>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle class='ion-text-center'>Vehicle not found</IonCardTitle>
+            </IonCardHeader>
+          </IonCard>
           :
           <IonCard key={vehicle.id}>
             <IonCardHeader>
@@ -132,6 +133,15 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               <IonCardTitle>{vehicle.model_year} {vehicle.make} {vehicle.model}</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
+            <Swiper>
+                {vehicle.images === undefined ? true : JSON.parse(vehicle.images).map((i: number) =>
+                  <SwiperSlide key={i}>
+                    <IonCard>
+                      <IonImg src={'https://api.kianm.net/files/vehicle_images/' + vehicle.id + '-' + i + '.jpg'} />
+                    </IonCard>
+                  </SwiperSlide>
+                )}
+              </Swiper>
               <IonGrid>
                 <IonRow>
                   <IonCol>
