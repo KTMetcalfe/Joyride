@@ -68,8 +68,8 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "NO", $out));
   }
 
-  public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user) {
-    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user) VALUES ('%s', '%s', %d, %d, %d, %d, '%s')", $make, $model, $mileage, $price, $year, $capacity, $user));
+  public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, $imageCount) {
+    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user, image_count) VALUES ('%s', '%s', %d, %d, %d, %d, '%s', %d)", $make, $model, $mileage, $price, $year, $capacity, $user, $imageCount));
     return $this->select("SELECT LAST_INSERT_ID();");
   }
 

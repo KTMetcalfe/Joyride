@@ -203,12 +203,13 @@ class VehiclesController extends BaseController {
             $year = $_POST['year'];
             $capacity = $_POST['capacity'];
 
-            $vehicleModel = new VehicleModel();
-            $lastInsertedID = $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user);
-            $id = $lastInsertedID[0]['LAST_INSERT_ID()'];
-
             $images = $_FILES;
-            for ($i = 0; $i < count($_FILES); $i++) {
+            
+            $vehicleModel = new VehicleModel();
+            $lastInsertedID = $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, count($images));
+            $id = $lastInsertedID[0]['LAST_INSERT_ID()'];
+            
+            for ($i = 0; $i < count($images); $i++) {
               move_uploaded_file($images['image-' . $i]['tmp_name'], './files/vehicle_images/' . $id . '-' . $i . '.jpg');
             }
 
