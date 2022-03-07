@@ -6,6 +6,8 @@ import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery,
 import VehicleCard from "./VehicleCard";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import './Modal.css';
+
 const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [busy, setBusy] = useState(true);
   const [update, setUpdate] = useState(false);
@@ -52,7 +54,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
           getFavorites();
         }
         setList([
-          ...list,
+          ...currList,
           ...newList
         ])
       })
@@ -108,7 +110,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
         setRefreshQuery(false);
       }
     }
-    // eslint-disable-next-line
   }, [busy, update, refreshQuery, resetQuery, list])
 
   const addFavorite = ($id: number) => {
@@ -187,11 +188,11 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <Swiper>
+                <Swiper slidesPerView='auto'>
                   {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
                     <SwiperSlide key={i}>
-                      <IonCard>
-                        <IonImg src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                      <IonCard className='image-slider'>
+                        <img src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
                       </IonCard>
                     </SwiperSlide>
                   )}

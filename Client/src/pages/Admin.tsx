@@ -108,9 +108,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
           console.log(result);
         }
         setUpdate(true);
-        // eslint-disable-next-line
       })
-      // eslint-disable-next-line
   }
 
   return busy ? <IonSpinner /> : (
@@ -135,10 +133,10 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                 <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <Swiper>
+                <Swiper slidesPerView='auto'>
                   {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
                     <SwiperSlide key={i}>
-                      <IonCard>
+                      <IonCard className='image-slider'>
                         <IonImg src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
                       </IonCard>
                     </SwiperSlide>

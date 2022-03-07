@@ -134,10 +134,10 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               <IonCardTitle>{vehicle.model_year} {vehicle.make} {vehicle.model}</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-            <Swiper>
+            <Swiper slidesPerView='auto'>
                 {vehicle.images === undefined ? true : JSON.parse(vehicle.images).map((i: number) =>
                   <SwiperSlide key={i}>
-                    <IonCard>
+                    <IonCard className='image-slider'>
                       <IonImg src={'https://api.kianm.net/files/vehicle_images/' + vehicle.id + '-' + i + '.jpg'} />
                     </IonCard>
                   </SwiperSlide>

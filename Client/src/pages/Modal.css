@@ -30,3 +30,10 @@
 .trans-background {
     background-color: transparent;
 }
+
+.image-slider {
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
