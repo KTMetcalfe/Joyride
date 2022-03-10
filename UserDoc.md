@@ -2,14 +2,14 @@
 USER DOCUMENTATION
 
 ## Table of Contents
-1. [Introduction] (#intro)
-2. [Setup] (#set)
-3. [Technologies] (#tech)
-4. [Features] (#feat)
-5. [Project Status] (#status)
+1. [Introduction](#intro)
+2. [Setup](#set)
+3. [Technologies](#tech)
+4. [Features](#feat)
+5. [Project Status](#status)
 
-<a name="intro"></a>
-## Introduction
+
+## Introduction <a name="intro"></a>
 Welcome to the JoyRide Application, in this document you will find out more information on how to use our application to its full potential. The primary goal of our application
 is to make buying and selling cars a more fluid and enjoyable experience. With our application a user will be able to log in and then see a library of cars that contain user
 ratings and then be able to make purchases. A helpful feature that we are including with our project is the ability to filter through different vehicle types and the ability to
