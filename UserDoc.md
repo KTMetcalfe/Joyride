@@ -1,5 +1,4 @@
 # Joyride
-Project for CSE-201
 USER DOCUMENTATION
 
 ## Introduction
