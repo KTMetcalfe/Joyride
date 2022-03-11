@@ -91,7 +91,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
             </IonRow>
             <IonRow>
               <IonCol>
-                <input className='image-input' type='file' id='image-input' />
+                <input multiple className='image-input' type='file' id='image-input' />
               </IonCol>
             </IonRow>
             <IonRow>
