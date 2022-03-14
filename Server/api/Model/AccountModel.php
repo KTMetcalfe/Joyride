@@ -1,6 +1,8 @@
 <?php
 require_once "/joyride/api/Model/Database.php";
 
+// TEST Commit
+
 class AccountModel extends Database {
   // Returns a list of matching accounts from SQL database
   public function getAccount($user) {
