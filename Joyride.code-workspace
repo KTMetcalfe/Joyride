@@ -1,9 +1,12 @@
 {
 	"folders": [
-		{
-			"path": "."
-		}
-	],
+    {
+      "path": "Client"
+    },
+    {
+      "path": "Server"
+    }
+  ],
 	"settings": {
 		"editor.tabSize": 2,
     "editor.detectIndentation": false,

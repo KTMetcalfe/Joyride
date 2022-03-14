@@ -2,14 +2,17 @@
 require_once "/joyride/api/Model/Database.php";
 
 class VehicleModel extends Database {
+  // Returns a list of approved vehicles
   public function listVehicles() {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'", "YES"));
   }
 
+  // Returns a limited list of approved vehicles
   public function listVehiclesLimited($offset, $limit) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' LIMIT %d, %d", "YES", $offset, $limit));
   }
 
+  // Returns a limited and filtered list of approved vehicles
   public function listVehiclesFiltered($filter, $offset, $limit) {
     $yearStart = isset($filter->{'year_start'}) ? $filter->{'year_start'} : '';
     $yearEnd = isset($filter->{'year_end'}) ? $filter->{'year_end'} : '';
@@ -26,9 +29,10 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "YES", $out, $offset, $limit));
   }
 
+  // Checks for existence of an approved vehicles in SQL database
   public function checkVehicles($ids) {
     $out = "";
-    foreach($ids as $id) {
+    foreach ($ids as $id) {
       $out .= sprintf(" OR id=%d", $id);
     }
     $out = substr($out, 4);
@@ -36,14 +40,17 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "YES", $out));
   }
 
+  // Returns a list of unapproved vehicles
   public function listVehiclesAdmin() {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'", "NO"));
   }
 
+  // Returns a limited list of unapproved vehicles
   public function listVehiclesAdminLimited($offset, $limit) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' LIMIT %d, %d", "NO", $offset, $limit));
   }
 
+  // Returns a limited and filtered list of unapproved vehicles
   public function listVehiclesAdminFiltered($filter, $offset, $limit) {
     $out = "";
 
@@ -58,9 +65,10 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "NO", $out, $offset, $limit));
   }
 
+  // Checks for existence of an unapproved vehicles in SQL database
   public function checkVehiclesAdmin($ids) {
     $out = "";
-    foreach($ids as $id) {
+    foreach ($ids as $id) {
       $out .= sprintf(" OR id=%d", $id);
     }
     $out = substr($out, 4);
@@ -68,6 +76,7 @@ class VehicleModel extends Database {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s' AND (%s)", "NO", $out));
   }
 
+  // Inserts a new vehicle to the SQL database
   public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, $imageCount) {
     $images = [];
     for ($i = 0; $i < $imageCount; $i++) {
@@ -78,22 +87,27 @@ class VehicleModel extends Database {
     return $this->select("SELECT LAST_INSERT_ID();");
   }
 
+  // Updates a vechiles approved tag to YES
   public function approveVehicle($id) {
     return $this->insert(sprintf("UPDATE vehicles SET approved='%s' WHERE id=%d", "YES", $id));
   }
 
+  // Deletes a vehicle from the SQL database
   public function removeVehicle($id) {
     return $this->insert(sprintf("DELETE FROM vehicles WHERE id=%d", $id));
   }
 
+  // Updates a vehicles information
   public function updateVehicle($id, $make, $model, $mileage, $price, $year, $capacity) {
     return $this->insert(sprintf("UPDATE vehicles SET make='%s', model='%s', mileage=%d, price=%d, model_year=%d, capacity=%d WHERE id=%d", $make, $model, $mileage, $price, $year, $capacity, $id));
   }
 
+  // Returns a list of approved vehicles matching the vehicle id
   public function getVehicle($id) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE id=%d AND approved='%s'", $id, 'YES'));
   }
 
+  // Returns a list of any vehicles matching the vehicle id
   public function getVehicleAdmin($id) {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE id=%d", $id));
   }

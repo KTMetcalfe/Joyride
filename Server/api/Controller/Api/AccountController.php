@@ -1,26 +1,29 @@
 <?php
 require '/joyride/api/Model/AccountModel.php';
-class AccountController extends BaseController
-{
+class AccountController extends BaseController {
   /**
-   * "/account/favorites" Endpoint - Gets a token from a user
+   * "/account/favorites" Endpoint - Returns a json array of a user's favorite vehicles
    */
-  public function favoritesAction()
-  {
+  public function favoritesAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // GET request handling
     if (strtoupper($requestMethod) == 'GET') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
             $vehicles = $accountModel->getFavorites($user);
 
             $responseData = json_encode($vehicles);
@@ -58,24 +61,28 @@ class AccountController extends BaseController
   }
 
   /**
-   * "/account/removeFav" Endpoint - Gets a token from a user
+   * "/account/removeFav" Endpoint - Removes a vehicle from a user's favorites 
    */
-  public function removeFavoriteAction()
-  {
+  public function removeFavoriteAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
             $data = file_get_contents('php://input');
             $body = json_decode($data);
             $id = $body->{'id'};
@@ -117,24 +124,28 @@ class AccountController extends BaseController
   }
 
   /**
-   * "/account/addFav" Endpoint - Gets a token from a user
+   * "/account/addFav" Endpoint - Adds a vehicle from a user's favorites 
    */
-  public function addFavoriteAction()
-  {
+  public function addFavoriteAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
             $data = file_get_contents('php://input');
             $body = json_decode($data);
             $id = $body->{'id'};

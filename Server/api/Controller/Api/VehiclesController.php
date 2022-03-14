@@ -9,7 +9,9 @@ class VehiclesController extends BaseController {
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // GET request handling
     if (strtoupper($requestMethod) == 'GET') {
+      // Header check
       if (
         isset($arrQueryStringParams['admin']) && $arrQueryStringParams['admin']
         && isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
@@ -18,11 +20,14 @@ class VehiclesController extends BaseController {
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           require '/joyride/api/Model/AccountModel.php';
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass']) && $accArr[0]['priveledge'] >= 2) {
+            // Main request logic
+
             $vehicleModel = new VehicleModel();
 
             if (
@@ -50,6 +55,8 @@ class VehiclesController extends BaseController {
         }
       } else {
         try {
+          // Main request logic
+
           $vehicleModel = new VehicleModel();
 
           if (
@@ -76,7 +83,10 @@ class VehiclesController extends BaseController {
           $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
         }
       }
-    } else if (strtoupper($requestMethod) == 'POST') {
+    }
+    // POST request handling
+    else if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (
         isset($arrQueryStringParams['admin']) && $arrQueryStringParams['admin']
         && isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
@@ -85,11 +95,14 @@ class VehiclesController extends BaseController {
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           require '/joyride/api/Model/AccountModel.php';
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass']) && $accArr[0]['priveledge'] >= 2) {
+            // Main request logic
+
             $data = file_get_contents('php://input');
             $body = json_decode($data);
 
@@ -124,6 +137,8 @@ class VehiclesController extends BaseController {
         }
       } else {
         try {
+          // Main request logic
+
           $data = file_get_contents('php://input');
           $body = json_decode($data);
 
@@ -185,17 +200,22 @@ class VehiclesController extends BaseController {
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           require '/joyride/api/Model/AccountModel.php';
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
             $make = $_POST['make'];
             $model = $_POST['model'];
             $mileage = $_POST['mileage'];
@@ -204,11 +224,11 @@ class VehiclesController extends BaseController {
             $capacity = $_POST['capacity'];
 
             $images = $_FILES;
-            
+
             $vehicleModel = new VehicleModel();
             $lastInsertedID = $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, count($images));
             $id = $lastInsertedID[0]['LAST_INSERT_ID()'];
-            
+
             for ($i = 0; $i < count($images); $i++) {
               move_uploaded_file($images['image-' . $i]['tmp_name'], './files/vehicle_images/' . $id . '-' . $i . '.jpg');
             }
@@ -255,17 +275,22 @@ class VehiclesController extends BaseController {
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           require '/joyride/api/Model/AccountModel.php';
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass']) && $accArr[0]['priveledge'] >= 2) {
+            // Main request logic
+
             $data = file_get_contents('php://input');
             $body = json_decode($data);
             $id = $body->{'id'};
@@ -315,17 +340,22 @@ class VehiclesController extends BaseController {
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           require '/joyride/api/Model/AccountModel.php';
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass']) && $accArr[0]['priveledge'] >= 2) {
+            // Main request logic
+
             $data = file_get_contents('php://input');
             $body = json_decode($data);
             $id = $body->{'id'};
@@ -375,17 +405,22 @@ class VehiclesController extends BaseController {
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
+    // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
+      // Header check
       if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $user = $_SERVER['PHP_AUTH_USER'];
         $pswd = $_SERVER['PHP_AUTH_PW'];
 
         try {
+          // Authorization check
           require '/joyride/api/Model/AccountModel.php';
           $accountModel = new AccountModel();
           $accArr = $accountModel->getAccount($user);
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
             $data = file_get_contents('php://input');
             $body = json_decode($data);
             $id = $body->{'id'};
