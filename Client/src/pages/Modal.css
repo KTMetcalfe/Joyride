@@ -32,8 +32,13 @@
 }
 
 .image-slider {
+  height: 500px !important;
   width: 500px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.vehicle-col {
+  width: 750px;
 }
