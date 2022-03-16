@@ -31,14 +31,13 @@
   background-color: transparent !important;
 }
 
-.image-slider {
-  height: 500px !important;
-  width: 500px !important;
+.swiper-main {
+  height: 50vh;
+}
+.swiper-card {
+  height: 100%;
+  width: 100%;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-}
-
-.vehicle-col {
-  width: 750px;
 }

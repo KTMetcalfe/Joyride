@@ -184,17 +184,17 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
         <IonGrid>
           <IonRow>
             {list?.map(v =>
-              <IonCol class='vehicle-col'>
-                <IonCard key={v.id} onClick={() => { handlePresentVehicle(v.id) }}>
+              <IonCol size='12' size-xl='3' size-lg='4' size-md='6'>
+                <IonCard key={v.id} onClick={() => { handlePresentVehicle(v.id) }} mode='ios'>
                   <IonCardHeader>
                     <IonCardSubtitle>Vehicle</IonCardSubtitle>
                     <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Swiper slidesPerView='auto'>
+                    <Swiper slidesPerView='auto' className="swiper-main">
                       {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
                         <SwiperSlide key={i}>
-                          <IonCard className='image-slider'>
+                          <IonCard className='swiper-card'>
                             <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
                           </IonCard>
                         </SwiperSlide>
