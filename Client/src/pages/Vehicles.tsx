@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -191,15 +191,19 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                     <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
-                    <Swiper slidesPerView='auto' className="swiper-main">
-                      {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
-                        <SwiperSlide key={i}>
-                          <IonCard className='swiper-card'>
-                            <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
-                          </IonCard>
-                        </SwiperSlide>
-                      )}
-                    </Swiper>
+                    {v.images === undefined || JSON.parse(v.images).length === 0 ?
+                      <IonLabel className="swiper-main">No Image Found</IonLabel>
+                      :
+                      <Swiper slidesPerView='auto' className="swiper-main">
+                        {JSON.parse(v.images).map((i: number) =>
+                          <SwiperSlide key={i}>
+                            <IonCard className='swiper-card'>
+                              <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                            </IonCard>
+                          </SwiperSlide>
+                        )}
+                      </Swiper>
+                    }
                     <IonGrid>
                       <IonRow>
                         <IonCol>
