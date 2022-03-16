@@ -197,7 +197,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                       <Swiper slidesPerView='auto' className="swiper-main">
                         {JSON.parse(v.images).map((i: number) =>
                           <SwiperSlide key={i}>
-                            <IonCard className='swiper-card'>
+                            <IonCard className='swiper-card' mode="ios">
                               <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
                             </IonCard>
                           </SwiperSlide>

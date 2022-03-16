@@ -122,22 +122,22 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       </IonHeader>
       <IonContent forceOverscroll={false}>
         {vehicle === undefined ?
-          <IonCard>
+          <IonCard mode="ios">
             <IonCardHeader>
               <IonCardTitle class='ion-text-center'>Vehicle not found</IonCardTitle>
             </IonCardHeader>
           </IonCard>
           :
-          <IonCard key={vehicle.id}>
+          <IonCard key={vehicle.id} mode="ios">
             <IonCardHeader>
               <IonCardSubtitle>Vehicle</IonCardSubtitle>
               <IonCardTitle>{vehicle.model_year} {vehicle.make} {vehicle.model}</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-            <Swiper slidesPerView='auto'>
+            <Swiper slidesPerView='auto' className="swiper-main">
                 {vehicle.images === undefined ? true : JSON.parse(vehicle.images).map((i: number) =>
                   <SwiperSlide key={i}>
-                    <IonCard className='image-slider'>
+                    <IonCard className='swiper-card' mode="ios">
                       <img alt={vehicle.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + vehicle.id + '-' + i + '.jpg'} />
                     </IonCard>
                   </SwiperSlide>
