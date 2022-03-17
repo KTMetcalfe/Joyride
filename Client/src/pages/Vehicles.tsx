@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
 import VehicleCard from "./VehicleCard";
@@ -14,6 +14,8 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [list, setList] = useState<Array<any>>([]);
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
+
+  const [waiting, setWaiting] = useState(true);
 
   const baseFilter = {
     "year_start": '',
@@ -97,21 +99,29 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   }
 
   useEffect(() => {
-    if (busy || update || refreshQuery || resetQuery || JSON.stringify(list) === JSON.stringify([])) {
-      if (resetQuery) {
-        setList([]);
-
-        setResetQuery(false);
-      } else {
-        updateList(20);
-
-        setBusy(false);
-        setUpdate(false);
-        setRefreshQuery(false);
-      }
+    console.log("v");
+    setWaiting(true);
+    if (waiting) {
+      let timer = setTimeout(() => {
+        setWaiting(false);
+        clearTimeout(timer);
+      }, 2500)
     }
+
+    if (resetQuery) {
+      setList([]);
+
+      setResetQuery(false);
+    } else {
+      updateList(20);
+
+      setBusy(false);
+      setUpdate(false);
+      setRefreshQuery(false);
+    }
+
     // eslint-disable-next-line
-  }, [busy, update, refreshQuery, resetQuery, list])
+  }, [busy, update, refreshQuery, resetQuery])
 
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
@@ -181,71 +191,92 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonContent forceOverscroll={true}>
-        <IonList class='trans-background' mode='ios'>
-          {list?.map(v =>
-            <IonCard key={v.id} onClick={() => { handlePresentVehicle(v.id) }}>
-              <IonCardHeader>
-                <IonCardSubtitle>Vehicle</IonCardSubtitle>
-                <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
-              </IonCardHeader>
-              <IonCardContent>
-                <Swiper slidesPerView='auto'>
-                  {v.images === undefined ? true : JSON.parse(v.images).map((i: number) =>
-                    <SwiperSlide key={i}>
-                      <IonCard className='image-slider'>
-                        <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
-                      </IonCard>
-                    </SwiperSlide>
-                  )}
-                </Swiper>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol>
-                      <IonLabel>Price: </IonLabel>
-                      <IonLabel>{v.price}</IonLabel>
-                    </IonCol>
-                    <IonCol>
-                      <IonLabel>Mileage: </IonLabel>
-                      <IonLabel>{v.mileage}</IonLabel>
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonLabel>Capacity: </IonLabel>
-                      <IonLabel>{v.capacity}</IonLabel>
-                    </IonCol>
-                    <IonCol>
-                      <IonLabel>User: </IonLabel>
-                      <IonLabel>{v.user}</IonLabel>
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol />
-                    <IonCol />
-                    {curr_user !== '' ?
-                      <IonCol>
-                        <IonButtons class='center-buttons'>
-                          <IonButton onClick={e => { favorites?.filter(d => d.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id); e.stopPropagation() }} size='small' fill='clear' color='primary'>
-                            <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
-                          </IonButton>
-                        </IonButtons>
-                      </IonCol>
-                      : false}
-                    {curr_priv >= 1 ?
-                      <IonCol>
-                        <IonButtons class='center-buttons'>
-                          <IonButton onClick={e => { removeVehicle(v.id); e.stopPropagation() }} size='small' fill='clear' color='danger'>
-                            <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                          </IonButton>
-                        </IonButtons>
-                      </IonCol>
-                      : false}
-                  </IonRow>
-                </IonGrid>
-              </IonCardContent>
-            </IonCard>
-          )}
-        </IonList>
+        {list?.length === 0 ?
+          <div className="true-center">
+            {waiting ?
+              <IonSpinner />
+              :
+              <IonCard>
+                <IonCardContent>
+                  <IonLabel class="ion-text-center">No Vehicles Found</IonLabel>
+                </IonCardContent>
+              </IonCard>}
+          </div>
+          :
+          <IonGrid>
+            <IonRow>
+              {list?.map(v =>
+                <IonCol key={v.id} size='12' size-xl='3' size-lg='4' size-md='6'>
+                  <IonCard key={v.id} onClick={() => { handlePresentVehicle(v.id) }} mode='ios'>
+                    <IonCardHeader>
+                      <IonCardSubtitle>Vehicle</IonCardSubtitle>
+                      <IonCardTitle>{v.model_year} {v.make} {v.model}</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      {v.images === undefined || JSON.parse(v.images).length === 0 ?
+                        <IonLabel className="swiper-main">No Image Found</IonLabel>
+                        :
+                        <Swiper slidesPerView='auto' className="swiper-main">
+                          {JSON.parse(v.images).map((i: number) =>
+                            <SwiperSlide key={i}>
+                              <IonCard className='swiper-card' mode="ios">
+                                <img alt={v.id + '-' + i + '.jpg'} src={'https://api.kianm.net/files/vehicle_images/' + v.id + '-' + i + '.jpg'} />
+                              </IonCard>
+                            </SwiperSlide>
+                          )}
+                        </Swiper>
+                      }
+                      <IonGrid>
+                        <IonRow>
+                          <IonCol>
+                            <IonLabel>Price: </IonLabel>
+                            <IonLabel>{v.price}</IonLabel>
+                          </IonCol>
+                          <IonCol>
+                            <IonLabel>Mileage: </IonLabel>
+                            <IonLabel>{v.mileage}</IonLabel>
+                          </IonCol>
+                        </IonRow>
+                        <IonRow>
+                          <IonCol>
+                            <IonLabel>Capacity: </IonLabel>
+                            <IonLabel>{v.capacity}</IonLabel>
+                          </IonCol>
+                          <IonCol>
+                            <IonLabel>User: </IonLabel>
+                            <IonLabel>{v.user}</IonLabel>
+                          </IonCol>
+                        </IonRow>
+                        <IonRow>
+                          <IonCol />
+                          <IonCol />
+                          {curr_user !== '' ?
+                            <IonCol>
+                              <IonButtons class='center-buttons'>
+                                <IonButton onClick={e => { favorites?.filter(d => d.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id); e.stopPropagation() }} size='small' fill='clear' color='primary'>
+                                  <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
+                                </IonButton>
+                              </IonButtons>
+                            </IonCol>
+                            : false}
+                          {curr_priv >= 1 ?
+                            <IonCol>
+                              <IonButtons class='center-buttons'>
+                                <IonButton onClick={e => { removeVehicle(v.id); e.stopPropagation() }} size='small' fill='clear' color='danger'>
+                                  <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                                </IonButton>
+                              </IonButtons>
+                            </IonCol>
+                            : false}
+                        </IonRow>
+                      </IonGrid>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              )}
+            </IonRow>
+          </IonGrid>
+        }
         <IonInfiniteScroll
           onIonInfinite={reloadList}
           threshold="0px"
