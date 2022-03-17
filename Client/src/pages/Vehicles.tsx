@@ -100,12 +100,18 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
 
   useEffect(() => {
     console.log("v");
+    setWaiting(true);
+    if (waiting) {
+      let timer = setTimeout(() => {
+        setWaiting(false);
+        clearTimeout(timer);
+      }, 2500)
+    }
 
     if (resetQuery) {
       setList([]);
 
       setResetQuery(false);
-      setWaiting(true);
     } else {
       updateList(20);
 
@@ -114,11 +120,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       setRefreshQuery(false);
     }
 
-    if (waiting) {
-      setTimeout(() => {
-        setWaiting(false);
-      }, 5000)
-    }
     // eslint-disable-next-line
   }, [busy, update, refreshQuery, resetQuery])
 

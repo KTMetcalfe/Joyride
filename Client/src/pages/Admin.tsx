@@ -66,17 +66,24 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }
 
   useEffect(() => {
-    console.log("a");
+    let isMounted = true;
+
+    setWaiting(true);
+    if (waiting) {
+      let timer = setTimeout(() => {
+        if (isMounted) {
+          setWaiting(false);
+        }
+        clearTimeout(timer);
+      }, 2500)
+    }
+
     updateList(20);
 
     setBusy(false);
     setUpdate(false);
 
-    if (waiting) {
-      setTimeout(() => {
-        setWaiting(false);
-      }, 5000)
-    }
+    return () => { isMounted = false }
     // eslint-disable-next-line
   }, [busy, update])
 
@@ -138,7 +145,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
               :
               <IonCard>
                 <IonCardContent>
-                  <IonLabel class="ion-text-center">No Vehicles Found</IonLabel>
+                  <IonLabel class="ion-text-center">No Unapproved Vehicles</IonLabel>
                 </IonCardContent>
               </IonCard>}
           </div>
