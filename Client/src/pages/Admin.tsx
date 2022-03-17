@@ -12,6 +12,8 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [update, setUpdate] = useState(false);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
 
+  const [waiting, setWaiting] = useState(true);
+
   const checkList = async () => {
     return await fetch('https://api.kianm.net/index.php/vehicles/list?admin=true', {
       method: 'POST',
@@ -64,10 +66,17 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   }
 
   useEffect(() => {
+    console.log("a");
     updateList(20);
 
     setBusy(false);
     setUpdate(false);
+
+    if (waiting) {
+      setTimeout(() => {
+        setWaiting(false);
+      }, 5000)
+    }
     // eslint-disable-next-line
   }, [busy, update])
 
@@ -124,17 +133,20 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       <IonContent forceOverscroll={true}>
         {list?.length === 0 ?
           <div className="true-center">
-            <IonCard>
-              <IonCardContent>
-                <IonLabel class="ion-text-center">No Unapproved Vehicles</IonLabel>
-              </IonCardContent>
-            </IonCard>
+            {waiting ?
+              <IonSpinner />
+              :
+              <IonCard>
+                <IonCardContent>
+                  <IonLabel class="ion-text-center">No Vehicles Found</IonLabel>
+                </IonCardContent>
+              </IonCard>}
           </div>
           :
           <IonGrid>
             <IonRow>
               {list?.map(v =>
-                <IonCol>
+                <IonCol key={v.id}>
                   <IonCard key={v.id} mode="ios">
                     <IonCardHeader>
                       <IonCardSubtitle>Vehicle</IonCardSubtitle>

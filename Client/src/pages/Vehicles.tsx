@@ -1,6 +1,6 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
 import VehicleCard from "./VehicleCard";
@@ -14,6 +14,8 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [list, setList] = useState<Array<any>>([]);
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
+
+  const [waiting, setWaiting] = useState(true);
 
   const baseFilter = {
     "year_start": '',
@@ -97,21 +99,28 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   }
 
   useEffect(() => {
-    if (busy || update || refreshQuery || resetQuery || JSON.stringify(list) === JSON.stringify([])) {
-      if (resetQuery) {
-        setList([]);
+    console.log("v");
 
-        setResetQuery(false);
-      } else {
-        updateList(20);
+    if (resetQuery) {
+      setList([]);
 
-        setBusy(false);
-        setUpdate(false);
-        setRefreshQuery(false);
-      }
+      setResetQuery(false);
+      setWaiting(true);
+    } else {
+      updateList(20);
+
+      setBusy(false);
+      setUpdate(false);
+      setRefreshQuery(false);
+    }
+
+    if (waiting) {
+      setTimeout(() => {
+        setWaiting(false);
+      }, 5000)
     }
     // eslint-disable-next-line
-  }, [busy, update, refreshQuery, resetQuery, list])
+  }, [busy, update, refreshQuery, resetQuery])
 
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
@@ -183,17 +192,20 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       <IonContent forceOverscroll={true}>
         {list?.length === 0 ?
           <div className="true-center">
-            <IonCard>
-              <IonCardContent>
-                <IonLabel class="ion-text-center">No Vehicles Found</IonLabel>
-              </IonCardContent>
-            </IonCard>
+            {waiting ?
+              <IonSpinner />
+              :
+              <IonCard>
+                <IonCardContent>
+                  <IonLabel class="ion-text-center">No Vehicles Found</IonLabel>
+                </IonCardContent>
+              </IonCard>}
           </div>
           :
           <IonGrid>
             <IonRow>
               {list?.map(v =>
-                <IonCol size='12' size-xl='3' size-lg='4' size-md='6'>
+                <IonCol key={v.id} size='12' size-xl='3' size-lg='4' size-md='6'>
                   <IonCard key={v.id} onClick={() => { handlePresentVehicle(v.id) }} mode='ios'>
                     <IonCardHeader>
                       <IonCardSubtitle>Vehicle</IonCardSubtitle>
