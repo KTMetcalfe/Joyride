@@ -234,7 +234,7 @@ const Main: React.FC = () => {
                   <IonGrid>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Year:</IonLabel>
                           {yearStart !== yearMin || yearEnd !== yearMax ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setYearStart(yearMin); setYearEnd(yearMax) }}>
@@ -242,7 +242,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='filter-chip'>
                             <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} onIonChange={e => setYearStart(e.detail.value!)}>
                               {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
@@ -259,7 +259,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Price:</IonLabel>
                           {priceStart !== 0 || priceEnd !== 0 ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setPriceStart(0); setPriceEnd(0) }}>
@@ -267,7 +267,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='filter-chip'>
                             <IonInput inputmode='numeric' type='number' value={priceStart} onIonChange={e => setPriceStart(Number(e.detail.value!))} />
                           </IonChip>
@@ -280,7 +280,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Capacity:</IonLabel>
                           {capacityStart !== capacityMin || capacityEnd !== capacityMax ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setCapacityStart(capacityMin); setCapacityEnd(capacityMax) }}>
@@ -288,7 +288,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='filter-chip'>
                             <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={capacityStart} onIonChange={e => setCapacityStart(e.detail.value!)}>
                               {capacities.map(cap => <IonSelectOption key={cap} value={cap}>{cap === 7 ? cap + "+" : cap}</IonSelectOption>)}
@@ -305,7 +305,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Mileage:</IonLabel>
                           {mileageStart !== 0 || mileageEnd !== 0 ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setMileageStart(0); setMileageEnd(0) }}>
@@ -313,7 +313,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='filter-chip'>
                             <IonInput inputmode='numeric' type='number' value={mileageStart} onIonChange={e => setMileageStart(Number(e.detail.value!))} />
                           </IonChip>
@@ -326,7 +326,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Transmission Type:</IonLabel>
                           {transmissionType !== '' ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setTransmissionType('') }}>
@@ -334,7 +334,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='filter-chip-100'>
                             <IonSelect class='filter-select-100' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={transmissionType} onIonChange={e => setTransmissionType(e.detail.value!)}>
                               {transmissions.map(trans => <IonSelectOption key={trans} value={trans}>{trans}</IonSelectOption>)}
@@ -345,7 +345,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Color:</IonLabel>
                           {vehicleColor !== '' ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleColor('') }}>
@@ -353,7 +353,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='filter-chip-100'>
                             <IonSelect class='filter-select-100' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={vehicleColor} onIonChange={e => setVehicleColor(e.detail.value!)}>
                               {colors.map(col => <IonSelectOption key={col} value={col}>{col}</IonSelectOption>)}
@@ -364,7 +364,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Make / Model:</IonLabel>
                           {make !== '' ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setMake(''); setModelList([]) }}>
@@ -372,7 +372,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class={modelList.length !== 0 ? 'filter-chip' : 'filter-chip-100'}>
                             <IonSelect class={modelList.length !== 0 ? 'filter-select' : 'filter-select-100'} mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={make} onIonChange={e => { setMake(e.detail.value!); getModels(e.detail.value!) }}>
                               {makes.map(make => <IonSelectOption key={make} value={make}>{make}</IonSelectOption>)}
@@ -390,7 +390,7 @@ const Main: React.FC = () => {
                     </IonRow>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Rating:</IonLabel>
                           {ratingStart !== 0 ?
                             <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setRatingStart(0); }}>
@@ -398,7 +398,7 @@ const Main: React.FC = () => {
                             </IonButton>
                             : false}
                         </IonItem>
-                        <IonItem lines='none' class='anti-focus md item-lines-none'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='center-buttons filter-chip-100'>
                             <IonButtons class='center-buttons filter-select-80'>
                               <IonButton onClick={() => setRatingStart(1)}>
@@ -417,6 +417,24 @@ const Main: React.FC = () => {
                                 <IonIcon icon={ratingStart > 4 ? star : starOutline} />
                               </IonButton>
                             </IonButtons>
+                          </IonChip>
+                        </IonItem>
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
+                          <IonLabel>Powertrain:</IonLabel>
+                          {ratingStart !== 0 ?
+                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setRatingStart(0); }}>
+                              <IonLabel>Clear</IonLabel>
+                            </IonButton>
+                            : false}
+                        </IonItem>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
+                          <IonChip>
+                            <IonCheckbox/>
+                            <IonLabel>Electric</IonLabel>
                           </IonChip>
                         </IonItem>
                       </IonCol>
