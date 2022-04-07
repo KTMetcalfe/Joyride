@@ -9,3 +9,33 @@
 .footer-bg {
   background-color: var(--ion-color-step-50);
 }
+
+.filter-chip {
+  width: 45%;
+}
+
+.filter-select {
+  max-width: 100%;
+}
+
+.filter-chip-100 {
+  width: 100%;
+}
+
+.filter-select-100 {
+  width: 100%;
+  max-width: 100%;
+}
+
+.filter-select-80 {
+  width: 80%;
+  max-width: 100%;
+}
+
+.rating-button {
+  width: 25%;
+}
+
+.anti-focus {
+  --highlight-color-focused: none;
+}
