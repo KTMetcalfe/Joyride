@@ -32,8 +32,19 @@ This project is created with:
 
 <a name="feat"></a>
 ## Features
-* Registration feature for customers to create an account for Joyride
-* Filter system that allows users to search for specfic vehicle specifications
+* ACCOUNT CREATION:
+* Registration feature for customers to create an account for Joyride.
+* We will have different types of users within our application.
+* There are the standard user, admins and moderators.
+* All will have different features that they will have accsess to. 
+* Admins and moderators will be able to change some parts of the site.
+* Regular users will not have too much power as they could try to change the site in a negative way.
+* FILTER:
+* Filter system that allows users to search for specfic vehicle specifications.
+* We intend to have many different categories to filter by.
+* The user will be able to filter by make and model.
+* They can also be able to filter by year. 
+* Additional categories that are filterable include through many popular features.
 * Favorites feature where registered users can favorite vehicles
 * Review system to allow users to leave reviews on select vehicles
 * Moderators can verfiy any reviews left by users
