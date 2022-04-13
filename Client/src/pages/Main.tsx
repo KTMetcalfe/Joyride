@@ -648,19 +648,21 @@ const Main: React.FC = () => {
               </IonRow>}
           </IonGrid>
         </IonContent>
-        <IonFooter>
-          <div className='footer-bg'>
-            <IonGrid>
-              <IonRow>
-                <IonCol>
-                  <IonButtons class='center-buttons'>
-                    <IonButton fill='clear' color='primary' onClick={() => { clearStorage(); window.location.reload() }}>Sign out</IonButton>
-                  </IonButtons>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </div>
-        </IonFooter>
+        {curr_user !== '' ?
+          <IonFooter>
+            <div className='footer-bg'>
+              <IonGrid>
+                <IonRow>
+                  <IonCol>
+                    <IonButtons class='center-buttons'>
+                      <IonButton fill='clear' color='primary' onClick={() => { clearStorage(); window.location.reload() }}>Sign out</IonButton>
+                    </IonButtons>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </div>
+          </IonFooter>
+          : false}
       </IonMenu>
       <IonHeader>
         <IonToolbar>
