@@ -2,6 +2,82 @@
 require_once "/joyride/api/Model/Database.php";
 
 class VehicleModel extends Database {
+  public function concatFilters($filter) {
+    $out = "";
+
+    if ($filter->{'year_start'} != null && $filter->{'year_end'} != null) {
+      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_end'};
+    } else if ($filter->{'year_start'} != null) {
+      $out .= ' AND model_year >= ' . $filter->{'year_start'};
+    } else if ($filter->{'year_end'} != null) {
+      $out .= ' AND model_year <= ' . $filter->{'year_end'};
+    }
+
+    if ($filter->{'price_start'} != null && $filter->{'price_end'} != null) {
+      $out .= ' AND price BETWEEN ' . $filter->{'price_start'} . ' AND ' . $filter->{'price_end'};
+    } else if ($filter->{'price_start'} != null) {
+      $out .= ' AND price >= ' . $filter->{'price_start'};
+    } else if ($filter->{'price_end'} != null) {
+      $out .= ' AND price <= ' . $filter->{'price_end'};
+    }
+
+    if ($filter->{'capacity_start'} != null && $filter->{'capacity_end'} != null && $filter->{'capacity_end'} < 7) {
+      $out .= ' AND capacity BETWEEN ' . $filter->{'capacity_start'} . ' AND ' . $filter->{'capacity_end'};
+    } else if ($filter->{'capacity_start'} != null) {
+      $out .= ' AND capacity >= ' . $filter->{'capacity_start'};
+    } else if ($filter->{'capacity_end'} != null) {
+      $out .= ' AND capacity <= ' . $filter->{'capacity_end'};
+    }
+
+    if ($filter->{'mileage_start'} != null && $filter->{'mileage_end'} != null) {
+      $out .= ' AND mileage BETWEEN ' . $filter->{'mileage_start'} . ' AND ' . $filter->{'mileage_end'};
+    } else if ($filter->{'mileage_start'} != null) {
+      $out .= ' AND mileage >= ' . $filter->{'mileage_start'};
+    } else if ($filter->{'mileage_end'} != null) {
+      $out .= ' AND mileage <= ' . $filter->{'mileage_end'};
+    }
+
+    if ($filter->{'transmission_type'} != null) {
+      $out .= ' AND transmission = ' . $filter->{'mileage_end'};
+    }
+
+    if ($filter->{'vehicle_color'} != null) {
+      $out .= ' AND color = ' . $filter->{'vehicle_color'};
+    }
+
+    if ($filter->{'make'} != null) {
+      $out .= ' AND make = ' . $filter->{'make'};
+    }
+
+    if ($filter->{'model'} != null) {
+      $out .= ' AND model = ' . $filter->{'model'};
+    }
+
+    if ($filter->{'rating_start'} != null) {
+      $out .= ' AND rating >= ' . $filter->{'rating_start'};
+    }
+
+    if ($filter->{'powertrains_list'} != null) {
+      foreach ($filter->{'powertrains_list'} as $powertrain) {
+        $out .= ' AND powertrains LIKE "%' . $powertrain . '%"';
+      }
+    }
+
+    if ($filter->{'vehicle_types_list'} != null) {
+      foreach ($filter->{'vehicle_types_list'} as $vehicle_type) {
+        $out .= ' AND vehicle_types LIKE "%' . $vehicle_type . '%"';
+      }
+    }
+
+    if ($filter->{'vehicle_options_list'} != null) {
+      foreach ($filter->{'vehicle_options_list'} as $vehicle_option) {
+        $out .= ' AND vehicle_options LIKE "%' . $vehicle_option . '%"';
+      }
+    }
+
+    return $out;
+  }
+
   // Returns a list of approved vehicles
   public function listVehicles() {
     return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'", "YES"));
@@ -14,19 +90,9 @@ class VehicleModel extends Database {
 
   // Returns a limited and filtered list of approved vehicles
   public function listVehiclesFiltered($filter, $offset, $limit) {
-    $yearStart = isset($filter->{'year_start'}) ? $filter->{'year_start'} : '';
-    $yearEnd = isset($filter->{'year_end'}) ? $filter->{'year_end'} : '';
+    $filter_string = $this->concatFilters($filter);
 
-    $out = "";
-    if ($yearStart != 0 && $yearEnd != 0) {
-      $out .= ' AND model_year BETWEEN ' . $yearStart . ' AND ' . $yearEnd;
-    } else if ($yearStart != 0) {
-      $out .= ' AND model_year >= ' . $yearStart;
-    } else if ($yearEnd != 0) {
-      $out .= ' AND model_year <= ' . $yearEnd;
-    }
-
-    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "YES", $out, $offset, $limit));
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "YES", $filter_string, $offset, $limit));
   }
 
   // Checks for existence of an approved vehicles in SQL database
@@ -52,17 +118,9 @@ class VehicleModel extends Database {
 
   // Returns a limited and filtered list of unapproved vehicles
   public function listVehiclesAdminFiltered($filter, $offset, $limit) {
-    $out = "";
+    $filter_string = $this->concatFilters($filter);
 
-    if (isset($filter->{'year_start'}) && isset($filter->{'year_end'})) {
-      $out .= ' AND model_year BETWEEN ' . $filter->{'year_start'} . ' AND ' . $filter->{'year_end'};
-    } else if (isset($filter->{'year_start'})) {
-      $out .= ' AND model_year > ' . $filter->{'year_start'};
-    } else if (isset($filter->{'year_end'})) {
-      $out .= ' AND model_year < ' . $filter->{'year_end'};
-    }
-
-    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "NO", $out, $offset, $limit));
+    return $this->select(sprintf("SELECT * FROM vehicles WHERE approved='%s'%s LIMIT %d, %d", "NO", $filter_string, $offset, $limit));
   }
 
   // Checks for existence of an unapproved vehicles in SQL database

@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardS
 import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd, curr_priv, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
+import { curr_user, curr_pswd, curr_priv, baseFilter, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
 import VehicleCard from "./VehicleCard";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -17,11 +17,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
 
   const [waiting, setWaiting] = useState(true);
 
-  const baseFilter = {
-    "year_start": '',
-    "year_end": ''
-  };
-
   const checkList = async () => {
     return await fetch('https://api.kianm.net/index.php/vehicles/list', {
       method: 'POST',
@@ -35,6 +30,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
 
   const getVehicles = (currList: Array<any>, limit: number) => {
     // Changes fetch if filter is set
+    console.log(filter);
     (JSON.stringify(filter) !== JSON.stringify(baseFilter) ?
       fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + currList.length + '&limit=' + limit, {
         method: 'POST',
@@ -52,6 +48,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     )
       .then(e => e.json())
       .then(newList => {
+        console.log(newList);
         if (curr_user !== '' && curr_pswd !== '') {
           getFavorites();
         }
@@ -99,7 +96,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   }
 
   useEffect(() => {
-    console.log("v");
     setWaiting(true);
     if (waiting) {
       let timer = setTimeout(() => {

@@ -1,12 +1,12 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter, IonChip, IonRange, IonInput, IonCheckbox, IonAvatar } from '@ionic/react';
-import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, closeOutline, starSharp, star, checkboxOutline, checkbox, stopOutline } from 'ionicons/icons';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter, IonChip, IonRange, IonInput, IonCheckbox, IonAvatar, IonItemDivider } from '@ionic/react';
+import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, closeOutline, starSharp, star, checkboxOutline, checkbox, stopOutline, atCircle, ellipseOutline, checkmarkCircleOutline, checkmarkCircle, power } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
 import StructurePage from './Structure';
 import VehiclesPage from './Vehicles';
 import LoginModal from './Login';
-import { clearStorage, curr_priv, curr_pswd, curr_user, filter, setFilter, setRefreshQuery, setResetQuery } from '../components/StorageService';
+import { capacityMax, capacityMin, clearStorage, curr_priv, curr_pswd, curr_user, filter, powertrainOptions, setFilter, setRefreshQuery, setResetQuery, vehicleOptionOptions, vehicleTypeOptions, yearMax, yearMin } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminModal from './Admin';
 
@@ -19,11 +19,64 @@ const Main: React.FC = () => {
   const [favoritesList, setFavoritesList] = useState<Array<any>>([]);
   const [updateState, setUpdateState] = useState(false);
 
-  // Filter limits
-  const yearMin = 1900;
-  const yearMax = new Date().getFullYear() + 2;
-  const capacityMin = 1;
-  const capacityMax = 7;
+  // Powertrain Filter
+  const [powertrains, setPowertrains] = useState(powertrainOptions);
+  const checkPowertrainsSet = () => {
+    for (let i = 0; i < powertrains.length; i++) {
+      if (powertrains[i].isChecked !== powertrainOptions[i].isChecked) {
+        return true;
+      }
+    }
+    return false;
+  }
+  const selectPowertrain = (type: string) => {
+    setPowertrains(
+      powertrains.map((pt) =>
+        pt.type === type
+          ? { ...pt, isChecked: pt.isChecked ? false : true }
+          : { ...pt }
+      )
+    )
+  }
+  // Vehicle Type Filter
+  const [vehicleTypes, setVehicleTypes] = useState(vehicleTypeOptions);
+  const checkVehicleTypesSet = () => {
+    for (let i = 0; i < vehicleTypes.length; i++) {
+      if (vehicleTypes[i].isChecked !== vehicleTypeOptions[i].isChecked) {
+        return true;
+      }
+    }
+    return false;
+  }
+  const selectVehicleType = (type: string) => {
+    setVehicleTypes(
+      vehicleTypes.map((v) =>
+        v.type === type
+          ? { ...v, isChecked: v.isChecked ? false : true }
+          : { ...v }
+      )
+    )
+  }
+  // Vehicle Options Filter
+  const [vehicleOptions, setVehicleOptions] = useState(vehicleOptionOptions);
+  const checkVehicleOptionsSet = () => {
+    for (let i = 0; i < vehicleOptions.length; i++) {
+      if (vehicleOptions[i].isChecked !== vehicleOptionOptions[i].isChecked) {
+        return true;
+      }
+    }
+    return false;
+  }
+  const selectVehicleOption = (type: string) => {
+    setVehicleOptions(
+      vehicleOptions.map((o) =>
+        o.type === type
+          ? { ...o, isChecked: o.isChecked ? false : true }
+          : { ...o }
+      )
+    )
+  }
+
   // Filter variables
   const [yearStart, setYearStart] = useState(yearMin);
   const [yearEnd, setYearEnd] = useState(yearMax);
@@ -65,8 +118,22 @@ const Main: React.FC = () => {
   // Filter controller
   const updateFilter = () => {
     const newFilter = {
-      "year_start": yearStart,
-      "year_end": yearEnd
+      "year_start": yearStart !== yearMin ? yearStart : null,
+      "year_end": yearEnd !== yearMax ? yearEnd : null,
+      "price_start": priceStart !== 0 ? priceStart : null,
+      "price_end": priceEnd !== 0 ? priceEnd : null,
+      "capacity_start": capacityStart !== capacityMin ? capacityStart : null,
+      "capacity_end": capacityEnd !== capacityMax ? capacityEnd : null,
+      "mileage_start": mileageStart !== 0 ? mileageStart : null,
+      "mileage_end": mileageEnd !== 0 ? mileageEnd : null,
+      "transmission_type": transmissionType !== '' ? transmissionType : null,
+      "vehicle_color": vehicleColor !== '' ? vehicleColor : null,
+      "make": make !== '' ? make : null,
+      "model": model !== '' ? model : null,
+      "rating_start": ratingStart !== 0 ? ratingStart : null,
+      "powertrains_list": checkPowertrainsSet() ? powertrains : null,
+      "vehicle_types_list": checkVehicleTypesSet() ? vehicleTypes : null,
+      "vehicle_options_list": checkVehicleOptionsSet() ? vehicleOptions : null
     }
 
     if (JSON.stringify(newFilter) !== JSON.stringify(filter)) {
@@ -225,6 +292,9 @@ const Main: React.FC = () => {
                       setModel('');
                       setModelList([]);
                       setRatingStart(0);
+                      setPowertrains(powertrainOptions);
+                      setVehicleTypes(vehicleTypeOptions);
+                      setVehicleOptions(vehicleOptionOptions);
                     }}>
                       Reset
                     </IonButton>
@@ -422,22 +492,70 @@ const Main: React.FC = () => {
                       </IonCol>
                     </IonRow>
                     <IonRow>
-                      <IonCol>
+                      <IonCol size='12'>
                         <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonLabel>Powertrain:</IonLabel>
-                          {ratingStart !== 0 ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setRatingStart(0); }}>
+                          {checkPowertrainsSet() ?
+                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setPowertrains(powertrainOptions); }}>
                               <IonLabel>Clear</IonLabel>
                             </IonButton>
                             : false}
                         </IonItem>
+                      </IonCol>
+                      {powertrains.map((pt) =>
+                        <IonCol key={pt.type}>
+                          <IonItem lines='none' class='anti-focus item-lines-none'>
+                            <IonChip onClick={() => selectPowertrain(pt.type)}>
+                              <IonIcon icon={pt.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
+                              <IonLabel>{pt.type}</IonLabel>
+                            </IonChip>
+                          </IonItem>
+                        </IonCol>
+                      )}
+                    </IonRow>
+                    <IonRow>
+                      <IonCol size='12'>
                         <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip>
-                            <IonCheckbox/>
-                            <IonLabel>Electric</IonLabel>
-                          </IonChip>
+                          <IonLabel>Vehicle Type:</IonLabel>
+                          {checkVehicleTypesSet() ?
+                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleTypes(vehicleTypeOptions); }}>
+                              <IonLabel>Clear</IonLabel>
+                            </IonButton>
+                            : false}
                         </IonItem>
                       </IonCol>
+                      {vehicleTypes.map((v) =>
+                        <IonCol key={v.type}>
+                          <IonItem lines='none' class='anti-focus item-lines-none'>
+                            <IonChip onClick={() => selectVehicleType(v.type)}>
+                              <IonIcon icon={v.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
+                              <IonLabel>{v.type}</IonLabel>
+                            </IonChip>
+                          </IonItem>
+                        </IonCol>
+                      )}
+                    </IonRow>
+                    <IonRow>
+                      <IonCol size='12'>
+                        <IonItem lines='none' class='anti-focus item-lines-none'>
+                          <IonLabel>Vehicle Options:</IonLabel>
+                          {checkVehicleOptionsSet() ?
+                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleOptions(vehicleOptionOptions); }}>
+                              <IonLabel>Clear</IonLabel>
+                            </IonButton>
+                            : false}
+                        </IonItem>
+                      </IonCol>
+                      {vehicleOptions.map((o) =>
+                        <IonCol key={o.type}>
+                          <IonItem lines='none' class='anti-focus item-lines-none'>
+                            <IonChip onClick={() => selectVehicleOption(o.type)}>
+                              <IonIcon icon={o.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
+                              <IonLabel>{o.type}</IonLabel>
+                            </IonChip>
+                          </IonItem>
+                        </IonCol>
+                      )}
                     </IonRow>
                   </IonGrid>
                 </IonList>
