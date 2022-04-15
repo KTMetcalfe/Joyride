@@ -5,14 +5,6 @@ on:
     branches: [ master ]
     
   workflow_dispatch:
-    branches:
-      - '**'
-      
-    inputs:
-      tag:
-        description: 'Branch or commit tag'     
-        required: false
-        default: 'master'
 
 jobs:
   Generate:
@@ -20,9 +12,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.tag }}
+        uses: actions/checkout@v3s
       
       - name: Visualize
         uses: githubocto/repo-visualizer@0.8.2
