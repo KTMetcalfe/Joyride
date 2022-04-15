@@ -5,14 +5,21 @@ on:
     branches: [ master ]
     
   workflow_dispatch:
+    inputs:
+        tag:
+          description: 'Branch or commit tag'     
+          required: false
+          default: 'master'
 
 jobs:
   Generate:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: tag
       
       - name: Visualize
         uses: githubocto/repo-visualizer@0.8.2
