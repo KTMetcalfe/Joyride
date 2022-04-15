@@ -2,17 +2,62 @@
 require_once "/joyride/api/Model/Database.php";
 
 class VehicleModel extends Database {
-  public function submitRating($id, $rating) {
-    $currRatings = $this->select(sprintf("SELECT rating, rating_count FROM vehicles WHERE id=%d", $id));
+  public function submitRating($id, $rating, $user) {
+    // Adding to user
+    $ratingElement = ["id" => $id, "rating" => $rating];
 
-    $currCount = $currRatings[0]['rating_count'];
-    $currRating = $currRatings[0]['rating'];
+    $accounts = $this->select(sprintf("SELECT ratings FROM accounts WHERE user='%s'", $user));
 
-    $newCount = $currCount + 1;
-    $newRating = (($currRating * $currCount) + $rating) / $newCount;
+    $ratings = json_decode($accounts[0]['ratings']);
+    if (gettype($ratings) == "array" && count($ratings) > 0) {
+      $index = array_search($id, array_column($ratings, 'id'));
 
-    $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $newRating, $newCount, $id));
-    return sprintf("%2.1f", $newRating);
+      if (!is_numeric($index)) {
+        array_push($ratings, $ratingElement);
+
+        $this->insert(sprintf("UPDATE accounts SET ratings='%s' WHERE user='%s'", json_encode($ratings), $user));
+
+        // Adding to vehicle
+        $currRatings = $this->select(sprintf("SELECT rating, rating_count FROM vehicles WHERE id=%d", $id));
+
+        $currCount = $currRatings[0]['rating_count'];
+        $currRating = $currRatings[0]['rating'];
+
+        $newCount = $currCount + 1;
+        $newRating = (($currRating * $currCount) + $rating) / $newCount;
+
+        $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $newRating, $newCount, $id));
+      }
+    } else {
+      $this->insert(sprintf("UPDATE accounts SET ratings='%s' WHERE user='%s'", json_encode([$ratingElement]), $user));
+    }
+  }
+
+  public function removeRating($id, $rating, $user) {
+    // Removing from user
+    $accounts = $this->select(sprintf("SELECT ratings FROM accounts WHERE user='%s'", $user));
+
+    $ratings = json_decode($accounts[0]['ratings']);
+    if (gettype($ratings) == "array" && count($ratings) > 0) {
+      $index = array_search($id, array_column($ratings, 'id'));
+
+      if (is_numeric($index)) {
+        unset($ratings[$index]);
+
+        $this->insert(sprintf("UPDATE accounts SET ratings='%s' WHERE user='%s'", json_encode($ratings), $user));
+
+        // Removing from vehicle
+        $currRatings = $this->select(sprintf("SELECT rating, rating_count FROM vehicles WHERE id=%d", $id));
+
+        $currCount = $currRatings[0]['rating_count'];
+        $currRating = $currRatings[0]['rating'];
+
+        $newCount = $currCount - 1;
+        $newRating = (($currRating * $currCount) - $rating) / $newCount;
+
+        $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $newRating, $newCount, $id));
+      }
+    }
   }
 
   public function concatFilters($filter) {

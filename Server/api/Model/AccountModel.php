@@ -16,7 +16,7 @@ class AccountModel extends Database {
   public function getFavorites($user) {
     $accounts = $this->select(sprintf("SELECT favorites FROM accounts WHERE user='%s'", $user));
 
-    if ($accounts[0]['favorites'] != null) {
+    if ($accounts[0]['favorites'] != '') {
       $favorites = json_decode($accounts[0]['favorites']);
 
       if (gettype($favorites) == "array" && count($favorites) > 0) {
@@ -36,7 +36,7 @@ class AccountModel extends Database {
   public function addFavorite($user, $id) {
     $accounts = $this->select(sprintf("SELECT favorites FROM accounts WHERE user='%s'", $user));
 
-    if ($accounts[0]['favorites'] != null) {
+    if ($accounts[0]['favorites'] != '') {
       $favorites = json_decode($accounts[0]['favorites']);
 
       if (gettype($favorites) == "array" && count($favorites) > 0) {
@@ -57,7 +57,7 @@ class AccountModel extends Database {
   public function removeFavorite($user, $id) {
     $accounts = $this->select(sprintf("SELECT favorites FROM accounts WHERE user='%s'", $user));
 
-    if ($accounts[0]['favorites'] != null) {
+    if ($accounts[0]['favorites'] != '') {
       $favorites = json_decode($accounts[0]['favorites']);
 
       if (gettype($favorites) == "array" && count($favorites) > 0) {
