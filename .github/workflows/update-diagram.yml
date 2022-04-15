@@ -5,11 +5,14 @@ on:
     branches: [ master ]
     
   workflow_dispatch:
+    branches:
+      - '**'s
+      
     inputs:
-        tag:
-          description: 'Branch or commit tag'     
-          required: false
-          default: 'master'
+      tag:
+        description: 'Branch or commit tag'     
+        required: false
+        default: 'master'
 
 jobs:
   Generate:
