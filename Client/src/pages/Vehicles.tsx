@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
-import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
+import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, baseFilter, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
@@ -30,7 +30,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
 
   const getVehicles = (currList: Array<any>, limit: number) => {
     // Changes fetch if filter is set
-    console.log(filter);
     (JSON.stringify(filter) !== JSON.stringify(baseFilter) ?
       fetch('https://api.kianm.net/index.php/vehicles/list?offset=' + currList.length + '&limit=' + limit, {
         method: 'POST',
@@ -48,6 +47,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     )
       .then(e => e.json())
       .then(newList => {
+        console.log(currList);
         console.log(newList);
         if (curr_user !== '' && curr_pswd !== '') {
           getFavorites();
@@ -93,6 +93,31 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       .then(result => {
         setFavorites(result)
       })
+  }
+
+  const submitRating = async (id: number, rating: number) => {
+    await fetch('https://api.kianm.net/index.php/vehicles/submitRating', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: JSON.stringify({
+        "id": id,
+        "rating": rating
+      })
+    })
+      .then(e => refreshList())
+  }
+
+  const refreshList = () => {
+    if (list.length > 0) {
+      checkList()
+        .then(e => e.json())
+        .then(safeList => {
+          getVehicles([], safeList.length);
+        })
+    }
   }
 
   useEffect(() => {
@@ -244,8 +269,25 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                           </IonCol>
                         </IonRow>
                         <IonRow>
-                          <IonCol />
-                          <IonCol />
+                          <IonCol size={curr_user !== '' ? "6" : "12"}>
+                            <IonButtons class='center-buttons'>
+                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 1); e.stopPropagation() }}>
+                                <IonIcon icon={v.rating >= .5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 2); e.stopPropagation() }}>
+                                <IonIcon icon={v.rating >= 1.5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 3); e.stopPropagation() }}>
+                                <IonIcon icon={v.rating >= 2.5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 4); e.stopPropagation() }}>
+                                <IonIcon icon={v.rating >= 3.5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 5); e.stopPropagation() }}>
+                                <IonIcon icon={v.rating >= 4.5 ? star : starOutline} />
+                              </IonButton>
+                            </IonButtons>
+                          </IonCol>
                           {curr_user !== '' ?
                             <IonCol>
                               <IonButtons class='center-buttons'>

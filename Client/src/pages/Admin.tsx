@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
-import { addCircleOutline, removeCircleOutline } from "ionicons/icons";
+import { addCircleOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_user, curr_pswd, setRefreshQuery } from "../components/StorageService";
@@ -195,8 +195,25 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                           </IonCol>
                         </IonRow>
                         <IonRow>
-                          <IonCol />
-                          <IonCol />
+                        <IonCol size="6">
+                            <IonButtons class='center-buttons'>
+                              <IonButton disabled={curr_user === ''}>
+                                <IonIcon icon={v.rating >= .5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''}>
+                                <IonIcon icon={v.rating >= 1.5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''}>
+                                <IonIcon icon={v.rating >= 2.5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''}>
+                                <IonIcon icon={v.rating >= 3.5 ? star : starOutline} />
+                              </IonButton>
+                              <IonButton disabled={curr_user === ''}>
+                                <IonIcon icon={v.rating >= 4.5 ? star : starOutline} />
+                              </IonButton>
+                            </IonButtons>
+                          </IonCol>
                           <IonCol>
                             <IonButtons class="center-buttons">
                               <IonButton onClick={() => approveVehicle(v.id)}>

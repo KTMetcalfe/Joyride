@@ -2,6 +2,19 @@
 require_once "/joyride/api/Model/Database.php";
 
 class VehicleModel extends Database {
+  public function submitRating($id, $rating) {
+    $currRatings = $this->select(sprintf("SELECT rating, rating_count FROM vehicles WHERE id=%d", $id));
+
+    $currCount = $currRatings[0]['rating_count'];
+    $currRating = $currRatings[0]['rating'];
+
+    $newCount = $currCount + 1;
+    $newRating = (($currRating * $currCount) + $rating) / $newCount;
+
+    $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $newRating, $newCount, $id));
+    return sprintf("%2.1f", $newRating);
+  }
+
   public function concatFilters($filter) {
     $out = "";
 

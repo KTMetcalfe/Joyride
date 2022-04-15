@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
-import { heart, heartOutline, removeCircleOutline } from "ionicons/icons";
+import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
@@ -101,6 +101,21 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
     }
   }
 
+  const submitRating = async (id: number, rating: number) => {
+    await fetch('https://api.kianm.net/index.php/vehicles/submitRating', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: JSON.stringify({
+        "id": id,
+        "rating": rating
+      })
+    })
+      .then(e => getVehicle())
+  }
+
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
@@ -134,7 +149,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               <IonCardTitle>{vehicle.model_year} {vehicle.make} {vehicle.model}</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-            <Swiper slidesPerView='auto' className="swiper-main">
+              <Swiper slidesPerView='auto' className="swiper-main">
                 {vehicle.images === undefined ? true : JSON.parse(vehicle.images).map((i: number) =>
                   <SwiperSlide key={i}>
                     <IonCard className='swiper-card' mode="ios">
@@ -165,8 +180,25 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                   </IonCol>
                 </IonRow>
                 <IonRow>
-                  <IonCol />
-                  <IonCol />
+                  <IonCol size={curr_user !== '' ? "6" : "12"}>
+                    <IonButtons class='center-buttons'>
+                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
+                        <IonIcon icon={vehicle.rating >= .5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
+                        <IonIcon icon={vehicle.rating >= 1.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
+                        <IonIcon icon={vehicle.rating >= 2.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
+                        <IonIcon icon={vehicle.rating >= 3.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
+                        <IonIcon icon={vehicle.rating >= 4.5 ? star : starOutline} />
+                      </IonButton>
+                    </IonButtons>
+                  </IonCol>
                   {curr_user !== '' ?
                     <IonCol>
                       <IonButtons class='center-buttons'>

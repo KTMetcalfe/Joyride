@@ -123,8 +123,6 @@ const Main: React.FC = () => {
       "vehicle_options_list": checkVehicleOptionsSet() ? vehicleOptionsSelected : null
     }
 
-    console.log(newFilter);
-    
     if (JSON.stringify(newFilter) !== JSON.stringify(filter)) {
       setFilter(newFilter);
       setResetQuery(true);
@@ -460,20 +458,20 @@ const Main: React.FC = () => {
                         <IonItem lines='none' class='anti-focus item-lines-none'>
                           <IonChip class='center-buttons filter-chip-100'>
                             <IonButtons class='center-buttons filter-select-80'>
-                              <IonButton onClick={() => setRatingStart(1)}>
-                                <IonIcon icon={ratingStart > 0 ? star : starOutline} />
+                              <IonButton onClick={() => setRatingStart(0.5)}>
+                                <IonIcon icon={ratingStart >= 0.5 ? star : starOutline} />
                               </IonButton>
-                              <IonButton onClick={() => setRatingStart(2)}>
-                                <IonIcon icon={ratingStart > 1 ? star : starOutline} />
+                              <IonButton onClick={() => setRatingStart(1.5)}>
+                                <IonIcon icon={ratingStart >= 1.5 ? star : starOutline} />
                               </IonButton>
-                              <IonButton onClick={() => setRatingStart(3)}>
-                                <IonIcon icon={ratingStart > 2 ? star : starOutline} />
+                              <IonButton onClick={() => setRatingStart(2.5)}>
+                                <IonIcon icon={ratingStart >= 2.5 ? star : starOutline} />
                               </IonButton>
-                              <IonButton onClick={() => setRatingStart(4)}>
-                                <IonIcon icon={ratingStart > 3 ? star : starOutline} />
+                              <IonButton onClick={() => setRatingStart(3.5)}>
+                                <IonIcon icon={ratingStart >= 3.5 ? star : starOutline} />
                               </IonButton>
-                              <IonButton onClick={() => setRatingStart(5)}>
-                                <IonIcon icon={ratingStart > 4 ? star : starOutline} />
+                              <IonButton onClick={() => setRatingStart(4.5)}>
+                                <IonIcon icon={ratingStart >= 4.5 ? star : starOutline} />
                               </IonButton>
                             </IonButtons>
                           </IonChip>
