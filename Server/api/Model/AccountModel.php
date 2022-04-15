@@ -12,6 +12,17 @@ class AccountModel extends Database {
     return $this->insert(sprintf("INSERT INTO accounts (email, user, pass) VALUES ('%s', '%s', '%s')", $email, $user, $pass));
   }
 
+  // Returns a list of ratings from mathcing account
+  public function getRatings($user) {
+    $accounts = $this->select(sprintf("SELECT ratings FROM accounts WHERE user='%s'", $user));
+
+    $ratings = json_decode($accounts[0]['ratings']);
+    if (gettype($ratings) == "array" && count($ratings) > 0) {
+      return $ratings;
+    }
+    return [];
+  }
+
   // Returns a list of vehicle ids from matching accounts
   public function getFavorites($user) {
     $accounts = $this->select(sprintf("SELECT favorites FROM accounts WHERE user='%s'", $user));

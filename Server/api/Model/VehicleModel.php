@@ -9,7 +9,7 @@ class VehicleModel extends Database {
     $accounts = $this->select(sprintf("SELECT ratings FROM accounts WHERE user='%s'", $user));
 
     $ratings = json_decode($accounts[0]['ratings']);
-    if (gettype($ratings) == "array" && count($ratings) > 0) {
+    if (gettype($ratings) == "array") {
       $index = array_search($id, array_column($ratings, 'id'));
 
       if (!is_numeric($index)) {
@@ -33,15 +33,16 @@ class VehicleModel extends Database {
     }
   }
 
-  public function removeRating($id, $rating, $user) {
+  public function removeRating($id, $user) {
     // Removing from user
     $accounts = $this->select(sprintf("SELECT ratings FROM accounts WHERE user='%s'", $user));
 
     $ratings = json_decode($accounts[0]['ratings']);
-    if (gettype($ratings) == "array" && count($ratings) > 0) {
+    if (gettype($ratings) == "array") {
       $index = array_search($id, array_column($ratings, 'id'));
 
       if (is_numeric($index)) {
+        $rating = $ratings[$index]->{'rating'};
         unset($ratings[$index]);
 
         $this->insert(sprintf("UPDATE accounts SET ratings='%s' WHERE user='%s'", json_encode($ratings), $user));
@@ -51,9 +52,9 @@ class VehicleModel extends Database {
 
         $currCount = $currRatings[0]['rating_count'];
         $currRating = $currRatings[0]['rating'];
-
+        
         $newCount = $currCount - 1;
-        $newRating = (($currRating * $currCount) - $rating) / $newCount;
+        $newRating = $newCount > 0 ? (($currRating * $currCount) - $rating) / $newCount : 0;
 
         $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $newRating, $newCount, $id));
       }

@@ -571,10 +571,9 @@ class VehiclesController extends BaseController {
             $data = file_get_contents('php://input');
             $body = json_decode($data);
             $id = $body->{'id'};
-            $rating = $body->{'rating'};
 
             $vehicleModel = new VehicleModel();
-            $vehicleModel->removeRating($id, $rating, $user);
+            $vehicleModel->removeRating($id, $user);
 
             $responseData = '{"removed":true}';
           } else if (count($accArr) > 1) {

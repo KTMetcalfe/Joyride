@@ -14,6 +14,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [list, setList] = useState<Array<any>>([]);
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
+  const [ratings, setRatings] = useState<Array<any>>([]);
 
   const [waiting, setWaiting] = useState(true);
 
@@ -51,6 +52,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
         console.log(newList);
         if (curr_user !== '' && curr_pswd !== '') {
           getFavorites();
+          getRatings();
         }
         setList([
           ...currList,
@@ -95,6 +97,20 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       })
   }
 
+  const getRatings = async () => {
+    await fetch('https://api.kianm.net/index.php/account/ratings', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setRatings(result)
+      })
+  }
+
   const submitRating = async (id: number, rating: number) => {
     await fetch('https://api.kianm.net/index.php/vehicles/submitRating', {
       method: 'POST',
@@ -105,6 +121,20 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       body: JSON.stringify({
         "id": id,
         "rating": rating
+      })
+    })
+      .then(e => getRatings())
+  }
+
+  const removeRating = async (id: number) => {
+    await fetch('https://api.kianm.net/index.php/vehicles/removeRating', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: JSON.stringify({
+        "id": id
       })
     })
       .then(e => refreshList())
@@ -270,23 +300,43 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                         </IonRow>
                         <IonRow>
                           <IonCol size={curr_user !== '' ? "6" : "12"}>
-                            <IonButtons class='center-buttons'>
-                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 1); e.stopPropagation() }}>
-                                <IonIcon icon={v.rating >= .5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 2); e.stopPropagation() }}>
-                                <IonIcon icon={v.rating >= 1.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 3); e.stopPropagation() }}>
-                                <IonIcon icon={v.rating >= 2.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 4); e.stopPropagation() }}>
-                                <IonIcon icon={v.rating >= 3.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 5); e.stopPropagation() }}>
-                                <IonIcon icon={v.rating >= 4.5 ? star : starOutline} />
-                              </IonButton>
-                            </IonButtons>
+                            {ratings.find(r => r.id === v.id) !== undefined ?
+                              <IonButtons class='center-buttons'>
+                                <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
+                                  <IonIcon icon={ratings.find(r => r.id === v.id).rating >= .5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
+                                  <IonIcon icon={ratings.find(r => r.id === v.id).rating >= 1.5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
+                                  <IonIcon icon={ratings.find(r => r.id === v.id).rating >= 2.5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
+                                  <IonIcon icon={ratings.find(r => r.id === v.id).rating >= 3.5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
+                                  <IonIcon icon={ratings.find(r => r.id === v.id).rating >= 4.5 ? star : starOutline} />
+                                </IonButton>
+                              </IonButtons>
+                              :
+                              <IonButtons class='center-buttons'>
+                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 1); e.stopPropagation() }}>
+                                  <IonIcon icon={v.rating >= .5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 2); e.stopPropagation() }}>
+                                  <IonIcon icon={v.rating >= 1.5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 3); e.stopPropagation() }}>
+                                  <IonIcon icon={v.rating >= 2.5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 4); e.stopPropagation() }}>
+                                  <IonIcon icon={v.rating >= 3.5 ? star : starOutline} />
+                                </IonButton>
+                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 5); e.stopPropagation() }}>
+                                  <IonIcon icon={v.rating >= 4.5 ? star : starOutline} />
+                                </IonButton>
+                              </IonButtons>
+                            }
                           </IonCol>
                           {curr_user !== '' ?
                             <IonCol>
