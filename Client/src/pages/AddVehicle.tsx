@@ -1,7 +1,7 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/react"
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
-import { curr_pswd, curr_user } from "../components/StorageService";
+import { curr_pswd, curr_user, powertrainOptions, transmissions, vehicleOptionOptions, vehicleTypeOptions } from "../components/StorageService";
 
 import './Modal.css';
 
@@ -12,6 +12,11 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [price, setPrice] = useState<string>('');
   const [year, setYear] = useState<string>('');
   const [capacity, setCapacity] = useState<string>('');
+  const [transmission, setTransmission] = useState<string>('');
+  const [color, setColor] = useState<string>('');
+  const [powertrain, setPowertrain] = useState<string>('');
+  const [vehicleType, setVehicleType] = useState<string>('');
+  const [vehicleOptions, setVehicleOptions] = useState<object>([]);
 
   const checkAdd = () => {
     window.document.getElementById('add-output')!.style.display = "none";
@@ -32,6 +37,11 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
     formData.append("price", price);
     formData.append("year", year);
     formData.append("capacity", capacity);
+    formData.append("transmission_type", transmission);
+    formData.append("vehicle_color", color);
+    formData.append("powertrain", powertrain);
+    formData.append("vehicle_type", vehicleType);
+    formData.append("vehicle_options_list", JSON.stringify(vehicleOptions));
 
     fetch('https://api.kianm.net/index.php/vehicles/add', {
       method: 'POST',
@@ -86,6 +96,29 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                   <IonItem>
                     <IonInput type="number" value={capacity} placeholder="Capacity" onIonChange={e => setCapacity(e.detail.value!)} />
                   </IonItem>
+                  <IonItem>
+                    <IonInput type="text" value={color} placeholder="Color" onIonChange={e => setColor(e.detail.value!)} />
+                  </IonItem>
+                  <IonItem>
+                    <IonSelect mode='ios' interface='popover' value={transmission} placeholder='Transmission' onIonChange={e => setTransmission(e.detail.value!)}>
+                      {transmissions.map(t => <IonSelectOption key={t} value={t}>{t}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonItem>
+                  <IonItem>
+                    <IonSelect mode='ios' interface='popover' value={powertrain} placeholder='Powertrain' onIonChange={e => setPowertrain(e.detail.value!)}>
+                      {powertrainOptions.map(p => <IonSelectOption key={p.type} value={p.type}>{p.type}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonItem>
+                  <IonItem>
+                    <IonSelect mode='ios' interface='popover' value={vehicleType} placeholder='Vehicle Type' onIonChange={e => setVehicleType(e.detail.value!)}>
+                      {vehicleTypeOptions.map(vt => <IonSelectOption key={vt.type} value={vt.type}>{vt.type}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonItem>
+                  <IonItem>
+                    <IonSelect multiple mode='ios' interface='popover' value={vehicleOptions} placeholder='Options' onIonChange={e => setVehicleOptions(e.detail.value!)}>
+                      {vehicleOptionOptions.map(vo => <IonSelectOption key={vo.type} value={vo.type}>{vo.type}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonItem>
                 </IonList>
               </IonCol>
             </IonRow>
@@ -104,7 +137,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
             <IonRow>
               <IonCol>
                 <IonButton color="secondary" expand="block" onClick={() => {
-                  if (make !== '' && model !== '' && mileage !== '' && price !== '' && year !== '' && capacity !== '') {
+                  if (make !== '' && model !== '' && mileage !== '' && price !== '' && year !== '' && capacity !== '' && transmission !== '' && color !== '' && powertrain !== '' && vehicleType !== '') {
                     if (!isNaN(Number(mileage)) && !isNaN(Number(price)) && !isNaN(Number(year)) && !isNaN(Number(capacity))) {
                       checkAdd()
                     } else {

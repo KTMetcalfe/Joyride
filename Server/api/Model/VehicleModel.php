@@ -38,19 +38,19 @@ class VehicleModel extends Database {
     }
 
     if ($filter->{'transmission_type'} != null) {
-      $out .= ' AND transmission = ' . $filter->{'mileage_end'};
+      $out .= ' AND transmission = "' . $filter->{'transmission_type'} . '"';
     }
 
     if ($filter->{'vehicle_color'} != null) {
-      $out .= ' AND color = ' . $filter->{'vehicle_color'};
+      $out .= ' AND color = "' . $filter->{'vehicle_color'} . '"';
     }
 
     if ($filter->{'make'} != null) {
-      $out .= ' AND make = ' . $filter->{'make'};
+      $out .= ' AND make = "' . $filter->{'make'} . '"';
     }
 
     if ($filter->{'model'} != null) {
-      $out .= ' AND model = ' . $filter->{'model'};
+      $out .= ' AND model = "' . $filter->{'model'} . '"';
     }
 
     if ($filter->{'rating_start'} != null) {
@@ -58,21 +58,39 @@ class VehicleModel extends Database {
     }
 
     if ($filter->{'powertrains_list'} != null) {
-      foreach ($filter->{'powertrains_list'} as $powertrain) {
-        $out .= ' AND powertrains LIKE "%' . $powertrain . '%"';
+      $out .= ' AND (';
+      for ($i = 0; $i < count($filter->{'powertrains_list'}); $i++) {
+        if ($i == 0) {
+          $out .= 'powertrain LIKE "%' . $filter->{'powertrains_list'}[$i] . '%"';
+        } else {
+          $out .= ' OR powertrain LIKE "%' . $filter->{'powertrains_list'}[$i] . '%"';
+        }
       }
+      $out .= ')';
     }
 
     if ($filter->{'vehicle_types_list'} != null) {
-      foreach ($filter->{'vehicle_types_list'} as $vehicle_type) {
-        $out .= ' AND vehicle_types LIKE "%' . $vehicle_type . '%"';
+      $out .= ' AND (';
+      for ($i = 0; $i < count($filter->{'vehicle_types_list'}); $i++) {
+        if ($i == 0) {
+          $out .= 'vehicle_type LIKE "%' . $filter->{'vehicle_types_list'}[$i] . '%"';
+        } else {
+          $out .= ' OR vehicle_type LIKE "%' . $filter->{'vehicle_types_list'}[$i] . '%"';
+        }
       }
+      $out .= ')';
     }
 
     if ($filter->{'vehicle_options_list'} != null) {
-      foreach ($filter->{'vehicle_options_list'} as $vehicle_option) {
-        $out .= ' AND vehicle_options LIKE "%' . $vehicle_option . '%"';
+      $out .= ' AND (';
+      for ($i = 0; $i < count($filter->{'vehicle_options_list'}); $i++) {
+        if ($i == 0) {
+          $out .= 'vehicle_options LIKE "%' . $filter->{'vehicle_options_list'}[$i] . '%"';
+        } else {
+          $out .= ' AND vehicle_options LIKE "%' . $filter->{'vehicle_options_list'}[$i] . '%"';
+        }
       }
+      $out .= ')';
     }
 
     return $out;
@@ -135,13 +153,13 @@ class VehicleModel extends Database {
   }
 
   // Inserts a new vehicle to the SQL database
-  public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, $imageCount) {
+  public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, $imageCount, $color, $transmission, $powertrain, $vehicleType, $vehicleOptions) {
     $images = [];
     for ($i = 0; $i < $imageCount; $i++) {
       array_push($images, $i);
     }
 
-    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user, images) VALUES ('%s', '%s', %d, %d, %d, %d, '%s', '%s')", $make, $model, $mileage, $price, $year, $capacity, $user, json_encode($images)));
+    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user, images, color, transmission, powertrain, vehicle_type, vehicle_options) VALUES ('%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s')", $make, $model, $mileage, $price, $year, $capacity, $user, json_encode($images), $color, $transmission, $powertrain, $vehicleType, $vehicleOptions));
     return $this->select("SELECT LAST_INSERT_ID();");
   }
 

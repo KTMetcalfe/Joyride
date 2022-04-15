@@ -6,7 +6,7 @@ import { Redirect, Route } from 'react-router';
 import StructurePage from './Structure';
 import VehiclesPage from './Vehicles';
 import LoginModal from './Login';
-import { capacityMax, capacityMin, clearStorage, curr_priv, curr_pswd, curr_user, filter, powertrainOptions, setFilter, setRefreshQuery, setResetQuery, vehicleOptionOptions, vehicleTypeOptions, yearMax, yearMin } from '../components/StorageService';
+import { capacities, capacityMax, capacityMin, clearStorage, colors, curr_priv, curr_pswd, curr_user, filter, makes, powertrainOptions, setFilter, setRefreshQuery, setResetQuery, transmissions, vehicleOptionOptions, vehicleTypeOptions, yearMax, yearMin, years } from '../components/StorageService';
 import AddVehicle from './AddVehicle';
 import AdminModal from './Admin';
 
@@ -92,31 +92,18 @@ const Main: React.FC = () => {
   const [model, setModel] = useState('');
   const [modelList, setModelList] = useState<Array<string>>([]);
   const [ratingStart, setRatingStart] = useState(0);
-  // Filter lists
-  let years: Array<number> = [];
-  for (let year = yearMax; year >= yearMin; year--) {
-    years.push(year);
-  }
-  let capacities: Array<number> = [];
-  for (let cap = capacityMax; cap >= capacityMin; cap--) {
-    capacities.push(cap);
-  }
-  let transmissions: Array<string> = ['Manual', 'Automatic'];
-  let colors: Array<string> = ['White', 'Black', 'Gray', 'Silver', 'Red', 'Blue', 'Brown',
-    'Green', 'Beige', 'Orange', 'Gold', 'Yellow', 'Purple'];
-  let makes: Array<string> = ['Toyota', 'Mercedes-Benz', 'Tesla', 'Volkswagen', 'BMW', 'Porsche', 'Honda', 'Ford',
-    'Nissan', 'Volvo', 'Audi', 'Hyundai', 'Chevrolet', 'Lexus', 'Land Rover', 'Renault', 'Ferrari', 'Subaru', 'BYD',
-    'Haval', 'Cadillac', 'Kia', 'Jeep', 'BUICK', 'Geely', 'Suzuki', 'GMC', 'MINI', 'Polaris', 'RAM Trucks', 'Skoda',
-    'Isuzu', 'Scania', 'Mazda', 'Peugeot', 'LI AUTO', 'Lincoln', 'Jaguar', 'NIO', 'Great Wall', 'Hino', 'Bentley',
-    'Bajaj Auto', 'Mahindra', 'Maruti Suzuki', 'Xpeng', 'MAN', 'Hero', 'Daihatsu', 'Fiat', 'Lamborghini', 'Iveco',
-    'Opel', 'FISKER', 'Foton', 'Jiefang', 'Song', 'Harley-Davidson', 'Citroën', 'Rolls- Royce', 'Dongfeng', 'Acura',
-    'McLaren', 'Changan', 'Kenworth', 'Maserati', 'Yamaha', 'Seat', 'Tata Motors', 'Aston Martin', 'Sinotruk',
-    'Peterbilt', 'JAC Motors', 'Yutong', 'Dacia', 'Dodge', 'KTM', 'Wuling', 'DAF', 'Roewe', 'Ashok Leyland', 'GAC',
-    'Vauxhall', 'TVS', 'Oshkosh', 'Paccar', 'Royal Enfield', 'Tang', 'WEY', 'Mack', 'Infiniti', 'Yulon', 'MG', 'Lada',
-    'Qin', 'Piaggio', 'Renault Samsung', 'UD Trucks', 'Baojun', 'ELMS',]
 
   // Filter controller
   const updateFilter = () => {
+    let vehicleOptionsSelected: Array<string> = [];
+    vehicleOptions.map(vo => vo.isChecked ? vehicleOptionsSelected.push(vo.type) : false);
+
+    let vehicleTypesSelected: Array<string> = [];
+    vehicleTypes.map(vt => vt.isChecked ? vehicleTypesSelected.push(vt.type) : false);
+
+    let powertrainsSelected: Array<string> = [];
+    powertrains.map(p => p.isChecked ? powertrainsSelected.push(p.type) : false);
+
     const newFilter = {
       "year_start": yearStart !== yearMin ? yearStart : null,
       "year_end": yearEnd !== yearMax ? yearEnd : null,
@@ -131,11 +118,13 @@ const Main: React.FC = () => {
       "make": make !== '' ? make : null,
       "model": model !== '' ? model : null,
       "rating_start": ratingStart !== 0 ? ratingStart : null,
-      "powertrains_list": checkPowertrainsSet() ? powertrains : null,
-      "vehicle_types_list": checkVehicleTypesSet() ? vehicleTypes : null,
-      "vehicle_options_list": checkVehicleOptionsSet() ? vehicleOptions : null
+      "powertrains_list": checkPowertrainsSet() ? powertrainsSelected : null,
+      "vehicle_types_list": checkVehicleTypesSet() ? vehicleTypesSelected : null,
+      "vehicle_options_list": checkVehicleOptionsSet() ? vehicleOptionsSelected : null
     }
 
+    console.log(newFilter);
+    
     if (JSON.stringify(newFilter) !== JSON.stringify(filter)) {
       setFilter(newFilter);
       setResetQuery(true);

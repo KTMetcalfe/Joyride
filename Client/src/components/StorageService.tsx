@@ -46,6 +46,28 @@ export const yearMin = 1900;
 export const yearMax = new Date().getFullYear() + 2;
 export const capacityMin = 1;
 export const capacityMax = 7;
+// Filter lists
+export let years: Array<number> = [];
+for (let year = yearMax; year >= yearMin; year--) {
+  years.push(year);
+}
+export let capacities: Array<number> = [];
+for (let cap = capacityMax; cap >= capacityMin; cap--) {
+  capacities.push(cap);
+}
+export let transmissions: Array<string> = ['Manual', 'Automatic'];
+export let colors: Array<string> = ['White', 'Black', 'Gray', 'Silver', 'Red', 'Blue', 'Brown',
+  'Green', 'Beige', 'Orange', 'Gold', 'Yellow', 'Purple'];
+export let makes: Array<string> = ['Toyota', 'Mercedes-Benz', 'Tesla', 'Volkswagen', 'BMW', 'Porsche', 'Honda', 'Ford',
+  'Nissan', 'Volvo', 'Audi', 'Hyundai', 'Chevrolet', 'Lexus', 'Land Rover', 'Renault', 'Ferrari', 'Subaru', 'BYD',
+  'Haval', 'Cadillac', 'Kia', 'Jeep', 'BUICK', 'Geely', 'Suzuki', 'GMC', 'MINI', 'Polaris', 'RAM Trucks', 'Skoda',
+  'Isuzu', 'Scania', 'Mazda', 'Peugeot', 'LI AUTO', 'Lincoln', 'Jaguar', 'NIO', 'Great Wall', 'Hino', 'Bentley',
+  'Bajaj Auto', 'Mahindra', 'Maruti Suzuki', 'Xpeng', 'MAN', 'Hero', 'Daihatsu', 'Fiat', 'Lamborghini', 'Iveco',
+  'Opel', 'FISKER', 'Foton', 'Jiefang', 'Song', 'Harley-Davidson', 'Citroën', 'Rolls- Royce', 'Dongfeng', 'Acura',
+  'McLaren', 'Changan', 'Kenworth', 'Maserati', 'Yamaha', 'Seat', 'Tata Motors', 'Aston Martin', 'Sinotruk',
+  'Peterbilt', 'JAC Motors', 'Yutong', 'Dacia', 'Dodge', 'KTM', 'Wuling', 'DAF', 'Roewe', 'Ashok Leyland', 'GAC',
+  'Vauxhall', 'TVS', 'Oshkosh', 'Paccar', 'Royal Enfield', 'Tang', 'WEY', 'Mack', 'Infiniti', 'Yulon', 'MG', 'Lada',
+  'Qin', 'Piaggio', 'Renault Samsung', 'UD Trucks', 'Baojun', 'ELMS',]
 
 export const baseFilter: object = {
   "year_start": null,

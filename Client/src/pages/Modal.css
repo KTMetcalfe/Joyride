@@ -1,6 +1,5 @@
 .form-pane {
   margin: auto;
-  max-width: 750px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,6 +11,7 @@
   background-color: var(--ion-color-primary);
   border-radius: 10px;
   padding: 5%;
+  max-width: 110%;
 }
 
 .form-input {
