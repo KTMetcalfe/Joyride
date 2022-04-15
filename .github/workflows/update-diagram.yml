@@ -17,7 +17,7 @@ jobs:
       - name: Visualize
         uses: githubocto/repo-visualizer@0.8.2
         with:
-          excluded_paths: "ignore,.github"
+          excluded_paths: "ignore,.github,Client/build/static"
 
       - name: Complete
         run: echo Done!
