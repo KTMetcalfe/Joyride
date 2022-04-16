@@ -121,6 +121,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   }
 
   const submitRating = async (id: number, rating: number) => {
+    setRefreshQuery(true);
     await fetch('https://api.kianm.net/index.php/vehicles/submitRating', {
       method: 'POST',
       mode: 'cors',
@@ -132,10 +133,11 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
         "rating": rating
       })
     })
-      .then(e => getRatings())
+      .then(e => setUpdate(true))
   }
 
   const removeRating = async (id: number) => {
+    setRefreshQuery(true);
     await fetch('https://api.kianm.net/index.php/vehicles/removeRating', {
       method: 'POST',
       mode: 'cors',
@@ -146,7 +148,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
         "id": id
       })
     })
-      .then(e => getVehicle())
+      .then(e => setUpdate(true))
   }
 
   useEffect(() => {
