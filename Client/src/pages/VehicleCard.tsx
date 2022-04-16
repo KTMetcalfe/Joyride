@@ -8,6 +8,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   const [vehicle, setVehicle] = useState<any>({});
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
+  const [ratings, setRatings] = useState<Array<any>>([]);
 
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -83,6 +84,8 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       })
         .then(e => e.json())
         .then(result => {
+          getFavorites();
+          getRatings();
           setVehicle(result[0]);
         })
     } else {
@@ -96,9 +99,25 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       })
         .then(e => e.json())
         .then(result => {
+          getFavorites();
+          getRatings();
           setVehicle(result[0]);
         })
     }
+  }
+
+  const getRatings = async () => {
+    await fetch('https://api.kianm.net/index.php/account/ratings', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setRatings(result)
+      })
   }
 
   const submitRating = async (id: number, rating: number) => {
@@ -113,12 +132,27 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
         "rating": rating
       })
     })
+      .then(e => getRatings())
+  }
+
+  const removeRating = async (id: number) => {
+    await fetch('https://api.kianm.net/index.php/vehicles/removeRating', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: JSON.stringify({
+        "id": id
+      })
+    })
       .then(e => getVehicle())
   }
 
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
+      getRatings();
     }
     getVehicle();
     setUpdate(false);
@@ -180,27 +214,47 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                   </IonCol>
                 </IonRow>
                 <IonRow>
-                  <IonCol size={curr_user !== '' ? "6" : "12"}>
-                    <IonButtons class='center-buttons'>
-                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
-                        <IonIcon icon={vehicle.rating >= .5 ? star : starOutline} />
-                      </IonButton>
-                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
-                        <IonIcon icon={vehicle.rating >= 1.5 ? star : starOutline} />
-                      </IonButton>
-                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
-                        <IonIcon icon={vehicle.rating >= 2.5 ? star : starOutline} />
-                      </IonButton>
-                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
-                        <IonIcon icon={vehicle.rating >= 3.5 ? star : starOutline} />
-                      </IonButton>
-                      <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
-                        <IonIcon icon={vehicle.rating >= 4.5 ? star : starOutline} />
-                      </IonButton>
-                    </IonButtons>
+                  <IonCol size={curr_user !== '' ? "7" : "12"}>
+                    {ratings.find(r => r.id === vehicle.id) !== undefined ?
+                      <IonButtons class='center-buttons'>
+                        <IonButton color="tertiary" onClick={e => { removeRating(vehicle.id); e.stopPropagation() }}>
+                          <IonIcon icon={ratings.find(r => r.id === vehicle.id).rating >= .5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton color="tertiary" onClick={e => { removeRating(vehicle.id); e.stopPropagation() }}>
+                          <IonIcon icon={ratings.find(r => r.id === vehicle.id).rating >= 1.5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton color="tertiary" onClick={e => { removeRating(vehicle.id); e.stopPropagation() }}>
+                          <IonIcon icon={ratings.find(r => r.id === vehicle.id).rating >= 2.5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton color="tertiary" onClick={e => { removeRating(vehicle.id); e.stopPropagation() }}>
+                          <IonIcon icon={ratings.find(r => r.id === vehicle.id).rating >= 3.5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton color="tertiary" onClick={e => { removeRating(vehicle.id); e.stopPropagation() }}>
+                          <IonIcon icon={ratings.find(r => r.id === vehicle.id).rating >= 4.5 ? star : starOutline} />
+                        </IonButton>
+                      </IonButtons>
+                      :
+                      <IonButtons class='center-buttons'>
+                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
+                          <IonIcon icon={vehicle.rating >= .5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
+                          <IonIcon icon={vehicle.rating >= 1.5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
+                          <IonIcon icon={vehicle.rating >= 2.5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
+                          <IonIcon icon={vehicle.rating >= 3.5 ? star : starOutline} />
+                        </IonButton>
+                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
+                          <IonIcon icon={vehicle.rating >= 4.5 ? star : starOutline} />
+                        </IonButton>
+                      </IonButtons>
+                    }
                   </IonCol>
                   {curr_user !== '' ?
-                    <IonCol>
+                    <IonCol size="4">
                       <IonButtons class='center-buttons'>
                         <IonButton onClick={() => { favorites?.filter(e => e.id === vehicle.id).length === 1 ? removeFavorite(vehicle.id) : addFavorite(vehicle.id) }} size='small' fill='clear' color='primary'>
                           <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === vehicle.id).length === 1 ? heart : heartOutline} />
@@ -209,7 +263,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                     </IonCol>
                     : false}
                   {curr_priv >= 1 ?
-                    <IonCol>
+                    <IonCol size="1">
                       <IonButtons class='center-buttons'>
                         <IonButton onClick={() => removeVehicle(vehicle.id)} size='small' fill='clear' color='danger'>
                           <IonIcon slot='icon-only' icon={removeCircleOutline} />

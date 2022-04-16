@@ -299,7 +299,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                           </IonCol>
                         </IonRow>
                         <IonRow>
-                          <IonCol size={curr_user !== '' ? "6" : "12"}>
+                          <IonCol size={curr_user !== '' ? "7" : "12"}>
                             {ratings.find(r => r.id === v.id) !== undefined ?
                               <IonButtons class='center-buttons'>
                                 <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
@@ -339,7 +339,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                             }
                           </IonCol>
                           {curr_user !== '' ?
-                            <IonCol>
+                            <IonCol size="4">
                               <IonButtons class='center-buttons'>
                                 <IonButton onClick={e => { favorites?.filter(d => d.id === v.id).length === 1 ? removeFavorite(v.id) : addFavorite(v.id); e.stopPropagation() }} size='small' fill='clear' color='primary'>
                                   <IonIcon slot='icon-only' icon={favorites?.filter(e => e.id === v.id).length === 1 ? heart : heartOutline} />
@@ -348,7 +348,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                             </IonCol>
                             : false}
                           {curr_priv >= 1 ?
-                            <IonCol>
+                            <IonCol size="1">
                               <IonButtons class='center-buttons'>
                                 <IonButton onClick={e => { removeVehicle(v.id); e.stopPropagation() }} size='small' fill='clear' color='danger'>
                                   <IonIcon slot='icon-only' icon={removeCircleOutline} />
