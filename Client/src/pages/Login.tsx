@@ -82,7 +82,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                     <IonInput value={user} placeholder="Username" onIonChange={e => setUser(e.detail.value!)} />
                   </IonItem>
                   <IonItem>
-                    <IonInput value={pswd} placeholder="Password" onIonChange={e => setPswd(e.detail.value!)} />
+                    <IonInput value={pswd} placeholder="Password" type="password" onIonChange={e => setPswd(e.detail.value!)} />
                   </IonItem>
                 </IonList>
               </IonCol>
