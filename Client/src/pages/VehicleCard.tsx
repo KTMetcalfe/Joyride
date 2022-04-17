@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,6 +9,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
   const [ratings, setRatings] = useState<Array<any>>([]);
+  const [comments, setComments] = useState<Array<any>>([]);
 
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -41,6 +42,50 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   const removeFavorite = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+        'Content-Type': 'application/json'
+      },
+      body: '{"id":' + $id + '}'
+    })
+      .then(() => setUpdate(true))
+  }
+
+  const getComments = async () => {
+    await fetch('https://api.kianm.net/index.php/comments/list', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"vehicle_id":' + id + '}'
+    })
+      .then(e => e.json())
+      .then(result => {
+        setComments(result)
+      })
+    console.log(comments);
+  }
+
+  const addComment = (vehicle_id: number, content: string, replied_to: number) => {
+    setRefreshQuery(true);
+    fetch('https://api.kianm.net/index.php/comments/add', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+        'Content-Type': 'application/json'
+      },
+      body: '{"vehicle_id":' + vehicle_id + ',"content":"' + content + (replied_to === null ? '"' : '","replied_to":' + replied_to) + '}'
+    })
+      .then(() => setUpdate(true))
+  }
+
+  const removeComment = ($id: number) => {
+    setRefreshQuery(true);
+    fetch('https://api.kianm.net/index.php/comments/remove', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -154,8 +199,9 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
-      getRatings();
     }
+    getComments();
+    getRatings();
     getVehicle();
     setUpdate(false);
     // eslint-disable-next-line
@@ -171,14 +217,16 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent forceOverscroll={false}>
-        {vehicle === undefined ?
+      {vehicle === undefined ?
+        <IonContent forceOverscroll={false}>
           <IonCard mode="ios">
             <IonCardHeader>
               <IonCardTitle class='ion-text-center'>Vehicle not found</IonCardTitle>
             </IonCardHeader>
           </IonCard>
-          :
+        </IonContent>
+        :
+        <IonContent forceOverscroll={false}>
           <IonCard key={vehicle.id} mode="ios">
             <IonCardHeader>
               <IonCardSubtitle>Vehicle</IonCardSubtitle>
@@ -277,8 +325,28 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               </IonGrid>
             </IonCardContent>
           </IonCard>
-        }
-      </IonContent>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardSubtitle>Comments</IonCardSubtitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <IonList>
+                {comments.map(c =>
+                  <IonItem>
+                    <IonText slot="start" color="primary">
+                      {c.user}
+                    </IonText>
+                    <IonText>
+                      {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
+                      {c.content}
+                    </IonText>
+                  </IonItem>
+                )}
+              </IonList>
+            </IonCardContent>
+          </IonCard>
+        </IonContent>
+      }
     </IonPage>
   );
 }
