@@ -12,39 +12,18 @@ class CommentsController extends BaseController {
 
     // POST request handling
     if (strtoupper($requestMethod) == 'POST') {
-      // Header check
-      if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-        $user = $_SERVER['PHP_AUTH_USER'];
-        $pswd = $_SERVER['PHP_AUTH_PW'];
+      try {
+        $data = file_get_contents('php://input');
+        $body = json_decode($data);
+        $vehicle_id = $body->{'vehicle_id'};
 
-        try {
-          // Authorization check
-          $accountModel = new AccountModel();
-          $accArr = $accountModel->getAccount($user);
+        $commentsModel = new CommentsModel();
+        $comments = $commentsModel->listComments($vehicle_id);
 
-          if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
-            // Main request logic
-            $data = file_get_contents('php://input');
-            $body = json_decode($data);
-            $vehicle_id = $body->{'vehicle_id'};
-
-            $commentsModel = new CommentsModel();
-            $comments = $commentsModel->listComments($vehicle_id);
-
-            $responseData = json_encode($comments);
-          } else if (count($accArr) > 1) {
-            throw new Exception('Too many accounts');
-          } else {
-            $strErrorDesc = 'Not Authorized';
-            $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
-          }
-        } catch (Error $e) {
-          $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
-          $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
-        }
-      } else {
-        $strErrorDesc = 'Not Authorized';
-        $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+        $responseData = json_encode($comments);
+      } catch (Error $e) {
+        $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+        $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
       }
     } else {
       $strErrorDesc = 'Method not supported';

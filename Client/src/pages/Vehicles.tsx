@@ -48,8 +48,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     )
       .then(e => e.json())
       .then(newList => {
-        console.log(currList);
-        console.log(newList);
         if (curr_user !== '' && curr_pswd !== '') {
           getFavorites();
           getRatings();
@@ -212,9 +210,6 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     })
       .then(e => e.json())
       .then(result => {
-        if (result.removed === true) {
-          console.log(result);
-        }
         setUpdate(true);
       })
   }
@@ -300,7 +295,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                         </IonRow>
                         <IonRow>
                           <IonCol size={curr_user !== '' ? "7" : "12"}>
-                            {ratings.find(r => r.id === v.id) !== undefined ?
+                            {ratings?.find(r => r.id === v.id) !== undefined ?
                               <IonButtons class='center-buttons'>
                                 <IonButton color="tertiary" onClick={e => { removeRating(v.id); e.stopPropagation() }}>
                                   <IonIcon icon={ratings.find(r => r.id === v.id).rating >= .5 ? star : starOutline} />

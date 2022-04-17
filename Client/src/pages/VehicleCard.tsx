@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
 
+import './Main.css';
+
 const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDismiss }) => {
   const [vehicle, setVehicle] = useState<any>({});
   const [favorites, setFavorites] = useState<Array<any>>([]);
@@ -57,16 +59,12 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
     await fetch('https://api.kianm.net/index.php/comments/list', {
       method: 'POST',
       mode: 'cors',
-      headers: {
-        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
-      },
       body: '{"vehicle_id":' + id + '}'
     })
       .then(e => e.json())
       .then(result => {
         setComments(result)
       })
-    console.log(comments);
   }
 
   const addComment = (vehicle_id: number, content: string, replied_to: number) => {
@@ -129,8 +127,10 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       })
         .then(e => e.json())
         .then(result => {
-          getFavorites();
-          getRatings();
+          if (curr_user !== '') {
+            getFavorites();
+            getRatings();
+          }
           setVehicle(result[0]);
         })
     } else {
@@ -144,8 +144,10 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       })
         .then(e => e.json())
         .then(result => {
-          getFavorites();
-          getRatings();
+          if (curr_user !== '') {
+            getFavorites();
+            getRatings();
+          }
           setVehicle(result[0]);
         })
     }
@@ -199,9 +201,9 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
+      getRatings();
     }
     getComments();
-    getRatings();
     getVehicle();
     setUpdate(false);
     // eslint-disable-next-line
@@ -265,7 +267,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                 </IonRow>
                 <IonRow>
                   <IonCol size={curr_user !== '' ? "7" : "12"}>
-                    {ratings.find(r => r.id === vehicle.id) !== undefined ?
+                    {ratings.find(r => r.id === vehicle.id) ?
                       <IonButtons class='center-buttons'>
                         <IonButton color="tertiary" onClick={e => { removeRating(vehicle.id); e.stopPropagation() }}>
                           <IonIcon icon={ratings.find(r => r.id === vehicle.id).rating >= .5 ? star : starOutline} />
@@ -330,19 +332,17 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               <IonCardSubtitle>Comments</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
-              <IonList>
-                {comments.map(c =>
-                  <IonItem>
-                    <IonText slot="start" color="primary">
-                      {c.user}
-                    </IonText>
-                    <IonText>
-                      {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
-                      {c.content}
-                    </IonText>
-                  </IonItem>
-                )}
-              </IonList>
+              {comments.map(c =>
+                <IonItem key={c.id} lines="none">
+                  <IonText slot="start" color="primary">
+                    {c.user}
+                  </IonText>
+                  <IonText>
+                    {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
+                    {c.content}
+                  </IonText>
+                </IonItem>
+              )}
             </IonCardContent>
           </IonCard>
         </IonContent>

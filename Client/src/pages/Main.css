@@ -3,7 +3,7 @@
 } */
 
 .center-buttons {
-    justify-content: center;
+  justify-content: center;
 }
 
 .footer-bg {
@@ -38,4 +38,8 @@
 
 .anti-focus {
   --highlight-color-focused: none;
+}
+
+ion-item {
+  --background: none;
 }

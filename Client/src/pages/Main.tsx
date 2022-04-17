@@ -257,296 +257,288 @@ const Main: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent forceOverscroll={false}>
+          <IonItem lines="full">
+            <IonIcon slot='start' icon={filterOutline}></IonIcon>
+            <IonLabel>Filters</IonLabel>
+            <IonButtons>
+              <IonButton color='primary' fill='clear' onClick={() => {
+                setYearStart(yearMin);
+                setYearEnd(yearMax);
+                setPriceStart(0);
+                setPriceEnd(0);
+                setCapacityStart(capacityMin);
+                setCapacityEnd(capacityMax);
+                setMileageStart(0);
+                setMileageEnd(0);
+                setTransmissionType('');
+                setVehicleColor('');
+                setMake('');
+                setModel('');
+                setModelList([]);
+                setRatingStart(0);
+                setPowertrains(powertrainOptions);
+                setVehicleTypes(vehicleTypeOptions);
+                setVehicleOptions(vehicleOptionOptions);
+              }}>
+                Reset
+              </IonButton>
+            </IonButtons>
+          </IonItem>
           <IonGrid>
             <IonRow>
               <IonCol>
-                <IonItem lines='none'>
-                  <IonIcon slot='start' icon={filterOutline}></IonIcon>
-                  <IonLabel>Filters</IonLabel>
-                  <IonButtons>
-                    <IonButton color='primary' fill='clear' onClick={() => {
-                      setYearStart(yearMin);
-                      setYearEnd(yearMax);
-                      setPriceStart(0);
-                      setPriceEnd(0);
-                      setCapacityStart(capacityMin);
-                      setCapacityEnd(capacityMax);
-                      setMileageStart(0);
-                      setMileageEnd(0);
-                      setTransmissionType('');
-                      setVehicleColor('');
-                      setMake('');
-                      setModel('');
-                      setModelList([]);
-                      setRatingStart(0);
-                      setPowertrains(powertrainOptions);
-                      setVehicleTypes(vehicleTypeOptions);
-                      setVehicleOptions(vehicleOptionOptions);
-                    }}>
-                      Reset
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Year:</IonLabel>
+                  {yearStart !== yearMin || yearEnd !== yearMax ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setYearStart(yearMin); setYearEnd(yearMax) }}>
+                      <IonLabel>Clear</IonLabel>
                     </IonButton>
-                  </IonButtons>
+                    : false}
                 </IonItem>
-                <IonList>
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Year:</IonLabel>
-                          {yearStart !== yearMin || yearEnd !== yearMax ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setYearStart(yearMin); setYearEnd(yearMax) }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='filter-chip'>
-                            <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} onIonChange={e => setYearStart(e.detail.value!)}>
-                              {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                          <IonLabel>-</IonLabel>
-                          <IonChip class='filter-chip'>
-                            <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} onIonChange={e => setYearEnd(e.detail.value!)}>
-                              {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Price:</IonLabel>
-                          {priceStart !== 0 || priceEnd !== 0 ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setPriceStart(0); setPriceEnd(0) }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='filter-chip'>
-                            <IonInput inputmode='numeric' type='number' value={priceStart} onIonChange={e => setPriceStart(Number(e.detail.value!))} />
-                          </IonChip>
-                          <IonLabel>-</IonLabel>
-                          <IonChip class='filter-chip'>
-                            <IonInput inputmode='numeric' type='number' value={priceEnd} onIonChange={e => setPriceEnd(Number(e.detail.value!))} />
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Capacity:</IonLabel>
-                          {capacityStart !== capacityMin || capacityEnd !== capacityMax ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setCapacityStart(capacityMin); setCapacityEnd(capacityMax) }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='filter-chip'>
-                            <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={capacityStart} onIonChange={e => setCapacityStart(e.detail.value!)}>
-                              {capacities.map(cap => <IonSelectOption key={cap} value={cap}>{cap === 7 ? cap + "+" : cap}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                          <IonLabel>-</IonLabel>
-                          <IonChip class='filter-chip'>
-                            <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={capacityEnd} onIonChange={e => setCapacityEnd(e.detail.value!)}>
-                              {capacities.map(cap => <IonSelectOption key={cap} value={cap}>{cap === 7 ? cap + "+" : cap}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Mileage:</IonLabel>
-                          {mileageStart !== 0 || mileageEnd !== 0 ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setMileageStart(0); setMileageEnd(0) }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='filter-chip'>
-                            <IonInput inputmode='numeric' type='number' value={mileageStart} onIonChange={e => setMileageStart(Number(e.detail.value!))} />
-                          </IonChip>
-                          <IonLabel>-</IonLabel>
-                          <IonChip class='filter-chip'>
-                            <IonInput inputmode='numeric' type='number' value={mileageEnd} onIonChange={e => setMileageEnd(Number(e.detail.value!))} />
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Transmission Type:</IonLabel>
-                          {transmissionType !== '' ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setTransmissionType('') }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='filter-chip-100'>
-                            <IonSelect class='filter-select-100' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={transmissionType} onIonChange={e => setTransmissionType(e.detail.value!)}>
-                              {transmissions.map(trans => <IonSelectOption key={trans} value={trans}>{trans}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Color:</IonLabel>
-                          {vehicleColor !== '' ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleColor('') }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='filter-chip-100'>
-                            <IonSelect class='filter-select-100' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={vehicleColor} onIonChange={e => setVehicleColor(e.detail.value!)}>
-                              {colors.map(col => <IonSelectOption key={col} value={col}>{col}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Make / Model:</IonLabel>
-                          {make !== '' ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setMake(''); setModelList([]) }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class={modelList.length !== 0 ? 'filter-chip' : 'filter-chip-100'}>
-                            <IonSelect class={modelList.length !== 0 ? 'filter-select' : 'filter-select-100'} mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={make} onIonChange={e => { setMake(e.detail.value!); getModels(e.detail.value!) }}>
-                              {makes.map(make => <IonSelectOption key={make} value={make}>{make}</IonSelectOption>)}
-                            </IonSelect>
-                          </IonChip>
-                          {modelList.length !== 0 ?
-                            <IonChip class='filter-chip'>
-                              <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={model} onIonChange={e => setModel(e.detail.value!)}>
-                                {modelList.map(model => <IonSelectOption key={model} value={model}>{model}</IonSelectOption>)}
-                              </IonSelect>
-                            </IonChip>
-                            : false}
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Rating:</IonLabel>
-                          {ratingStart !== 0 ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setRatingStart(0); }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonChip class='center-buttons filter-chip-100'>
-                            <IonButtons class='center-buttons filter-select-80'>
-                              <IonButton onClick={() => setRatingStart(0.5)}>
-                                <IonIcon icon={ratingStart >= 0.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton onClick={() => setRatingStart(1.5)}>
-                                <IonIcon icon={ratingStart >= 1.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton onClick={() => setRatingStart(2.5)}>
-                                <IonIcon icon={ratingStart >= 2.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton onClick={() => setRatingStart(3.5)}>
-                                <IonIcon icon={ratingStart >= 3.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton onClick={() => setRatingStart(4.5)}>
-                                <IonIcon icon={ratingStart >= 4.5 ? star : starOutline} />
-                              </IonButton>
-                            </IonButtons>
-                          </IonChip>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol size='12'>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Powertrain:</IonLabel>
-                          {checkPowertrainsSet() ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setPowertrains(powertrainOptions); }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                      </IonCol>
-                      {powertrains.map((pt) =>
-                        <IonCol key={pt.type}>
-                          <IonItem lines='none' class='anti-focus item-lines-none'>
-                            <IonChip onClick={() => selectPowertrain(pt.type)}>
-                              <IonIcon icon={pt.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
-                              <IonLabel>{pt.type}</IonLabel>
-                            </IonChip>
-                          </IonItem>
-                        </IonCol>
-                      )}
-                    </IonRow>
-                    <IonRow>
-                      <IonCol size='12'>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Vehicle Type:</IonLabel>
-                          {checkVehicleTypesSet() ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleTypes(vehicleTypeOptions); }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                      </IonCol>
-                      {vehicleTypes.map((v) =>
-                        <IonCol key={v.type}>
-                          <IonItem lines='none' class='anti-focus item-lines-none'>
-                            <IonChip onClick={() => selectVehicleType(v.type)}>
-                              <IonIcon icon={v.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
-                              <IonLabel>{v.type}</IonLabel>
-                            </IonChip>
-                          </IonItem>
-                        </IonCol>
-                      )}
-                    </IonRow>
-                    <IonRow>
-                      <IonCol size='12'>
-                        <IonItem lines='none' class='anti-focus item-lines-none'>
-                          <IonLabel>Vehicle Options:</IonLabel>
-                          {checkVehicleOptionsSet() ?
-                            <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleOptions(vehicleOptionOptions); }}>
-                              <IonLabel>Clear</IonLabel>
-                            </IonButton>
-                            : false}
-                        </IonItem>
-                      </IonCol>
-                      {vehicleOptions.map((o) =>
-                        <IonCol key={o.type}>
-                          <IonItem lines='none' class='anti-focus item-lines-none'>
-                            <IonChip onClick={() => selectVehicleOption(o.type)}>
-                              <IonIcon icon={o.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
-                              <IonLabel>{o.type}</IonLabel>
-                            </IonChip>
-                          </IonItem>
-                        </IonCol>
-                      )}
-                    </IonRow>
-                  </IonGrid>
-                </IonList>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='filter-chip'>
+                    <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearStart} onIonChange={e => setYearStart(e.detail.value!)}>
+                      {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                  <IonLabel>-</IonLabel>
+                  <IonChip class='filter-chip'>
+                    <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={yearEnd} onIonChange={e => setYearEnd(e.detail.value!)}>
+                      {years.map(year => <IonSelectOption key={year} value={year}>{year}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                </IonItem>
               </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Price:</IonLabel>
+                  {priceStart !== 0 || priceEnd !== 0 ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setPriceStart(0); setPriceEnd(0) }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='filter-chip'>
+                    <IonInput inputmode='numeric' type='number' value={priceStart} onIonChange={e => setPriceStart(Number(e.detail.value!))} />
+                  </IonChip>
+                  <IonLabel>-</IonLabel>
+                  <IonChip class='filter-chip'>
+                    <IonInput inputmode='numeric' type='number' value={priceEnd} onIonChange={e => setPriceEnd(Number(e.detail.value!))} />
+                  </IonChip>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Capacity:</IonLabel>
+                  {capacityStart !== capacityMin || capacityEnd !== capacityMax ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setCapacityStart(capacityMin); setCapacityEnd(capacityMax) }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='filter-chip'>
+                    <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={capacityStart} onIonChange={e => setCapacityStart(e.detail.value!)}>
+                      {capacities.map(cap => <IonSelectOption key={cap} value={cap}>{cap === 7 ? cap + "+" : cap}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                  <IonLabel>-</IonLabel>
+                  <IonChip class='filter-chip'>
+                    <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={capacityEnd} onIonChange={e => setCapacityEnd(e.detail.value!)}>
+                      {capacities.map(cap => <IonSelectOption key={cap} value={cap}>{cap === 7 ? cap + "+" : cap}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Mileage:</IonLabel>
+                  {mileageStart !== 0 || mileageEnd !== 0 ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setMileageStart(0); setMileageEnd(0) }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='filter-chip'>
+                    <IonInput inputmode='numeric' type='number' value={mileageStart} onIonChange={e => setMileageStart(Number(e.detail.value!))} />
+                  </IonChip>
+                  <IonLabel>-</IonLabel>
+                  <IonChip class='filter-chip'>
+                    <IonInput inputmode='numeric' type='number' value={mileageEnd} onIonChange={e => setMileageEnd(Number(e.detail.value!))} />
+                  </IonChip>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Transmission Type:</IonLabel>
+                  {transmissionType !== '' ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setTransmissionType('') }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='filter-chip-100'>
+                    <IonSelect class='filter-select-100' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={transmissionType} onIonChange={e => setTransmissionType(e.detail.value!)}>
+                      {transmissions.map(trans => <IonSelectOption key={trans} value={trans}>{trans}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Color:</IonLabel>
+                  {vehicleColor !== '' ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleColor('') }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='filter-chip-100'>
+                    <IonSelect class='filter-select-100' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={vehicleColor} onIonChange={e => setVehicleColor(e.detail.value!)}>
+                      {colors.map(col => <IonSelectOption key={col} value={col}>{col}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Make / Model:</IonLabel>
+                  {make !== '' ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setMake(''); setModelList([]) }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class={modelList.length !== 0 ? 'filter-chip' : 'filter-chip-100'}>
+                    <IonSelect class={modelList.length !== 0 ? 'filter-select' : 'filter-select-100'} mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={make} onIonChange={e => { setMake(e.detail.value!); getModels(e.detail.value!) }}>
+                      {makes.map(make => <IonSelectOption key={make} value={make}>{make}</IonSelectOption>)}
+                    </IonSelect>
+                  </IonChip>
+                  {modelList.length !== 0 ?
+                    <IonChip class='filter-chip'>
+                      <IonSelect class='filter-select' mode='ios' interfaceOptions={customPopoverOptions} interface='popover' value={model} onIonChange={e => setModel(e.detail.value!)}>
+                        {modelList.map(model => <IonSelectOption key={model} value={model}>{model}</IonSelectOption>)}
+                      </IonSelect>
+                    </IonChip>
+                    : false}
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Rating:</IonLabel>
+                  {ratingStart !== 0 ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setRatingStart(0); }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonChip class='center-buttons filter-chip-100'>
+                    <IonButtons class='center-buttons filter-select-80'>
+                      <IonButton onClick={() => setRatingStart(0.5)}>
+                        <IonIcon icon={ratingStart >= 0.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton onClick={() => setRatingStart(1.5)}>
+                        <IonIcon icon={ratingStart >= 1.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton onClick={() => setRatingStart(2.5)}>
+                        <IonIcon icon={ratingStart >= 2.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton onClick={() => setRatingStart(3.5)}>
+                        <IonIcon icon={ratingStart >= 3.5 ? star : starOutline} />
+                      </IonButton>
+                      <IonButton onClick={() => setRatingStart(4.5)}>
+                        <IonIcon icon={ratingStart >= 4.5 ? star : starOutline} />
+                      </IonButton>
+                    </IonButtons>
+                  </IonChip>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol size='12'>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Powertrain:</IonLabel>
+                  {checkPowertrainsSet() ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setPowertrains(powertrainOptions); }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+              </IonCol>
+              {powertrains.map((pt) =>
+                <IonCol key={pt.type}>
+                  <IonItem lines='none' class='anti-focus item-lines-none'>
+                    <IonChip onClick={() => selectPowertrain(pt.type)}>
+                      <IonIcon icon={pt.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
+                      <IonLabel>{pt.type}</IonLabel>
+                    </IonChip>
+                  </IonItem>
+                </IonCol>
+              )}
+            </IonRow>
+            <IonRow>
+              <IonCol size='12'>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Vehicle Type:</IonLabel>
+                  {checkVehicleTypesSet() ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleTypes(vehicleTypeOptions); }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+              </IonCol>
+              {vehicleTypes.map((v) =>
+                <IonCol key={v.type}>
+                  <IonItem lines='none' class='anti-focus item-lines-none'>
+                    <IonChip onClick={() => selectVehicleType(v.type)}>
+                      <IonIcon icon={v.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
+                      <IonLabel>{v.type}</IonLabel>
+                    </IonChip>
+                  </IonItem>
+                </IonCol>
+              )}
+            </IonRow>
+            <IonRow>
+              <IonCol size='12'>
+                <IonItem lines='none' class='anti-focus item-lines-none'>
+                  <IonLabel>Vehicle Options:</IonLabel>
+                  {checkVehicleOptionsSet() ?
+                    <IonButton slot='end' size='small' color='primary' fill='clear' onClick={() => { setVehicleOptions(vehicleOptionOptions); }}>
+                      <IonLabel>Clear</IonLabel>
+                    </IonButton>
+                    : false}
+                </IonItem>
+              </IonCol>
+              {vehicleOptions.map((o) =>
+                <IonCol key={o.type}>
+                  <IonItem lines='none' class='anti-focus item-lines-none'>
+                    <IonChip onClick={() => selectVehicleOption(o.type)}>
+                      <IonIcon icon={o.isChecked ? checkmarkCircle : ellipseOutline} color='primary' />
+                      <IonLabel>{o.type}</IonLabel>
+                    </IonChip>
+                  </IonItem>
+                </IonCol>
+              )}
             </IonRow>
           </IonGrid>
         </IonContent>
