@@ -1,5 +1,5 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/react"
-import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/react"
+import { arrowUndoOutline, checkmarkCircle, heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
@@ -246,24 +246,54 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               </Swiper>
               <IonGrid>
                 <IonRow>
-                  <IonCol>
-                    <IonLabel>Price: </IonLabel>
+                  <IonCol size="12">
+                    <IonLabel color="primary">Description:</IonLabel>
+                  </IonCol>
+                  <IonCol size="12">
+                    <IonText class="ion-text-wrap">{vehicle.description}</IonText>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Price: </IonLabel>
                     <IonLabel>{vehicle.price}</IonLabel>
                   </IonCol>
-                  <IonCol>
-                    <IonLabel>Mileage: </IonLabel>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Mileage: </IonLabel>
                     <IonLabel>{vehicle.mileage}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Powertrain: </IonLabel>
+                    <IonLabel>{vehicle.powertrain}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Color: </IonLabel>
+                    <IonLabel>{vehicle.color}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Capacity: </IonLabel>
+                    <IonLabel>{vehicle.capacity}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">User: </IonLabel>
+                    <IonLabel>{vehicle.user}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Transmission: </IonLabel>
+                    <IonLabel>{vehicle.transmission}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
+                    <IonLabel color="primary">Vehicle Type: </IonLabel>
+                    <IonLabel>{vehicle.vehicle_type}</IonLabel>
                   </IonCol>
                 </IonRow>
                 <IonRow>
-                  <IonCol>
-                    <IonLabel>Capacity: </IonLabel>
-                    <IonLabel>{vehicle.capacity}</IonLabel>
-                  </IonCol>
-                  <IonCol>
-                    <IonLabel>User: </IonLabel>
-                    <IonLabel>{vehicle.user}</IonLabel>
-                  </IonCol>
+                  {typeof (vehicle.vehicle_options) === "string" && vehicle.vehicle_options !== '' ? JSON.parse(vehicle.vehicle_options).map((o: string) =>
+                    <IonCol key={o}>
+                      <IonChip class="options-chip">
+                        <IonIcon icon={checkmarkCircle} color='primary' />
+                        <IonLabel>{o}</IonLabel>
+                      </IonChip>
+                    </IonCol>
+                  ) : false}
                 </IonRow>
                 <IonRow>
                   <IonCol size={curr_user !== '' ? "7" : "12"}>
@@ -332,17 +362,28 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
               <IonCardSubtitle>Comments</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
-              {comments.map(c =>
-                <IonItem key={c.id} lines="none">
-                  <IonText slot="start" color="primary">
-                    {c.user}
-                  </IonText>
-                  <IonText>
-                    {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
-                    {c.content}
-                  </IonText>
-                </IonItem>
-              )}
+              <IonGrid>
+                {comments.map(c =>
+                  <IonRow key={c.id}>
+                    <IonCol size="2">
+                      <IonLabel color="primary">{c.user}</IonLabel>
+                    </IonCol>
+                    <IonCol size="9">
+                      <IonLabel class="ion-text-wrap">
+                        {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
+                        {c.content}
+                      </IonLabel>
+                    </IonCol>
+                    <IonCol size="1">
+                      <IonButtons>
+                        <IonButton size="small">
+                          <IonIcon slot="icon-only" icon={arrowUndoOutline} />
+                        </IonButton>
+                      </IonButtons>
+                    </IonCol>
+                  </IonRow>
+                )}
+              </IonGrid>
             </IonCardContent>
           </IonCard>
         </IonContent>

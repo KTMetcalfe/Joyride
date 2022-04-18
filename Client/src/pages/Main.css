@@ -43,3 +43,7 @@
 ion-item {
   --background: none;
 }
+
+.options-chip {
+  white-space: nowrap;
+}

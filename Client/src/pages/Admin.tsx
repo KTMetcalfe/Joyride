@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar } from "@ionic/react"
 import { addCircleOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -175,27 +175,25 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                       }
                       <IonGrid>
                         <IonRow>
-                          <IonCol>
-                            <IonLabel>Price: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Price: </IonLabel>
                             <IonLabel>{v.price}</IonLabel>
                           </IonCol>
-                          <IonCol>
-                            <IonLabel>Mileage: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Mileage: </IonLabel>
                             <IonLabel>{v.mileage}</IonLabel>
                           </IonCol>
-                        </IonRow>
-                        <IonRow>
-                          <IonCol>
-                            <IonLabel>Capacity: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Capacity: </IonLabel>
                             <IonLabel>{v.capacity}</IonLabel>
                           </IonCol>
-                          <IonCol>
-                            <IonLabel>User: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">User: </IonLabel>
                             <IonLabel>{v.user}</IonLabel>
                           </IonCol>
                         </IonRow>
                         <IonRow>
-                        <IonCol size="6">
+                          <IonCol size="6">
                             <IonButtons class='center-buttons'>
                               <IonButton disabled={curr_user === ''}>
                                 <IonIcon icon={v.rating >= .5 ? star : starOutline} />

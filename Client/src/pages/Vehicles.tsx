@@ -274,22 +274,20 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                       }
                       <IonGrid>
                         <IonRow>
-                          <IonCol>
-                            <IonLabel>Price: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Price: </IonLabel>
                             <IonLabel>{v.price}</IonLabel>
                           </IonCol>
-                          <IonCol>
-                            <IonLabel>Mileage: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Mileage: </IonLabel>
                             <IonLabel>{v.mileage}</IonLabel>
                           </IonCol>
-                        </IonRow>
-                        <IonRow>
-                          <IonCol>
-                            <IonLabel>Capacity: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Capacity: </IonLabel>
                             <IonLabel>{v.capacity}</IonLabel>
                           </IonCol>
-                          <IonCol>
-                            <IonLabel>User: </IonLabel>
+                          <IonCol size="6">
+                            <IonLabel color="primary">User: </IonLabel>
                             <IonLabel>{v.user}</IonLabel>
                           </IonCol>
                         </IonRow>

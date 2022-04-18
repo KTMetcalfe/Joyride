@@ -17,6 +17,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [powertrain, setPowertrain] = useState<string>('');
   const [vehicleType, setVehicleType] = useState<string>('');
   const [vehicleOptions, setVehicleOptions] = useState<object>([]);
+  const [description, setDescription] = useState<string>('');
 
   const checkAdd = () => {
     window.document.getElementById('add-output')!.style.display = "none";
@@ -42,6 +43,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
     formData.append("powertrain", powertrain);
     formData.append("vehicle_type", vehicleType);
     formData.append("vehicle_options_list", JSON.stringify(vehicleOptions));
+    formData.append("description", description);
 
     fetch('https://api.kianm.net/index.php/vehicles/add', {
       method: 'POST',
@@ -118,6 +120,9 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                     <IonSelect multiple mode='ios' interface='popover' value={vehicleOptions} placeholder='Options' onIonChange={e => setVehicleOptions(e.detail.value!)}>
                       {vehicleOptionOptions.map(vo => <IonSelectOption key={vo.type} value={vo.type}>{vo.type}</IonSelectOption>)}
                     </IonSelect>
+                  </IonItem>
+                  <IonItem>
+                    <IonInput value={description} placeholder="Description" onIonChange={e => setDescription(e.detail.value!)} />
                   </IonItem>
                 </IonList>
               </IonCol>
