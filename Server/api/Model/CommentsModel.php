@@ -2,9 +2,28 @@
 require_once "/joyride/api/Model/Database.php";
 
 class CommentsModel extends Database {
-  // Returns a list of vehicle ids from matching accounts
+  // Returns a list of comments from matching vehicle id
   public function listComments($vehicle_id) {
-    return $this->select(sprintf("SELECT * FROM comments WHERE vehicle_id=%d", $vehicle_id));
+    $comments = $this->select(sprintf("SELECT * FROM comments WHERE vehicle_id=%d", $vehicle_id));
+
+    foreach ($comments as &$val) {
+      if ($val['replied_to'] != null) {
+        $index = array_search($val['replied_to'], array_column($comments, 'id'));
+        $val['replied_to'] = $comments[$index];
+      }
+    }
+
+    return $comments;
+  }
+
+  // Returns a list of comment replies from matching comment id
+  public function listReplyComments($id) {
+    return $this->select(sprintf("SELECT * FROM comments WHERE replied_to=%d", $id));
+  }
+
+  // Returns a list of comment replies from matching comment id
+  public function getComment($id) {
+    return $this->select(sprintf("SELECT * FROM comments WHERE id=%d", $id));
   }
 
   // Reads and adds to the current comment on a matching vehicle
@@ -23,3 +42,5 @@ class CommentsModel extends Database {
     return;
   }
 }
+
+?>

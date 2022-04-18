@@ -45,6 +45,90 @@ class CommentsController extends BaseController {
   }
 
   /**
+   * "/comments/listReplies" Endpoint - Returns a json array of a user's favorite vehicles
+   */
+  public function listRepliesAction() {
+    $strErrorDesc = '';
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+    $arrQueryStringParams = $this->getQueryStringParams();
+
+    // POST request handling
+    if (strtoupper($requestMethod) == 'POST') {
+      try {
+        $data = file_get_contents('php://input');
+        $body = json_decode($data);
+        $id = $body->{'id'};
+
+        $commentsModel = new CommentsModel();
+        $comments = $commentsModel->listReplyComments($id);
+
+        $responseData = json_encode($comments);
+      } catch (Error $e) {
+        $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+        $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+      }
+    } else {
+      $strErrorDesc = 'Method not supported';
+      $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+    }
+
+    // send output
+    if (!$strErrorDesc) {
+      $this->sendOutput(
+        $responseData,
+        array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+      );
+    } else {
+      $this->sendOutput(
+        json_encode(array('error' => $strErrorDesc)),
+        array('Content-Type: application/json', $strErrorHeader)
+      );
+    }
+  }
+
+  /**
+   * "/comments/get" Endpoint - Returns a json array of a user's favorite vehicles
+   */
+  public function getAction() {
+    $strErrorDesc = '';
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+    $arrQueryStringParams = $this->getQueryStringParams();
+
+    // POST request handling
+    if (strtoupper($requestMethod) == 'POST') {
+      try {
+        $data = file_get_contents('php://input');
+        $body = json_decode($data);
+        $id = $body->{'id'};
+
+        $commentsModel = new CommentsModel();
+        $comments = $commentsModel->getComment($id);
+
+        $responseData = json_encode($comments);
+      } catch (Error $e) {
+        $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+        $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+      }
+    } else {
+      $strErrorDesc = 'Method not supported';
+      $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+    }
+
+    // send output
+    if (!$strErrorDesc) {
+      $this->sendOutput(
+        $responseData,
+        array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+      );
+    } else {
+      $this->sendOutput(
+        json_encode(array('error' => $strErrorDesc)),
+        array('Content-Type: application/json', $strErrorHeader)
+      );
+    }
+  }
+
+  /**
    * "/comments/add" Endpoint - Removes a vehicle from a user's favorites 
    */
   public function addAction() {

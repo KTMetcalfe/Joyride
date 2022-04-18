@@ -70,6 +70,14 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       })
   }
 
+  const getRepliedTo = async (comment_id: number) => {
+    return await fetch('https://api.kianm.net/index.php/comments/get', {
+      method: 'POST',
+      mode: 'cors',
+      body: '{"id":' + comment_id + '}'
+    })
+  }
+
   const addComment = (vehicle_id: number, content: string, replied_to?: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/comments/add', {
@@ -392,11 +400,13 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                 {comments.map(c =>
                   <IonRow key={c.id}>
                     <IonCol size="2">
-                      <IonLabel color="primary">{c.user}</IonLabel>
+                      <IonLabel color="primary"><h2>{c.user}</h2></IonLabel>
                     </IonCol>
                     <IonCol size={curr_priv >= 1 ? "7" : "9"}>
+                      <IonLabel color="tertiary" onClick={e => console.log("Clicked!")}>
+                        {c.replied_to !== null ? "Re: " + c.replied_to.user + " " : false}
+                      </IonLabel>
                       <IonLabel class="ion-text-wrap">
-                        {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
                         {c.content}
                       </IonLabel>
                     </IonCol>
