@@ -1,5 +1,6 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/react"
-import { arrowUndoOutline, checkmarkCircle, heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
+import { focusElement } from "@ionic/core/dist/types/utils/helpers";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/react"
+import { arrowForward, arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircle, closeCircleOutline, closeOutline, heart, heartOutline, removeCircleOutline, sendOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
@@ -12,6 +13,8 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   const [update, setUpdate] = useState(false);
   const [ratings, setRatings] = useState<Array<any>>([]);
   const [comments, setComments] = useState<Array<any>>([]);
+  const [newComment, setNewComment] = useState<string>('');
+  const [replyComment, setReplyComment] = useState<any>({});
 
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -67,7 +70,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
       })
   }
 
-  const addComment = (vehicle_id: number, content: string, replied_to: number) => {
+  const addComment = (vehicle_id: number, content: string, replied_to?: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/comments/add', {
       method: 'POST',
@@ -76,7 +79,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
         'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
         'Content-Type': 'application/json'
       },
-      body: '{"vehicle_id":' + vehicle_id + ',"content":"' + content + (replied_to === null ? '"' : '","replied_to":' + replied_to) + '}'
+      body: '{"vehicle_id":' + vehicle_id + ',"content":"' + content + (replied_to === undefined ? '"' : '","replied_to":' + replied_to) + '}'
     })
       .then(() => setUpdate(true))
   }
@@ -363,24 +366,53 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
             </IonCardHeader>
             <IonCardContent>
               <IonGrid>
+                {curr_user !== '' ?
+                  <IonRow>
+                    <IonCol size="12">
+                      <IonItem lines="full" class='input-item'>
+                        {isNaN(replyComment.id) ? true :
+                          <IonChip>
+                            <IonButtons>
+                              <IonButton onClick={e => setReplyComment({})}>
+                                <IonIcon slot="icon-only" icon={closeCircleOutline} />
+                              </IonButton>
+                            </IonButtons>
+                            <IonLabel>Re: {replyComment.user}</IonLabel>
+                          </IonChip>}
+                        <IonInput type="text" placeholder="Add a Comment..." value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
+                        <IonButtons>
+                          <IonButton onClick={e => addComment(vehicle.id, newComment, replyComment.id)}>
+                            <IonIcon slot="icon-only" icon={arrowForwardOutline} />
+                          </IonButton>
+                        </IonButtons>
+                      </IonItem>
+                    </IonCol>
+                  </IonRow>
+                  : false}
                 {comments.map(c =>
                   <IonRow key={c.id}>
                     <IonCol size="2">
                       <IonLabel color="primary">{c.user}</IonLabel>
                     </IonCol>
-                    <IonCol size="9">
+                    <IonCol size={curr_priv >= 1 ? "7" : "9"}>
                       <IonLabel class="ion-text-wrap">
                         {c.replied_to !== null ? "RE: " + c.replied_to + " - " : false}
                         {c.content}
                       </IonLabel>
                     </IonCol>
-                    <IonCol size="1">
-                      <IonButtons>
-                        <IonButton size="small">
-                          <IonIcon slot="icon-only" icon={arrowUndoOutline} />
-                        </IonButton>
-                      </IonButtons>
-                    </IonCol>
+                    {curr_user !== '' ?
+                      <IonCol size={curr_priv >= 1 ? "3" : "1"}>
+                        <IonButtons>
+                          <IonButton size="small" onClick={e => setReplyComment(c)}>
+                            <IonIcon slot="icon-only" icon={arrowUndoOutline} />
+                          </IonButton>
+                          {curr_priv >= 1 ?
+                            <IonButton onClick={e => removeComment(c.id)}>
+                              <IonIcon color="danger" slot="icon-only" icon={removeCircleOutline} />
+                            </IonButton>
+                            : false}
+                        </IonButtons>
+                      </IonCol> : false}
                   </IonRow>
                 )}
               </IonGrid>
