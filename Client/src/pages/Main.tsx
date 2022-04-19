@@ -3,7 +3,6 @@ import { optionsOutline, starOutline, removeCircleOutline, filterOutline, person
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
-import StructurePage from './Structure';
 import VehiclesPage from './Vehicles';
 import LoginModal from './Login';
 import { capacities, capacityMax, capacityMin, clearStorage, colors, curr_priv, curr_pswd, curr_user, filter, makes, powertrainOptions, setFilter, setRefreshQuery, setResetQuery, transmissions, vehicleOptionOptions, vehicleTypeOptions, yearMax, yearMin, years } from '../components/StorageService';
@@ -664,12 +663,8 @@ const Main: React.FC = () => {
             <IonTabButton tab='vehicles' href='/vehicles'>
               <IonLabel>Vehicles</IonLabel>
             </IonTabButton>
-            <IonTabButton tab='structure' href='/structure'>
-              <IonLabel>Structure</IonLabel>
-            </IonTabButton>
           </IonTabBar>
           <IonRouterOutlet>
-            <Route path="/structure" render={() => (<StructurePage pageRef={mainRef} />)} exact />
             <Route path="/vehicles" render={() => (<VehiclesPage mainRef={mainRef} />)} exact />
             <Route path="/" render={() => <Redirect to="/vehicles" />} exact={true} />
           </IonRouterOutlet>
