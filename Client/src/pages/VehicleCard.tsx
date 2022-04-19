@@ -220,6 +220,37 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
     // eslint-disable-next-line
   }, [update])
 
+  const CommentCard: React.FC<{ c: any }> = ({ c }) => {
+    return (
+      <IonRow key={c.id}>
+        <IonCol size="2">
+          <IonLabel color="primary"><h2>{c.user}</h2></IonLabel>
+        </IonCol>
+        <IonCol size={curr_priv >= 1 ? "7" : "9"}>
+          <IonLabel color="tertiary" onClick={e => console.log("Clicked!")}>
+            {c.replied_to !== null ? "Re: " + c.replied_to.user + " " : false}
+          </IonLabel>
+          <IonLabel class="ion-text-wrap">
+            {c.content}
+          </IonLabel>
+        </IonCol>
+        {curr_user !== '' ?
+          <IonCol size={curr_priv >= 1 ? "3" : "1"}>
+            <IonButtons>
+              <IonButton size="small" onClick={e => setReplyComment(c)}>
+                <IonIcon slot="icon-only" icon={arrowUndoOutline} />
+              </IonButton>
+              {curr_priv >= 1 ?
+                <IonButton onClick={e => removeComment(c.id)}>
+                  <IonIcon color="danger" slot="icon-only" icon={removeCircleOutline} />
+                </IonButton>
+                : false}
+            </IonButtons>
+          </IonCol> : false}
+      </IonRow>
+    );
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -398,32 +429,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                   </IonRow>
                   : false}
                 {comments.map(c =>
-                  <IonRow key={c.id}>
-                    <IonCol size="2">
-                      <IonLabel color="primary"><h2>{c.user}</h2></IonLabel>
-                    </IonCol>
-                    <IonCol size={curr_priv >= 1 ? "7" : "9"}>
-                      <IonLabel color="tertiary" onClick={e => console.log("Clicked!")}>
-                        {c.replied_to !== null ? "Re: " + c.replied_to.user + " " : false}
-                      </IonLabel>
-                      <IonLabel class="ion-text-wrap">
-                        {c.content}
-                      </IonLabel>
-                    </IonCol>
-                    {curr_user !== '' ?
-                      <IonCol size={curr_priv >= 1 ? "3" : "1"}>
-                        <IonButtons>
-                          <IonButton size="small" onClick={e => setReplyComment(c)}>
-                            <IonIcon slot="icon-only" icon={arrowUndoOutline} />
-                          </IonButton>
-                          {curr_priv >= 1 ?
-                            <IonButton onClick={e => removeComment(c.id)}>
-                              <IonIcon color="danger" slot="icon-only" icon={removeCircleOutline} />
-                            </IonButton>
-                            : false}
-                        </IonButtons>
-                      </IonCol> : false}
-                  </IonRow>
+                  <CommentCard c={c} />
                 )}
               </IonGrid>
             </IonCardContent>
