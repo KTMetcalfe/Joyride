@@ -29,6 +29,7 @@ class VehicleModel extends Database {
         $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $newRating, $newCount, $id));
       }
     } else {
+      $this->insert(sprintf("UPDATE vehicles SET rating=%2.1f, rating_count=%d WHERE id=%d", $rating, 1, $id));
       $this->insert(sprintf("UPDATE accounts SET ratings='%s' WHERE user='%s'", json_encode([$ratingElement]), $user));
     }
   }
@@ -43,7 +44,8 @@ class VehicleModel extends Database {
 
       if (is_numeric($index)) {
         $rating = $ratings[$index]->{'rating'};
-        unset($ratings[$index]);
+        array_splice($ratings, $index, 1);
+        // unset($ratings[$index]);
 
         $this->insert(sprintf("UPDATE accounts SET ratings='%s' WHERE user='%s'", json_encode($ratings), $user));
 
