@@ -1,5 +1,5 @@
 import { focusElement } from "@ionic/core/dist/types/utils/helpers";
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonActionSheet } from "@ionic/react"
 import { arrowForward, arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircle, closeCircleOutline, closeOutline, heart, heartOutline, removeCircleOutline, sendOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -220,6 +220,22 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
     // eslint-disable-next-line
   }, [update])
 
+  const [presentRemove, dismissRemove] = useIonActionSheet();
+
+  const handlePresentRemove = (vehicle_id: number) => {
+    presentRemove({
+      buttons: [
+        {
+          text: "Remove",
+          handler: () => removeVehicle(vehicle_id)
+        },
+        { text: "Cancel" }
+      ],
+      header: "Remove vehicle?",
+      mode: "ios"
+    });
+  }
+
   const CommentCard: React.FC<{ c: any }> = ({ c }) => {
     return (
       <IonRow key={c.id}>
@@ -389,7 +405,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                   {curr_priv >= 1 ?
                     <IonCol size="1">
                       <IonButtons class='center-buttons'>
-                        <IonButton onClick={() => removeVehicle(vehicle.id)} size='small' fill='clear' color='danger'>
+                        <IonButton size='small' fill='clear' color='danger' onClick={e => {handlePresentRemove(vehicle.id); e.stopPropagation()}}>
                           <IonIcon slot='icon-only' icon={removeCircleOutline} />
                         </IonButton>
                       </IonButtons>

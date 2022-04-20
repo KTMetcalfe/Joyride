@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonActionSheet, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
@@ -234,6 +234,22 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     onDismiss: handleDismissVehicle
   })
 
+  const [presentRemove, dismissRemove] = useIonActionSheet();
+
+  const handlePresentRemove = (vehicle_id: number) => {
+    presentRemove({
+      buttons: [
+        {
+          text: "Remove",
+          handler: () => removeVehicle(vehicle_id)
+        },
+        { text: "Cancel" }
+      ],
+      header: "Remove vehicle?",
+      mode: "ios"
+    });
+  }
+
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonContent forceOverscroll={true}>
@@ -343,7 +359,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                           {curr_priv >= 1 ?
                             <IonCol size="1">
                               <IonButtons class='center-buttons'>
-                                <IonButton onClick={e => { removeVehicle(v.id); e.stopPropagation() }} size='small' fill='clear' color='danger'>
+                                <IonButton size='small' fill='clear' color='danger' onClick={e => {handlePresentRemove(v.id); e.stopPropagation()}}>
                                   <IonIcon slot='icon-only' icon={removeCircleOutline} />
                                 </IonButton>
                               </IonButtons>

@@ -1,5 +1,5 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar } from "@ionic/react"
-import { addCircleOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
+import { IonActionSheet, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar, useIonActionSheet } from "@ionic/react"
+import { addCircleOutline, checkmarkCircle, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_user, curr_pswd, setRefreshQuery } from "../components/StorageService";
@@ -11,6 +11,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
   const [list, setList] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
+  const [isRemoveOpen, setIsRemoveOpen] = useState(false);
 
   const [waiting, setWaiting] = useState(true);
 
@@ -127,6 +128,22 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       })
   }
 
+  const [presentRemove, dismissRemove] = useIonActionSheet();
+
+  const handlePresentRemove = (vehicle_id: number) => {
+    presentRemove({
+      buttons: [
+        {
+          text: "Remove",
+          handler: () => removeVehicle(vehicle_id)
+        },
+        { text: "Cancel" }
+      ],
+      header: "Remove vehicle?",
+      mode: "ios"
+    });
+  }
+
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonHeader>
@@ -175,6 +192,12 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                       }
                       <IonGrid>
                         <IonRow>
+                          <IonCol size="12">
+                            <IonLabel color="primary">Description:</IonLabel>
+                          </IonCol>
+                          <IonCol size="12">
+                            <IonText class="ion-text-wrap">{v.description}</IonText>
+                          </IonCol>
                           <IonCol size="6">
                             <IonLabel color="primary">Price: </IonLabel>
                             <IonLabel>{v.price}</IonLabel>
@@ -184,6 +207,14 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                             <IonLabel>{v.mileage}</IonLabel>
                           </IonCol>
                           <IonCol size="6">
+                            <IonLabel color="primary">Powertrain: </IonLabel>
+                            <IonLabel>{v.powertrain}</IonLabel>
+                          </IonCol>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Color: </IonLabel>
+                            <IonLabel>{v.color}</IonLabel>
+                          </IonCol>
+                          <IonCol size="6">
                             <IonLabel color="primary">Capacity: </IonLabel>
                             <IonLabel>{v.capacity}</IonLabel>
                           </IonCol>
@@ -191,40 +222,36 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
                             <IonLabel color="primary">User: </IonLabel>
                             <IonLabel>{v.user}</IonLabel>
                           </IonCol>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Transmission: </IonLabel>
+                            <IonLabel>{v.transmission}</IonLabel>
+                          </IonCol>
+                          <IonCol size="6">
+                            <IonLabel color="primary">Vehicle Type: </IonLabel>
+                            <IonLabel>{v.vehicle_type}</IonLabel>
+                          </IonCol>
                         </IonRow>
                         <IonRow>
-                          <IonCol size="6">
-                            <IonButtons class='center-buttons'>
-                              <IonButton disabled={curr_user === ''}>
-                                <IonIcon icon={v.rating >= .5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''}>
-                                <IonIcon icon={v.rating >= 1.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''}>
-                                <IonIcon icon={v.rating >= 2.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''}>
-                                <IonIcon icon={v.rating >= 3.5 ? star : starOutline} />
-                              </IonButton>
-                              <IonButton disabled={curr_user === ''}>
-                                <IonIcon icon={v.rating >= 4.5 ? star : starOutline} />
-                              </IonButton>
-                            </IonButtons>
+                          {typeof (v.vehicle_options) === "string" && v.vehicle_options !== '' ?
+                            JSON.parse(v.vehicle_options).map((o: string) =>
+                              <IonCol key={o}>
+                                <IonChip class="options-chip">
+                                  <IonIcon icon={checkmarkCircle} color='primary' />
+                                  <IonLabel>{o}</IonLabel>
+                                </IonChip>
+                              </IonCol>
+                            ) : false}
+                        </IonRow>
+                        <IonRow>
+                          <IonCol>
+                            <IonButton expand="block" color="primary" onClick={() => approveVehicle(v.id)}>
+                              <IonIcon slot='icon-only' icon={addCircleOutline} />
+                            </IonButton>
                           </IonCol>
                           <IonCol>
-                            <IonButtons class="center-buttons">
-                              <IonButton onClick={() => approveVehicle(v.id)}>
-                                <IonIcon slot='icon-only' icon={addCircleOutline} />
-                              </IonButton>
-                            </IonButtons>
-                          </IonCol>
-                          <IonCol>
-                            <IonButtons class="center-buttons">
-                              <IonButton onClick={() => removeVehicle(v.id)}>
-                                <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                              </IonButton>
-                            </IonButtons>
+                            <IonButton expand="block" color="danger" onClick={e => {handlePresentRemove(v.id); e.stopPropagation()}}>
+                              <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                            </IonButton>
                           </IonCol>
                         </IonRow>
                       </IonGrid>
