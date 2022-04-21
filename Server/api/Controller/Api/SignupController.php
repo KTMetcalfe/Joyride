@@ -28,7 +28,7 @@ class SignupController extends BaseController {
           $pass = password_hash($pswd, PASSWORD_BCRYPT);
           $result = $accountModel->addAccount($email, $user, $pass);
 
-          $responseData = '{"signedUp":' . $result . '}';
+          $responseData = '{"signedUp":' . ($result ? "true" : "false") . '}';
         } catch (mysqli_sql_exception $e) {
           if ($e->getCode() === 1062) {
             $strErrorDesc = 'username_taken';
@@ -84,7 +84,7 @@ class SignupController extends BaseController {
 
         $result = $accountModel->verifyAccount($email, $verification_code);
 
-        $responseData = '{"verified":' . $result . '}';
+        $responseData = '{"verified":' . ($result ? "true" : "false") . '}';
       } catch (mysqli_sql_exception $e) {
         if ($e->getCode() === 1062) {
           $strErrorDesc = 'username_taken';

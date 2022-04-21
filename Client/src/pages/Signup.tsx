@@ -61,7 +61,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
                     <IonInput value={user} placeholder="Username" onIonChange={e => setUser(e.detail.value!)} />
                   </IonItem>
                   <IonItem>
-                    <IonInput value={pswd} placeholder="Password" onIonChange={e => setPswd(e.detail.value!)} />
+                    <IonInput value={pswd} type="password" placeholder="Password" onIonChange={e => setPswd(e.detail.value!)} />
                   </IonItem>
                 </IonList>
               </IonCol>
