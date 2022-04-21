@@ -26,9 +26,9 @@ class SignupController extends BaseController {
           $accountModel = new AccountModel();
 
           $pass = password_hash($pswd, PASSWORD_BCRYPT);
-          $accountModel->addAccount($email, $user, $pass);
+          $result = $accountModel->addAccount($email, $user, $pass);
 
-          $responseData = '{"signedUp":true}';
+          $responseData = '{"signedUp":' . $result . '}';
         } catch (mysqli_sql_exception $e) {
           if ($e->getCode() === 1062) {
             $strErrorDesc = 'username_taken';
@@ -43,6 +43,58 @@ class SignupController extends BaseController {
       } else {
         $strErrorDesc = 'Not Authorized';
         $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+      }
+    } else {
+      $strErrorDesc = 'Method not supported';
+      $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+    }
+
+    // send output
+    if (!$strErrorDesc) {
+      $this->sendOutput(
+        $responseData,
+        array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+      );
+    } else {
+      $this->sendOutput(
+        json_encode(array('error' => $strErrorDesc)),
+        array('Content-Type: application/json', $strErrorHeader)
+      );
+    }
+  }
+
+  /**
+   * "/signup/verifyEmail" Endpoint - Gets a token from a user
+   */
+  public function verifyEmailAction() {
+    $strErrorDesc = '';
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+    $arrQueryStringParams = $this->getQueryStringParams();
+
+    // POST request handling
+    if (strtoupper($requestMethod) == 'GET') {
+      // Header check
+      try {
+        // Main request logic
+
+        $email = $arrQueryStringParams['email'];
+        $verification_code = $arrQueryStringParams['code'];
+
+        $accountModel = new AccountModel();
+
+        $result = $accountModel->verifyAccount($email, $verification_code);
+
+        $responseData = '{"verified":' . $result . '}';
+      } catch (mysqli_sql_exception $e) {
+        if ($e->getCode() === 1062) {
+          $strErrorDesc = 'username_taken';
+          $strErrorHeader = 'HTTP/1.1 400 Bad Request';
+        } else {
+          throw new mysqli_sql_exception($e->getMessage(), $e->getCode());
+        }
+      } catch (Error $e) {
+        $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+        $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
       }
     } else {
       $strErrorDesc = 'Method not supported';

@@ -23,7 +23,7 @@ if (isset($uri[2]) && $uri[2] == 'login') {
   require "/joyride/api/Controller/Api/SignupController.php";
 
   $objFeedController = new SignupController();
-  $strMethodName = 'signupAction';
+  $strMethodName = isset($uri[3]) ? $uri[3] . "Action" : 'signupAction';
   $objFeedController->{$strMethodName}();
 } else if (isset($uri[2]) && $uri[2] == 'vehicles') {
   require "/joyride/api/Controller/Api/VehiclesController.php";
