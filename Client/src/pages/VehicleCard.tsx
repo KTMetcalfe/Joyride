@@ -405,7 +405,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                   {curr_priv >= 1 ?
                     <IonCol size="1">
                       <IonButtons class='center-buttons'>
-                        <IonButton size='small' fill='clear' color='danger' onClick={e => {handlePresentRemove(vehicle.id); e.stopPropagation()}}>
+                        <IonButton size='small' fill='clear' color='danger' onClick={e => { handlePresentRemove(vehicle.id); e.stopPropagation() }}>
                           <IonIcon slot='icon-only' icon={removeCircleOutline} />
                         </IonButton>
                       </IonButtons>
@@ -421,10 +421,9 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
             </IonCardHeader>
             <IonCardContent>
               <IonGrid>
-                {curr_user !== '' ?
                   <IonRow>
                     <IonCol size="12">
-                      <IonItem lines="full" class='input-item'>
+                      <IonItem disabled={curr_user === ''} lines="full" class='input-item'>
                         {isNaN(replyComment.id) ? true :
                           <IonChip>
                             <IonButtons>
@@ -434,7 +433,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                             </IonButtons>
                             <IonLabel>Re: {replyComment.user}</IonLabel>
                           </IonChip>}
-                        <IonInput type="text" placeholder="Add a Comment..." value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
+                        <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : "Add a Comment..."} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
                         <IonButtons>
                           <IonButton onClick={e => addComment(vehicle.id, newComment, replyComment.id)}>
                             <IonIcon slot="icon-only" icon={arrowForwardOutline} />
@@ -443,7 +442,6 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                       </IonItem>
                     </IonCol>
                   </IonRow>
-                  : false}
                 {comments.map(c =>
                   <CommentCard c={c} />
                 )}
