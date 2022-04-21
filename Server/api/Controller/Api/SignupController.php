@@ -85,6 +85,7 @@ class SignupController extends BaseController {
         $result = $accountModel->verifyAccount($email, $verification_code);
 
         $responseData = '{"verified":' . ($result ? "true" : "false") . '}';
+        #$responseData = '<html><h1>' . ($result ? "Account verified!" : "Verification failed...") . '</h1></html>';
       } catch (mysqli_sql_exception $e) {
         if ($e->getCode() === 1062) {
           $strErrorDesc = 'username_taken';
