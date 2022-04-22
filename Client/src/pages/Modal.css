@@ -35,6 +35,12 @@
   text-align: center;
 }
 
+.center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .swiper-main {
   height: 50vh;
   display: flex;

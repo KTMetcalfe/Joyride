@@ -43,6 +43,12 @@ if (isset($uri[2]) && $uri[2] == 'login') {
   $objFeedController = new CommentsController();
   $strMethodName = $uri[3] . 'Action';
   $objFeedController->{$strMethodName}();
+} else if (isset($uri[2]) && $uri[2] == 'payment') {
+  require "/joyride/api/Controller/Api/PaymentController.php";
+
+  $objFeedController = new PaymentController();
+  $strMethodName = $uri[3] . 'Action';
+  $objFeedController->{$strMethodName}();
 } else {
   header("HTTP/1.1 404 Not Found");
   exit();

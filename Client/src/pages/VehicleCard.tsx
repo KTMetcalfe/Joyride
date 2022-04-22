@@ -1,13 +1,15 @@
 import { focusElement } from "@ionic/core/dist/types/utils/helpers";
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonActionSheet } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonActionSheet, useIonModal } from "@ionic/react"
 import { arrowForward, arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircle, closeCircleOutline, closeOutline, heart, heartOutline, removeCircleOutline, sendOutline, star, starOutline } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
 
 import './Main.css';
+import BuyPage from "./BuyPage";
+import RentPage from "./RentPage";
 
-const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDismiss }) => {
+const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }> = ({ mainRef, id, onDismiss }) => {
   const [vehicle, setVehicle] = useState<any>({});
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
@@ -15,6 +17,7 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
   const [comments, setComments] = useState<Array<any>>([]);
   const [newComment, setNewComment] = useState<string>('');
   const [replyComment, setReplyComment] = useState<any>({});
+  const pageRef = useRef();
 
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -236,6 +239,40 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
     });
   }
 
+  const handlePresentRent = () => {
+    presentRent({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: pageRef.current
+    });
+  };
+
+  const handleDismissRent = () => {
+    dismissRent();
+  };
+
+  const [presentRent, dismissRent] = useIonModal(RentPage, {
+    vehicle: vehicle,
+    onDismiss: handleDismissRent
+  })
+
+  const handlePresentBuy = () => {
+    presentBuy({
+      mode: 'ios',
+      swipeToClose: true,
+      presentingElement: pageRef.current
+    });
+  };
+
+  const handleDismissBuy = () => {
+    dismissBuy();
+  };
+
+  const [presentBuy, dismissBuy] = useIonModal(BuyPage, {
+    vehicle: vehicle,
+    onDismiss: handleDismissBuy
+  })
+
   const CommentCard: React.FC<{ c: any }> = ({ c }) => {
     return (
       <IonRow key={c.id}>
@@ -417,31 +454,52 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
           </IonCard>
           <IonCard>
             <IonCardHeader>
+              <IonCardSubtitle>Rent or Buy</IonCardSubtitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <IonGrid>
+                <IonRow>
+                  <IonCol>
+                    <IonButton color="primary" expand="block" onClick={() => handlePresentRent()}>
+                      <IonLabel>Rent</IonLabel>
+                    </IonButton>
+                  </IonCol>
+                  <IonCol>
+                    <IonButton color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
+                      <IonLabel>Buy</IonLabel>
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </IonCardContent>
+          </IonCard>
+          <IonCard>
+            <IonCardHeader>
               <IonCardSubtitle>Comments</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
               <IonGrid>
-                  <IonRow>
-                    <IonCol size="12">
-                      <IonItem disabled={curr_user === ''} lines="full" class='input-item'>
-                        {isNaN(replyComment.id) ? true :
-                          <IonChip>
-                            <IonButtons>
-                              <IonButton onClick={e => setReplyComment({})}>
-                                <IonIcon slot="icon-only" icon={closeCircleOutline} />
-                              </IonButton>
-                            </IonButtons>
-                            <IonLabel>Re: {replyComment.user}</IonLabel>
-                          </IonChip>}
-                        <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : "Add a Comment..."} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
-                        <IonButtons>
-                          <IonButton onClick={e => addComment(vehicle.id, newComment, replyComment.id)}>
-                            <IonIcon slot="icon-only" icon={arrowForwardOutline} />
-                          </IonButton>
-                        </IonButtons>
-                      </IonItem>
-                    </IonCol>
-                  </IonRow>
+                <IonRow>
+                  <IonCol size="12">
+                    <IonItem disabled={curr_user === ''} lines="full" class='input-item'>
+                      {isNaN(replyComment.id) ? true :
+                        <IonChip>
+                          <IonButtons>
+                            <IonButton onClick={e => setReplyComment({})}>
+                              <IonIcon slot="icon-only" icon={closeCircleOutline} />
+                            </IonButton>
+                          </IonButtons>
+                          <IonLabel>Re: {replyComment.user}</IonLabel>
+                        </IonChip>}
+                      <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : "Add a Comment..."} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
+                      <IonButtons>
+                        <IonButton onClick={e => addComment(vehicle.id, newComment, replyComment.id)}>
+                          <IonIcon slot="icon-only" icon={arrowForwardOutline} />
+                        </IonButton>
+                      </IonButtons>
+                    </IonItem>
+                  </IonCol>
+                </IonRow>
                 {comments.map(c =>
                   <CommentCard c={c} />
                 )}

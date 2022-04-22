@@ -2,9 +2,9 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-require '/joyride/api/PHPMailer/src/Exception.php';
-require '/joyride/api/PHPMailer/src/PHPMailer.php';
-require '/joyride/api/PHPMailer/src/SMTP.php';
+require '/joyride/PHPMailer/src/Exception.php';
+require '/joyride/PHPMailer/src/PHPMailer.php';
+require '/joyride/PHPMailer/src/SMTP.php';
 
 require_once "/joyride/api/Model/Database.php";
 
