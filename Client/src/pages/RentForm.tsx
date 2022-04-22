@@ -3,8 +3,9 @@ import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { useEffect, useState } from "react";
 
 import './Modal.css';
+import './PaymentForm.css';
 
-const RentForm: React.FC = () => {
+const RentForm: React.FC<{ cid: string; pid: string; vehicle: any }> = ({ cid, pid, vehicle }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -53,27 +54,44 @@ const RentForm: React.FC = () => {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const { setupIntent, error } = await stripe.confirmSetup({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://www.kianm.net",
+        return_url: "http://localhost:8100",
       },
+      redirect: 'if_required'
     });
+
+    if (setupIntent?.status === "succeeded") {
+      setMessage("Success!");
+      startSubscription(typeof (setupIntent.payment_method) === 'string' ? setupIntent.payment_method : '')
+        .then(() => window.location.reload());
+    }
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
+    if (error?.type === "card_error" || error?.type === "validation_error") {
       setMessage(error.message !== undefined ? error.message : '');
-    } else {
+    } else if (!setupIntent) {
       setMessage("An unexpected error occured.");
     }
 
     setIsLoading(false);
   };
+
+  const startSubscription = async (card: string) => {
+    const body = { cents: vehicle.price / 2, customer_id: cid, payment_id: card };
+    await fetch("https://api.kianm.net/index.php/payment/subscribe", {
+      method: 'post',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    })
+    console.log(body);
+  }
 
   return (
     <form className="center" id="payment-form" onSubmit={handleSubmit}>

@@ -40,20 +40,32 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
   };
 
   return (
-    <div className="App">
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>Payment</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <BuyForm />
-            </IonCardContent>
-          </IonCard>
-        </Elements>
-      )}
-    </div>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle class='ion-text-center'>Buy</IonTitle>
+          <IonButtons slot='end'>
+            <IonButton onClick={onDismiss}>Close</IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent forceOverscroll={false}>
+        <div className="App">
+          {clientSecret && (
+            <Elements options={options} stripe={stripePromise}>
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>Payment</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <BuyForm />
+                </IonCardContent>
+              </IonCard>
+            </Elements>
+          )}
+        </div>
+      </IonContent>
+    </IonPage>
   );
 }
 

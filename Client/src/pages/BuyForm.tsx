@@ -3,6 +3,7 @@ import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { useEffect, useState } from "react";
 
 import './Modal.css';
+import './PaymentForm.css';
 
 const BuyForm: React.FC = () => {
   const stripe = useStripe();

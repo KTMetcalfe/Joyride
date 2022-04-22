@@ -11,17 +11,22 @@ import RentForm from "./RentForm";
 const stripePromise = loadStripe("pk_test_51KrBMoHW1ixNikIwhzdtbDcW3nvQvtrSpv8rsBWPj7bsa19axEl35FvGoGCLzlpdRyMFnNbIoLRmER0XJHmiUUU700iykcFSkV");
 
 const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
-  const [clientSecret, setClientSecret] = useState("");
+  const [clientSecret, setClientSecret] = useState('');
+  const [customerID, setCustomerID] = useState('');
+  const [paymentID, setPaymentID] = useState('');
 
   useEffect(() => {
-    const body = { vehicle_id: vehicle.id, cents: vehicle.price * 100, seller: vehicle.user, buyer: curr_user };
-    fetch('https://api.kianm.net/index.php/payment/buy', {
+    const body = { vehicle_id: vehicle.id, cents: vehicle.price / 50, seller: vehicle.user, buyer: curr_user };
+    fetch('https://api.kianm.net/index.php/payment/rent', {
       method: 'post',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     })
       .then(e => e.json())
-      .then(result => setClientSecret(result.clientSecret))
+      .then(result => {
+        setClientSecret(result.clientSecret);
+        setCustomerID(result.customer_id);
+      })
   }, []);
 
   const enum themeOptions {
@@ -40,20 +45,33 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
   };
 
   return (
-    <div className="App">
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>Payment</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <RentForm />
-            </IonCardContent>
-          </IonCard>
-        </Elements>
-      )}
-    </div>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle class='ion-text-center'>Rent</IonTitle>
+          <IonButtons slot='end'>
+            <IonButton onClick={onDismiss}>Close</IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent forceOverscroll={false}>
+        <div className="App">
+          {clientSecret && (
+            <Elements options={options} stripe={stripePromise}>
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>Payment</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <RentForm cid={customerID} pid={paymentID} vehicle={vehicle} />
+                </IonCardContent>
+              </IonCard>
+            </Elements>
+          )}
+        </div>
+      </IonContent>
+    </IonPage>
+
   );
 }
 
