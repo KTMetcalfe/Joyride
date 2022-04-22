@@ -292,11 +292,11 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                         <IonRow>
                           <IonCol size="6">
                             <IonLabel color="primary">Price: </IonLabel>
-                            <IonLabel>{v.price}</IonLabel>
+                            <IonLabel>${Number(v.price).toLocaleString('en-US')}</IonLabel>
                           </IonCol>
                           <IonCol size="6">
                             <IonLabel color="primary">Mileage: </IonLabel>
-                            <IonLabel>{v.mileage}</IonLabel>
+                            <IonLabel>{Number(v.mileage).toLocaleString('en-US')}</IonLabel>
                           </IonCol>
                           <IonCol size="6">
                             <IonLabel color="primary">Capacity: </IonLabel>

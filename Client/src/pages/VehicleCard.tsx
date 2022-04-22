@@ -312,11 +312,11 @@ const VehicleCard: React.FC<{ id: number; onDismiss: () => void }> = ({ id, onDi
                   </IonCol>
                   <IonCol size="6">
                     <IonLabel color="primary">Price: </IonLabel>
-                    <IonLabel>{vehicle.price}</IonLabel>
+                    <IonLabel>${Number(vehicle.price).toLocaleString('en-US')}</IonLabel>
                   </IonCol>
                   <IonCol size="6">
                     <IonLabel color="primary">Mileage: </IonLabel>
-                    <IonLabel>{vehicle.mileage}</IonLabel>
+                    <IonLabel>{Number(vehicle.mileage).toLocaleString('en-US')}</IonLabel>
                   </IonCol>
                   <IonCol size="6">
                     <IonLabel color="primary">Powertrain: </IonLabel>
