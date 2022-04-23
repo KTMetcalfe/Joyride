@@ -3,7 +3,7 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardS
 import { arrowForward, arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircle, closeCircleOutline, closeOutline, heart, heartOutline, removeCircleOutline, sendOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
+import { curr_priv, curr_pswd, curr_user, email_verified, setRefreshQuery } from "../components/StorageService";
 
 import './Main.css';
 import BuyPage from "./BuyPage";
@@ -458,14 +458,23 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
             </IonCardHeader>
             <IonCardContent>
               <IonGrid>
+                {
+                  email_verified !== "YES" ?
+                  <IonRow>
+                    <IonCol class="center">
+                      <IonLabel class="ion-text-center">Please verify email to rent or buy...</IonLabel>
+                    </IonCol>
+                  </IonRow>
+                  : false
+                }
                 <IonRow>
                   <IonCol>
-                    <IonButton color="primary" expand="block" onClick={() => handlePresentRent()}>
+                    <IonButton disabled={email_verified !== "YES"} color="primary" expand="block" onClick={() => handlePresentRent()}>
                       <IonLabel>Rent</IonLabel>
                     </IonButton>
                   </IonCol>
                   <IonCol>
-                    <IonButton color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
+                    <IonButton disabled={email_verified !== "YES"} color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
                       <IonLabel>Buy</IonLabel>
                     </IonButton>
                   </IonCol>
@@ -481,7 +490,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
               <IonGrid>
                 <IonRow>
                   <IonCol size="12">
-                    <IonItem disabled={curr_user === ''} lines="full" class='input-item'>
+                    <IonItem disabled={curr_user === '' || email_verified !== "YES"} lines="full" class='input-item'>
                       {isNaN(replyComment.id) ? true :
                         <IonChip>
                           <IonButtons>
@@ -491,7 +500,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
                           </IonButtons>
                           <IonLabel>Re: {replyComment.user}</IonLabel>
                         </IonChip>}
-                      <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : "Add a Comment..."} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
+                      <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : (email_verified !== "YES" ? "Verify email to comment..." : "Add a Comment...")} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
                       <IonButtons>
                         <IonButton onClick={e => addComment(vehicle.id, newComment, replyComment.id)}>
                           <IonIcon slot="icon-only" icon={arrowForwardOutline} />
