@@ -10,7 +10,7 @@ import RentForm from "./RentForm";
 
 const stripePromise = loadStripe("pk_test_51KrBMoHW1ixNikIwhzdtbDcW3nvQvtrSpv8rsBWPj7bsa19axEl35FvGoGCLzlpdRyMFnNbIoLRmER0XJHmiUUU700iykcFSkV");
 
-const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
+const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
   const [clientSecret, setClientSecret] = useState('');
   const [customerID, setCustomerID] = useState('');
   const [paymentID, setPaymentID] = useState('');
@@ -75,4 +75,4 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
   );
 }
 
-export default BuyPage;
+export default RentPage;
