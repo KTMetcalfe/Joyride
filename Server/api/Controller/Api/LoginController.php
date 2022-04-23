@@ -23,8 +23,9 @@ class LoginController extends BaseController {
 
           if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
             // Main request logic
-
-            $responseData = sprintf('{"isVerified": true, "email": "%s", "priveledge":%d}', $accArr[0]['email'], $accArr[0]['priveledge']);
+            
+            $responseData = sprintf('{"isVerified": true, "email": "%s", "priveledge":%d, "email_verified": "%s"}', 
+              $accArr[0]['email'], $accArr[0]['priveledge'], $accArr[0]['verified']);
           } else if (count($accArr) > 1) {
             throw new Exception('Too many accounts');
           } else {

@@ -1,7 +1,7 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
-import { setCurrentAccount } from "../components/StorageService";
+import { email_verified, setCurrentAccount } from "../components/StorageService";
 
 import './Modal.css';
 
@@ -26,7 +26,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
       .then(e => e.json())
       .then(result => {
         if (result.signedUp === true) {
-          setCurrentAccount(email!, user!, pswd!, 0);
+          setCurrentAccount(email!, user!, pswd!, 0, "NO");
           window.document.getElementById('signupErr')!.innerHTML = "Signed up";
           window.document.getElementById('signup-output')!.style.display = "block";
           onDismiss();
