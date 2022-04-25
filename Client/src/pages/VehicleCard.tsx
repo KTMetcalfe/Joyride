@@ -249,6 +249,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
 
   const handleDismissRent = () => {
     dismissRent();
+    setUpdate(true);
   };
 
   const [presentRent, dismissRent] = useIonModal(RentPage, {
@@ -266,6 +267,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
 
   const handleDismissBuy = () => {
     dismissBuy();
+    setUpdate(true);
   };
 
   const [presentBuy, dismissBuy] = useIonModal(BuyPage, {

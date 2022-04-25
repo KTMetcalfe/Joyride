@@ -1,7 +1,11 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-require_once dirname(__FILE__).'/../../../stripe-php/init.php';
+require_once dirname(__FILE__) . '/../../../stripe-php/init.php';
+
+require '/joyride/api/Model/AccountModel.php';
+require '/joyride/api/Model/VehicleModel.php';
+require '/joyride/api/Model/PaymentModel.php';
 
 \Stripe\Stripe::setApiKey('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
 
@@ -46,7 +50,7 @@ class PaymentController extends BaseController {
     }
   }
 
-  public function rentAction() {
+  public function rentIntentAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
@@ -91,38 +95,216 @@ class PaymentController extends BaseController {
     }
   }
 
-  public function subscribeAction() {
+  public function requestAction() {
+    $strErrorDesc = '';
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+    $arrQueryStringParams = $this->getQueryStringParams();
+    // POST request handling
+    if (strtoupper($requestMethod) == 'POST') {
+      if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+        $user = $_SERVER['PHP_AUTH_USER'];
+        $pswd = $_SERVER['PHP_AUTH_PW'];
+        try {
+          // Authorization check
+          $accountModel = new AccountModel();
+          $accArr = $accountModel->getAccount($user);
+
+          if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
+            $stripe = new \Stripe\StripeClient('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
+
+            $data = file_get_contents('php://input');
+            $body = json_decode($data);
+            $customer_id = $body->{'customer_id'};
+            $payment_id = $body->{'payment_id'};
+            $vehicle_id = $body->{'vehicle_id'};
+            $request_type = $body->{'request_type'};
+            $price = $body->{'price'};
+            $seller = $body->{'seller'};
+
+            $paymentModel = new PaymentModel;
+            $result = $paymentModel->createRequest($customer_id, $payment_id, $vehicle_id, $request_type, $price, $user, $seller);
+
+            $responseData = '{"requested":true}';
+          } else {
+            $strErrorDesc = 'Not Authorized';
+            $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+          }
+        } catch (Error $e) {
+          $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+          $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        }
+      } else {
+        $strErrorDesc = 'Method not supported';
+        $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+      }
+    } else {
+      $strErrorDesc = 'Not Authorized';
+      $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+    }
+
+    // send output
+    if (!$strErrorDesc) {
+      $this->sendOutput(
+        $responseData,
+        array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+      );
+    } else {
+      $this->sendOutput(
+        json_encode(array('error' => $strErrorDesc)),
+        array('Content-Type: application/json', $strErrorHeader)
+      );
+    }
+  }
+
+  public function acceptAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
 
-    try {
-      $stripe = new \Stripe\StripeClient('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
+    // POST request handling
+    if (strtoupper($requestMethod) == 'POST') {
+      if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+        $user = $_SERVER['PHP_AUTH_USER'];
+        $pswd = $_SERVER['PHP_AUTH_PW'];
 
-      $data = file_get_contents('php://input');
-      $body = json_decode($data);
-      $price = $body->{'cents'};
-      $customer_id = $body->{'customer_id'};
-      $payment_id = $body->{'payment_id'};
+        try {
+          // Authorization check
+          $accountModel = new AccountModel();
+          $accArr = $accountModel->getAccount($user);
 
-      $paymentIntent = \Stripe\PaymentIntent::create([
-        'amount' => $price,
-        'currency' => 'usd',
-        'customer' => $customer_id,
-        'payment_method' => $payment_id,
-        'off_session' => true,
-        'confirm' => true,
-      ]);
+          if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
 
-      $responseData = '{"clientSecret":"' . $paymentIntent->client_secret . '"}';
-    } catch (\Stripe\Exception\CardException $e) {
-      // Error code will be authentication_required if authentication is needed
-      echo 'Error code is:' . $e->getError()->code;
-      $payment_intent_id = $e->getError()->payment_intent->id;
-      $payment_intent = \Stripe\PaymentIntent::retrieve($payment_intent_id);
-    } catch (Error $e) {
-      $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
-      $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+            $data = file_get_contents('php://input');
+            $body = json_decode($data);
+            $vehicle_id = $body->{'vehicle_id'};
+            $buyer = $body->{'buyer'};
+
+            $vehicleModel = new VehicleModel();
+            $vehicles = $vehicleModel->getVehicle($vehicle_id);
+
+            // Matching vehicle seller for approval
+            if ($vehicles[0]['user'] == $user) {
+              $stripe = new \Stripe\StripeClient('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
+
+              $paymentModel = new PaymentModel;
+              $request = $paymentModel->acceptRequest($vehicle_id, $buyer);
+
+              $customer_id = $request[0]['customer_id'];
+              $payment_id = $request[0]['payment_id'];
+              $price = $request[0]['price'];
+
+              $paymentIntent = \Stripe\PaymentIntent::create([
+                'amount' => $price,
+                'currency' => 'usd',
+                'customer' => $customer_id,
+                'payment_method' => $payment_id,
+                'off_session' => true,
+                'confirm' => true,
+              ]);
+
+              $responseData = '{"accepted":true}';
+            } else {
+              $strErrorDesc = 'Not Authorized';
+              $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+            }
+          } else if (count($accArr) > 1) {
+            throw new Exception('Too many accounts');
+          } else {
+            $responseData = '{"isVerified": false}';
+          }
+        } catch (\Stripe\Exception\CardException $e) {
+          // Error code will be authentication_required if authentication is needed
+          echo 'Error code is:' . $e->getError()->code;
+          $payment_intent_id = $e->getError()->payment_intent->id;
+          $payment_intent = \Stripe\PaymentIntent::retrieve($payment_intent_id);
+        } catch (Error $e) {
+          $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+          $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        }
+      } else {
+        $strErrorDesc = 'Not Authorized';
+        $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+      }
+    } else {
+      $strErrorDesc = 'Method not supported';
+      $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+    }
+
+    // send output
+    if (!$strErrorDesc) {
+      $this->sendOutput(
+        $responseData,
+        array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+      );
+    } else {
+      $this->sendOutput(
+        json_encode(array('error' => $strErrorDesc)),
+        array('Content-Type: application/json', $strErrorHeader)
+      );
+    }
+  }
+
+  public function cancelAction() {
+    $strErrorDesc = '';
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+    $arrQueryStringParams = $this->getQueryStringParams();
+
+    // POST request handling
+    if (strtoupper($requestMethod) == 'POST') {
+      if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+        $user = $_SERVER['PHP_AUTH_USER'];
+        $pswd = $_SERVER['PHP_AUTH_PW'];
+
+        try {
+          // Authorization check
+          $accountModel = new AccountModel();
+          $accArr = $accountModel->getAccount($user);
+
+          if (count($accArr) == 1 && password_verify($pswd, $accArr[0]['pass'])) {
+            // Main request logic
+
+            $data = file_get_contents('php://input');
+            $body = json_decode($data);
+            $vehicle_id = $body->{'vehicle_id'};
+            $buyer = $body->{'buyer'};
+            $seller = $body->{'seller'};
+
+            $paymentModel = new PaymentModel;
+            $requests = $paymentModel->getRequest($vehicle_id, $buyer, $seller);
+
+            // Matching vehicle seller or buyer for approval
+            if ($requests[0]['buyer'] == $user || $requests[0]['seller'] == $user) {
+              $response = $paymentModel->cancelRequest($vehicle_id, $buyer);
+
+              $responseData = '{"cancelled":true}';
+            } else {
+              $strErrorDesc = 'Not Authorized';
+              $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+            }
+          } else if (count($accArr) > 1) {
+            throw new Exception('Too many accounts');
+          } else {
+            $responseData = '{"isVerified": false}';
+          }
+        } catch (\Stripe\Exception\CardException $e) {
+          // Error code will be authentication_required if authentication is needed
+          echo 'Error code is:' . $e->getError()->code;
+          $payment_intent_id = $e->getError()->payment_intent->id;
+          $payment_intent = \Stripe\PaymentIntent::retrieve($payment_intent_id);
+        } catch (Error $e) {
+          $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
+          $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        }
+      } else {
+        $strErrorDesc = 'Not Authorized';
+        $strErrorHeader = 'HTTP/1.1 401 Unauthorized';
+      }
+    } else {
+      $strErrorDesc = 'Method not supported';
+      $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
     }
 
     // send output

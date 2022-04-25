@@ -17,7 +17,7 @@ const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle,
 
   useEffect(() => {
     const body = { vehicle_id: vehicle.id, cents: vehicle.price / 50, seller: vehicle.user, buyer: curr_user };
-    fetch('https://api.kianm.net/index.php/payment/rent', {
+    fetch('https://api.kianm.net/index.php/payment/rentIntent', {
       method: 'post',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
@@ -63,7 +63,7 @@ const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle,
                   <IonCardTitle>Payment</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <RentForm cid={customerID} pid={paymentID} vehicle={vehicle} />
+                  <RentForm cid={customerID} pid={paymentID} vehicle={vehicle} onDismiss={onDismiss} />
                 </IonCardContent>
               </IonCard>
             </Elements>
