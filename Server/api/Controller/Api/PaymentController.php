@@ -10,7 +10,7 @@ require '/joyride/api/Model/PaymentModel.php';
 \Stripe\Stripe::setApiKey('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
 
 class PaymentController extends BaseController {
-  public function buyAction() {
+  public function buyIntentAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $arrQueryStringParams = $this->getQueryStringParams();
@@ -203,6 +203,7 @@ class PaymentController extends BaseController {
                 'payment_method' => $payment_id,
                 'off_session' => true,
                 'confirm' => true,
+                'description' => sprintf("%s %d: %s -> %s", $request[0]['request_type'], $vehicle_id, $user, $buyer)
               ]);
 
               $responseData = '{"accepted":true}';

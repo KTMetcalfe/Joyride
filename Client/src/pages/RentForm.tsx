@@ -85,7 +85,7 @@ const RentForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: ()
   };
 
   const createRequest = async (card: string) => {
-    const body = { customer_id: cid, payment_id: card, vehicle_id: vehicle.id, request_type: 'Rent', price: vehicle.price / 2, buyer: curr_user, seller: vehicle.user };
+    const body = { customer_id: cid, payment_id: card, vehicle_id: vehicle.id, request_type: 'Rent', price: vehicle.rent_price * 100, buyer: curr_user, seller: vehicle.user };
     await fetch("https://api.kianm.net/index.php/payment/request", {
       method: 'post',
       headers: {
@@ -104,7 +104,7 @@ const RentForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: ()
         {isLoading ?
           <IonSpinner />
           :
-          <IonLabel>Rent now</IonLabel>
+          <IonLabel>Rent for ${Number(vehicle.rent_price).toLocaleString('en-US')}</IonLabel>
         }
       </IonButton>
       {/* Show any error or success messages */}

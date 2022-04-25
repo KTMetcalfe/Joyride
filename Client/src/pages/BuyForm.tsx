@@ -1,11 +1,12 @@
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from "@ionic/react";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
+import { curr_pswd, curr_user } from "../components/StorageService";
 
 import './Modal.css';
 import './PaymentForm.css';
 
-const BuyForm: React.FC = () => {
+const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () => void }> = ({ cid, pid, vehicle, onDismiss }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -54,27 +55,47 @@ const BuyForm: React.FC = () => {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const { setupIntent, error } = await stripe.confirmSetup({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://www.kianm.net",
+        return_url: "http://localhost:8100",
       },
+      redirect: 'if_required'
     });
+
+    if (setupIntent?.status === "succeeded") {
+      setMessage("Success!");
+      createRequest(typeof (setupIntent.payment_method) === 'string' ? setupIntent.payment_method : '')
+        .then(onDismiss);
+    }
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
+    if (error?.type === "card_error" || error?.type === "validation_error") {
       setMessage(error.message !== undefined ? error.message : '');
-    } else {
+    } else if (!setupIntent) {
       setMessage("An unexpected error occured.");
     }
 
     setIsLoading(false);
   };
+
+  const createRequest = async (card: string) => {
+    const body = { customer_id: cid, payment_id: card, vehicle_id: vehicle.id, request_type: 'Buy', price: vehicle.price * 100, buyer: curr_user, seller: vehicle.user };
+    await fetch("https://api.kianm.net/index.php/payment/request", {
+      method: 'post',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    })
+    console.log(body);
+  }
 
   return (
     <form className="center" id="payment-form" onSubmit={handleSubmit}>
@@ -83,7 +104,7 @@ const BuyForm: React.FC = () => {
         {isLoading ?
           <IonSpinner />
           :
-          <IonLabel>Buy now</IonLabel>
+          <IonLabel>Buy for ${Number(vehicle.price).toLocaleString('en-US')}</IonLabel>
         }
       </IonButton>
       {/* Show any error or success messages */}

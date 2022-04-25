@@ -16,7 +16,7 @@ const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle,
   const [paymentID, setPaymentID] = useState('');
 
   useEffect(() => {
-    const body = { vehicle_id: vehicle.id, cents: vehicle.price / 50, seller: vehicle.user, buyer: curr_user };
+    const body = { vehicle_id: vehicle.id, cents: vehicle.rent_price * 100, seller: vehicle.user, buyer: curr_user };
     fetch('https://api.kianm.net/index.php/payment/rentIntent', {
       method: 'post',
       headers: { "Content-Type": "application/json" },

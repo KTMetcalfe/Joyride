@@ -354,6 +354,10 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
                     <IonLabel>${Number(vehicle.price).toLocaleString('en-US')}</IonLabel>
                   </IonCol>
                   <IonCol size="6">
+                    <IonLabel color="primary">Rent Price: </IonLabel>
+                    <IonLabel>${Number(vehicle.rent_price).toLocaleString('en-US')}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
                     <IonLabel color="primary">Mileage: </IonLabel>
                     <IonLabel>{Number(vehicle.mileage).toLocaleString('en-US')}</IonLabel>
                   </IonCol>
