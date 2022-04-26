@@ -10,6 +10,7 @@ import BuyPage from "./BuyPage";
 import RentPage from "./RentPage";
 
 const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }> = ({ mainRef, id, onDismiss }) => {
+  const pageRef = useRef();
   const [vehicle, setVehicle] = useState<any>({});
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
@@ -17,7 +18,8 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
   const [comments, setComments] = useState<Array<any>>([]);
   const [newComment, setNewComment] = useState<string>('');
   const [replyComment, setReplyComment] = useState<any>({});
-  const pageRef = useRef();
+  const [requestsListBuyer, setRequestsListBuyer] = useState<Array<any>>([]);
+  const [requestsListSeller, setRequestsListSeller] = useState<Array<any>>([]);
 
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -144,6 +146,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
           if (curr_user !== '') {
             getFavorites();
             getRatings();
+            getRequests()
           }
           setVehicle(result[0]);
         })
@@ -161,6 +164,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
           if (curr_user !== '') {
             getFavorites();
             getRatings();
+            getRequests()
           }
           setVehicle(result[0]);
         })
@@ -212,10 +216,50 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(e => setUpdate(true))
   }
 
+  const getRequests = () => {
+    fetch('https://api.kianm.net/index.php/payment/listBuyer', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setRequestsListBuyer(result);
+      })
+
+    fetch('https://api.kianm.net/index.php/payment/listSeller', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setRequestsListSeller(result);
+      })
+  }
+
+  const cancelRequest = ($vehicle_id: number, buyer: string, seller: string) => {
+    setRefreshQuery(true);
+    fetch('https://api.kianm.net/index.php/payment/cancel', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"vehicle_id":' + $vehicle_id + ',"buyer":"' + buyer + '","seller":"' + seller + '"}'
+    })
+      .then(() => { getRequests() })
+  }
+
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
       getRatings();
+      getRequests();
     }
     getComments();
     getVehicle();
@@ -465,26 +509,48 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
             <IonCardContent>
               <IonGrid>
                 {
-                  email_verified !== "YES" ?
-                  <IonRow>
-                    <IonCol class="center">
-                      <IonLabel class="ion-text-center">Please verify email to rent or buy...</IonLabel>
-                    </IonCol>
-                  </IonRow>
-                  : false
+                  vehicle.user === curr_user ?
+                    <IonRow>
+                      <IonCol class="center">
+                        <IonLabel>This is your vehicle</IonLabel>
+                      </IonCol>
+                    </IonRow>
+                    : email_verified !== "YES" ?
+                      <IonRow>
+                        <IonCol class="center">
+                          <IonLabel class="ion-text-center">Please verify email to rent or buy...</IonLabel>
+                        </IonCol>
+                      </IonRow>
+                      : false
                 }
-                <IonRow>
-                  <IonCol>
-                    <IonButton disabled={email_verified !== "YES"} color="primary" expand="block" onClick={() => handlePresentRent()}>
-                      <IonLabel>Rent</IonLabel>
-                    </IonButton>
-                  </IonCol>
-                  <IonCol>
-                    <IonButton disabled={email_verified !== "YES"} color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
-                      <IonLabel>Buy</IonLabel>
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
+                {
+                  requestsListBuyer.find(r => r.vehicle_id === vehicle.id) ?
+                    <IonRow>
+                      <IonCol class="center">
+                        <IonLabel>You made a request on this vehicle</IonLabel>
+                      </IonCol>
+                      {requestsListBuyer.find(r => r.vehicle_id === vehicle.id).status === "Pending" ?
+                        <IonCol>
+                          <IonButton onClick={() => cancelRequest(vehicle.id, curr_user, vehicle.user)}>
+                            <IonLabel>Cancel</IonLabel>
+                          </IonButton>
+                        </IonCol>
+                        : false}
+                    </IonRow>
+                    :
+                    <IonRow>
+                      <IonCol>
+                        <IonButton disabled={email_verified !== "YES" || vehicle.user === curr_user} color="primary" expand="block" onClick={() => handlePresentRent()}>
+                          <IonLabel>Rent</IonLabel>
+                        </IonButton>
+                      </IonCol>
+                      <IonCol>
+                        <IonButton disabled={email_verified !== "YES" || vehicle.user === curr_user} color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
+                          <IonLabel>Buy</IonLabel>
+                        </IonButton>
+                      </IonCol>
+                    </IonRow>
+                }
               </IonGrid>
             </IonCardContent>
           </IonCard>

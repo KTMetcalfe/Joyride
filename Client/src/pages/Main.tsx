@@ -1,5 +1,5 @@
 import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter, IonChip, IonRange, IonInput, IonCheckbox, IonAvatar, IonItemDivider } from '@ionic/react';
-import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, closeOutline, starSharp, star, checkboxOutline, checkbox, stopOutline, atCircle, ellipseOutline, checkmarkCircleOutline, checkmarkCircle, power, carSport, carSportOutline } from 'ionicons/icons';
+import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, closeOutline, starSharp, star, checkboxOutline, checkbox, stopOutline, atCircle, ellipseOutline, checkmarkCircleOutline, checkmarkCircle, power, carSport, carSportOutline, heartDislikeOutline, addCircleOutline } from 'ionicons/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
@@ -190,7 +190,7 @@ const Main: React.FC = () => {
         setRequestsListBuyer(result);
       })
 
-      fetch('https://api.kianm.net/index.php/payment/listSeller', {
+    fetch('https://api.kianm.net/index.php/payment/listSeller', {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -212,6 +212,19 @@ const Main: React.FC = () => {
         'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
       },
       body: '{"vehicle_id":' + $vehicle_id + ',"buyer":"' + buyer + '","seller":"' + seller + '"}'
+    })
+      .then(() => { getRequests() })
+  }
+
+  const acceptRequest = ($vehicle_id: number, buyer: string) => {
+    setRefreshQuery(true);
+    fetch('https://api.kianm.net/index.php/payment/accept', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"vehicle_id":' + $vehicle_id + ',"buyer":"' + buyer + '"}'
     })
       .then(() => { getRequests() })
   }
@@ -650,7 +663,7 @@ const Main: React.FC = () => {
                                   <IonCol>{v.model_year}</IonCol>
                                   <IonCol>
                                     <IonButton onClick={() => removeFavorite(v.id)}>
-                                      <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                                      <IonIcon slot='icon-only' icon={heartDislikeOutline} />
                                     </IonButton>
                                   </IonCol>
                                   <IonCol>
@@ -685,11 +698,14 @@ const Main: React.FC = () => {
                                   <IonCol>{r.buyer}</IonCol>
                                   <IonCol>Status:</IonCol>
                                   <IonCol>{r.status}</IonCol>
-                                  <IonCol>
-                                    <IonButton onClick={() => cancelRequest(r.vehicle_id, r.buyer, r.seller)}>
-                                      <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                                    </IonButton>
-                                  </IonCol>
+                                  {r.status === "Pending" ?
+                                    <IonCol>
+                                      <IonButton onClick={() => cancelRequest(r.vehicle_id, r.buyer, r.seller)}>
+                                        <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                                      </IonButton>
+                                    </IonCol>
+                                    : false
+                                  }
                                   <IonCol>
                                     <IonButton onClick={() => handlePresentVehicle(r.vehicle_id)}>View</IonButton>
                                   </IonCol>
@@ -722,11 +738,19 @@ const Main: React.FC = () => {
                                   <IonCol>{r.buyer}</IonCol>
                                   <IonCol>Status:</IonCol>
                                   <IonCol>{r.status}</IonCol>
-                                  <IonCol>
-                                    <IonButton onClick={() => cancelRequest(r.vehicle_id, r.buyer, r.seller)}>
-                                      <IonIcon slot='icon-only' icon={removeCircleOutline} />
-                                    </IonButton>
-                                  </IonCol>
+                                </IonRow>
+                                <IonRow>
+                                  {r.status === "Pending" ?
+                                    <IonCol>
+                                      <IonButton onClick={() => acceptRequest(r.vehicle_id, r.buyer)}>
+                                        <IonIcon slot='icon-only' icon={addCircleOutline} />
+                                      </IonButton>
+                                      <IonButton onClick={() => cancelRequest(r.vehicle_id, r.buyer, r.seller)}>
+                                        <IonIcon slot='icon-only' icon={removeCircleOutline} />
+                                      </IonButton>
+                                    </IonCol>
+                                    : false
+                                  }
                                   <IonCol>
                                     <IonButton onClick={() => handlePresentVehicle(r.vehicle_id)}>View</IonButton>
                                   </IonCol>
@@ -739,7 +763,7 @@ const Main: React.FC = () => {
                   </IonAccordionGroup>
                 </IonCol>
               </IonRow>
-              }
+            }
           </IonGrid>
         </IonContent>
         {curr_user !== '' ?
