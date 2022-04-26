@@ -418,19 +418,19 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
                       </IonButtons>
                       :
                       <IonButtons class='center-buttons'>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= .5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 1.5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 2.5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 3.5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 4.5 ? star : starOutline} />
                         </IonButton>
                       </IonButtons>

@@ -16,6 +16,14 @@ class PaymentModel extends Database {
     ));
   }
 
+  public function listRequestsBuyer($buyer) {
+    return $this->select(sprintf("SELECT vehicle_id, request_type, time_posted, status, price, buyer, seller FROM requests WHERE buyer='%s'", $buyer));
+  }
+
+  public function listRequestsSeller($seller) {
+    return $this->select(sprintf("SELECT vehicle_id, request_type, time_posted, status, price, buyer, seller FROM requests WHERE seller='%s'", $seller));
+  }
+
   // Returns a list of comment replies from matching comment id
   public function getRequest($vehicle_id, $buyer, $seller) {
     return $this->select(sprintf("SELECT * FROM requests WHERE vehicle_id=%d AND buyer='%s' AND seller='%s'", $vehicle_id, $buyer, $seller));
