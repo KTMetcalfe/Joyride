@@ -18,6 +18,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [vehicleType, setVehicleType] = useState<string>('');
   const [vehicleOptions, setVehicleOptions] = useState<object>([]);
   const [description, setDescription] = useState<string>('');
+  const [rentPrice, setRentPrice] = useState<string>('');
 
   const checkAdd = () => {
     window.document.getElementById('add-output')!.style.display = "none";
@@ -44,6 +45,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
     formData.append("vehicle_type", vehicleType);
     formData.append("vehicle_options_list", JSON.stringify(vehicleOptions));
     formData.append("description", description);
+    formData.append("rent_price", rentPrice);
 
     fetch('https://api.kianm.net/index.php/vehicles/add', {
       method: 'POST',
@@ -91,6 +93,9 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
                   </IonItem>
                   <IonItem>
                     <IonInput type="number" value={price} placeholder="Price" onIonChange={e => setPrice(e.detail.value!)} />
+                  </IonItem>
+                  <IonItem>
+                    <IonInput type="number" value={rentPrice} placeholder="Rent Price" onIonChange={e => setRentPrice(e.detail.value!)} />
                   </IonItem>
                   <IonItem>
                     <IonInput type="number" value={year} placeholder="Year" onIonChange={e => setYear(e.detail.value!)} />

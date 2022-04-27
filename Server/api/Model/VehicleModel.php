@@ -214,13 +214,13 @@ class VehicleModel extends Database {
   }
 
   // Inserts a new vehicle to the SQL database
-  public function addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, $imageCount, $color, $transmission, $powertrain, $vehicleType, $vehicleOptions) {
+  public function addVehicle($make, $model, $mileage, $price, $rent_price, $year, $capacity, $user, $imageCount, $color, $transmission, $powertrain, $vehicleType, $vehicleOptions) {
     $images = [];
     for ($i = 0; $i < $imageCount; $i++) {
       array_push($images, $i);
     }
 
-    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, model_year, capacity, user, images, color, transmission, powertrain, vehicle_type, vehicle_options) VALUES ('%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s')", $make, $model, $mileage, $price, $year, $capacity, $user, json_encode($images), $color, $transmission, $powertrain, $vehicleType, $vehicleOptions));
+    $this->insert(sprintf("INSERT INTO vehicles (make, model, mileage, price, rent_price, model_year, capacity, user, images, color, transmission, powertrain, vehicle_type, vehicle_options) VALUES ('%s', '%s', %d, %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s')", $make, $model, $mileage, $price, $rent_price, $year, $capacity, $user, json_encode($images), $color, $transmission, $powertrain, $vehicleType, $vehicleOptions));
     return $this->select("SELECT LAST_INSERT_ID();");
   }
 
