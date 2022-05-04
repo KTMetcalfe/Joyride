@@ -1,11 +1,12 @@
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from "@ionic/react";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
+import { curr_pswd, curr_user } from "../components/StorageService";
 
 import './Modal.css';
 import './PaymentForm.css';
 
-const RentForm: React.FC<{ cid: string; pid: string; vehicle: any }> = ({ cid, pid, vehicle }) => {
+const RentForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () => void }> = ({ cid, pid, vehicle, onDismiss }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -65,8 +66,8 @@ const RentForm: React.FC<{ cid: string; pid: string; vehicle: any }> = ({ cid, p
 
     if (setupIntent?.status === "succeeded") {
       setMessage("Success!");
-      startSubscription(typeof (setupIntent.payment_method) === 'string' ? setupIntent.payment_method : '')
-        .then(() => window.location.reload());
+      createRequest(typeof (setupIntent.payment_method) === 'string' ? setupIntent.payment_method : '')
+        .then(onDismiss);
     }
 
     // This point will only be reached if there is an immediate error when
@@ -83,11 +84,14 @@ const RentForm: React.FC<{ cid: string; pid: string; vehicle: any }> = ({ cid, p
     setIsLoading(false);
   };
 
-  const startSubscription = async (card: string) => {
-    const body = { cents: vehicle.price / 2, customer_id: cid, payment_id: card };
-    await fetch("https://api.kianm.net/index.php/payment/subscribe", {
+  const createRequest = async (card: string) => {
+    const body = { customer_id: cid, payment_id: card, vehicle_id: vehicle.id, request_type: 'Rent', price: vehicle.rent_price * 100, buyer: curr_user, seller: vehicle.user };
+    await fetch("https://api.kianm.net/index.php/payment/request", {
       method: 'post',
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd),
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(body)
     })
     console.log(body);
@@ -100,7 +104,7 @@ const RentForm: React.FC<{ cid: string; pid: string; vehicle: any }> = ({ cid, p
         {isLoading ?
           <IonSpinner />
           :
-          <IonLabel>Rent now</IonLabel>
+          <IonLabel>Rent for ${Number(vehicle.rent_price).toLocaleString('en-US')}</IonLabel>
         }
       </IonButton>
       {/* Show any error or success messages */}

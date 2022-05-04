@@ -100,16 +100,18 @@ export var curr_email: string = '';
 export var curr_user: string = '';
 export var curr_pswd: string = '';
 export var curr_priv: number = 0;
+export var email_verified: string = '';
 
-export const setCurrentAccount = async (email: string, user: string, pswd: string, priv: number) => {
+export const setCurrentAccount = async (email: string, user: string, pswd: string, priv: number, verified: string) => {
   await storage.set({
     key: 'account',
-    value: JSON.stringify('{"email":"' + email + '","user":"' + user + '","pswd":"' + pswd + '","priv":"' + priv + '"}')
+    value: JSON.stringify('{"email":"' + email + '","user":"' + user + '","pswd":"' + pswd + '","priv":"' + priv + '","verified":"' + verified +'"}')
   });
   curr_email = email;
   curr_user = user;
   curr_pswd = pswd;
   curr_priv = priv;
+  email_verified = verified;
   return getCurrentAccount();
 }
 
@@ -146,6 +148,7 @@ export const onLoad = async () => {
           curr_user = account.user;
           curr_pswd = account.pswd;
           curr_priv = result.priveledge;
+          email_verified = result.email_verified;
           console.log("User validated");
         } else {
           console.log("Mismatch between local and remote user");

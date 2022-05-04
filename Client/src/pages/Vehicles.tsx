@@ -2,7 +2,7 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardS
 import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
-import { curr_user, curr_pswd, curr_priv, baseFilter, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery } from "../components/StorageService";
+import { curr_user, curr_pswd, curr_priv, baseFilter, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery, email_verified } from "../components/StorageService";
 import VehicleCard from "./VehicleCard";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -329,19 +329,19 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                               </IonButtons>
                               :
                               <IonButtons class='center-buttons'>
-                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 1); e.stopPropagation() }}>
+                                <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(v.id, 1); e.stopPropagation() }}>
                                   <IonIcon icon={v.rating >= .5 ? star : starOutline} />
                                 </IonButton>
-                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 2); e.stopPropagation() }}>
+                                <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(v.id, 2); e.stopPropagation() }}>
                                   <IonIcon icon={v.rating >= 1.5 ? star : starOutline} />
                                 </IonButton>
-                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 3); e.stopPropagation() }}>
+                                <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(v.id, 3); e.stopPropagation() }}>
                                   <IonIcon icon={v.rating >= 2.5 ? star : starOutline} />
                                 </IonButton>
-                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 4); e.stopPropagation() }}>
+                                <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(v.id, 4); e.stopPropagation() }}>
                                   <IonIcon icon={v.rating >= 3.5 ? star : starOutline} />
                                 </IonButton>
-                                <IonButton disabled={curr_user === ''} onClick={e => { submitRating(v.id, 5); e.stopPropagation() }}>
+                                <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(v.id, 5); e.stopPropagation() }}>
                                   <IonIcon icon={v.rating >= 4.5 ? star : starOutline} />
                                 </IonButton>
                               </IonButtons>

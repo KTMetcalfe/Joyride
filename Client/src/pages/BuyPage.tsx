@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons, IonCardContent, IonCard, IonCardHeader, IonCardTitle } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { curr_user, setCurrentAccount } from "../components/StorageService";
@@ -11,17 +11,22 @@ import BuyForm from "./BuyForm";
 const stripePromise = loadStripe("pk_test_51KrBMoHW1ixNikIwhzdtbDcW3nvQvtrSpv8rsBWPj7bsa19axEl35FvGoGCLzlpdRyMFnNbIoLRmER0XJHmiUUU700iykcFSkV");
 
 const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
-  const [clientSecret, setClientSecret] = useState("");
+  const [clientSecret, setClientSecret] = useState('');
+  const [customerID, setCustomerID] = useState('');
+  const [paymentID, setPaymentID] = useState('');
 
   useEffect(() => {
     const body = { vehicle_id: vehicle.id, cents: vehicle.price * 100, seller: vehicle.user, buyer: curr_user };
-    fetch('https://api.kianm.net/index.php/payment/buy', {
+    fetch('https://api.kianm.net/index.php/payment/buyIntent', {
       method: 'post',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     })
       .then(e => e.json())
-      .then(result => setClientSecret(result.clientSecret))
+      .then(result => {
+        setClientSecret(result.clientSecret);
+        setCustomerID(result.customer_id);
+      })
   }, []);
 
   const enum themeOptions {
@@ -58,7 +63,7 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
                   <IonCardTitle>Payment</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <BuyForm />
+                  <BuyForm cid={customerID} pid={paymentID} vehicle={vehicle} onDismiss={onDismiss} />
                 </IonCardContent>
               </IonCard>
             </Elements>
@@ -66,6 +71,7 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
         </div>
       </IonContent>
     </IonPage>
+
   );
 }
 

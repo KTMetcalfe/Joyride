@@ -3,13 +3,14 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardS
 import { arrowForward, arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircle, closeCircleOutline, closeOutline, heart, heartOutline, removeCircleOutline, sendOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { curr_priv, curr_pswd, curr_user, setRefreshQuery } from "../components/StorageService";
+import { curr_priv, curr_pswd, curr_user, email_verified, setRefreshQuery } from "../components/StorageService";
 
 import './Main.css';
 import BuyPage from "./BuyPage";
 import RentPage from "./RentPage";
 
 const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }> = ({ mainRef, id, onDismiss }) => {
+  const pageRef = useRef();
   const [vehicle, setVehicle] = useState<any>({});
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
@@ -17,7 +18,8 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
   const [comments, setComments] = useState<Array<any>>([]);
   const [newComment, setNewComment] = useState<string>('');
   const [replyComment, setReplyComment] = useState<any>({});
-  const pageRef = useRef();
+  const [requestsListBuyer, setRequestsListBuyer] = useState<Array<any>>([]);
+  const [requestsListSeller, setRequestsListSeller] = useState<Array<any>>([]);
 
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
@@ -144,6 +146,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
           if (curr_user !== '') {
             getFavorites();
             getRatings();
+            getRequests()
           }
           setVehicle(result[0]);
         })
@@ -161,6 +164,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
           if (curr_user !== '') {
             getFavorites();
             getRatings();
+            getRequests()
           }
           setVehicle(result[0]);
         })
@@ -212,10 +216,50 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(e => setUpdate(true))
   }
 
+  const getRequests = () => {
+    fetch('https://api.kianm.net/index.php/payment/listBuyer', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setRequestsListBuyer(result);
+      })
+
+    fetch('https://api.kianm.net/index.php/payment/listSeller', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      }
+    })
+      .then(e => e.json())
+      .then(result => {
+        setRequestsListSeller(result);
+      })
+  }
+
+  const cancelRequest = ($vehicle_id: number, buyer: string, seller: string) => {
+    setRefreshQuery(true);
+    fetch('https://api.kianm.net/index.php/payment/cancel', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Authorization': 'Basic ' + btoa(curr_user + ':' + curr_pswd)
+      },
+      body: '{"vehicle_id":' + $vehicle_id + ',"buyer":"' + buyer + '","seller":"' + seller + '"}'
+    })
+      .then(() => { getRequests() })
+  }
+
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
       getRatings();
+      getRequests();
     }
     getComments();
     getVehicle();
@@ -249,6 +293,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
 
   const handleDismissRent = () => {
     dismissRent();
+    setUpdate(true);
   };
 
   const [presentRent, dismissRent] = useIonModal(RentPage, {
@@ -266,6 +311,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
 
   const handleDismissBuy = () => {
     dismissBuy();
+    setUpdate(true);
   };
 
   const [presentBuy, dismissBuy] = useIonModal(BuyPage, {
@@ -352,6 +398,10 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
                     <IonLabel>${Number(vehicle.price).toLocaleString('en-US')}</IonLabel>
                   </IonCol>
                   <IonCol size="6">
+                    <IonLabel color="primary">Rent Price: </IonLabel>
+                    <IonLabel>${Number(vehicle.rent_price).toLocaleString('en-US')}</IonLabel>
+                  </IonCol>
+                  <IonCol size="6">
                     <IonLabel color="primary">Mileage: </IonLabel>
                     <IonLabel>{Number(vehicle.mileage).toLocaleString('en-US')}</IonLabel>
                   </IonCol>
@@ -412,19 +462,19 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
                       </IonButtons>
                       :
                       <IonButtons class='center-buttons'>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 1); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= .5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 2); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 1.5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 3); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 2.5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 4); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 3.5 ? star : starOutline} />
                         </IonButton>
-                        <IonButton disabled={curr_user === ''} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
+                        <IonButton disabled={curr_user === '' || email_verified === 'NO'} onClick={e => { submitRating(vehicle.id, 5); e.stopPropagation() }}>
                           <IonIcon icon={vehicle.rating >= 4.5 ? star : starOutline} />
                         </IonButton>
                       </IonButtons>
@@ -458,18 +508,49 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
             </IonCardHeader>
             <IonCardContent>
               <IonGrid>
-                <IonRow>
-                  <IonCol>
-                    <IonButton color="primary" expand="block" onClick={() => handlePresentRent()}>
-                      <IonLabel>Rent</IonLabel>
-                    </IonButton>
-                  </IonCol>
-                  <IonCol>
-                    <IonButton color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
-                      <IonLabel>Buy</IonLabel>
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
+                {
+                  vehicle.user === curr_user ?
+                    <IonRow>
+                      <IonCol class="center">
+                        <IonLabel>This is your vehicle</IonLabel>
+                      </IonCol>
+                    </IonRow>
+                    : email_verified !== "YES" ?
+                      <IonRow>
+                        <IonCol class="center">
+                          <IonLabel class="ion-text-center">Please verify email to rent or buy...</IonLabel>
+                        </IonCol>
+                      </IonRow>
+                      : false
+                }
+                {
+                  requestsListBuyer.find(r => r.vehicle_id === vehicle.id) ?
+                    <IonRow>
+                      <IonCol class="center">
+                        <IonLabel>You made a request on this vehicle</IonLabel>
+                      </IonCol>
+                      {requestsListBuyer.find(r => r.vehicle_id === vehicle.id).status === "Pending" ?
+                        <IonCol>
+                          <IonButton onClick={() => cancelRequest(vehicle.id, curr_user, vehicle.user)}>
+                            <IonLabel>Cancel</IonLabel>
+                          </IonButton>
+                        </IonCol>
+                        : false}
+                    </IonRow>
+                    :
+                    <IonRow>
+                      <IonCol>
+                        <IonButton disabled={email_verified !== "YES" || vehicle.user === curr_user} color="primary" expand="block" onClick={() => handlePresentRent()}>
+                          <IonLabel>Rent</IonLabel>
+                        </IonButton>
+                      </IonCol>
+                      <IonCol>
+                        <IonButton disabled={email_verified !== "YES" || vehicle.user === curr_user} color="tertiary" expand="block" onClick={() => handlePresentBuy()}>
+                          <IonLabel>Buy</IonLabel>
+                        </IonButton>
+                      </IonCol>
+                    </IonRow>
+                }
               </IonGrid>
             </IonCardContent>
           </IonCard>
@@ -481,7 +562,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
               <IonGrid>
                 <IonRow>
                   <IonCol size="12">
-                    <IonItem disabled={curr_user === ''} lines="full" class='input-item'>
+                    <IonItem disabled={curr_user === '' || email_verified !== "YES"} lines="full" class='input-item'>
                       {isNaN(replyComment.id) ? true :
                         <IonChip>
                           <IonButtons>
@@ -491,7 +572,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
                           </IonButtons>
                           <IonLabel>Re: {replyComment.user}</IonLabel>
                         </IonChip>}
-                      <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : "Add a Comment..."} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
+                      <IonInput type="text" placeholder={curr_user === '' ? "Sign in to comment..." : (email_verified !== "YES" ? "Verify email to comment..." : "Add a Comment...")} value={newComment} onIonChange={e => setNewComment(e.detail.value!)} />
                       <IonButtons>
                         <IonButton onClick={e => addComment(vehicle.id, newComment, replyComment.id)}>
                           <IonIcon slot="icon-only" icon={arrowForwardOutline} />

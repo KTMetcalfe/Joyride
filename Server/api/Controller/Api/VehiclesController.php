@@ -220,6 +220,7 @@ class VehiclesController extends BaseController {
             $model = $_POST['model'];
             $mileage = $_POST['mileage'];
             $price = $_POST['price'];
+            $rent_price = $_POST['rent_price'];
             $year = $_POST['year'];
             $capacity = $_POST['capacity'];
             $color = $_POST['vehicle_color'];
@@ -231,7 +232,7 @@ class VehiclesController extends BaseController {
             $images = $_FILES;
 
             $vehicleModel = new VehicleModel();
-            $lastInsertedID = $vehicleModel->addVehicle($make, $model, $mileage, $price, $year, $capacity, $user, count($images), $color, $transmission, $powertrain, $vehicleType, $vehicleOptions);
+            $lastInsertedID = $vehicleModel->addVehicle($make, $model, $mileage, $price, $rent_price, $year, $capacity, $user, count($images), $color, $transmission, $powertrain, $vehicleType, $vehicleOptions);
             $id = $lastInsertedID[0]['LAST_INSERT_ID()'];
 
             for ($i = 0; $i < count($images); $i++) {

@@ -10,14 +10,14 @@ import RentForm from "./RentForm";
 
 const stripePromise = loadStripe("pk_test_51KrBMoHW1ixNikIwhzdtbDcW3nvQvtrSpv8rsBWPj7bsa19axEl35FvGoGCLzlpdRyMFnNbIoLRmER0XJHmiUUU700iykcFSkV");
 
-const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
+const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
   const [clientSecret, setClientSecret] = useState('');
   const [customerID, setCustomerID] = useState('');
   const [paymentID, setPaymentID] = useState('');
 
   useEffect(() => {
-    const body = { vehicle_id: vehicle.id, cents: vehicle.price / 50, seller: vehicle.user, buyer: curr_user };
-    fetch('https://api.kianm.net/index.php/payment/rent', {
+    const body = { vehicle_id: vehicle.id, cents: vehicle.rent_price * 100, seller: vehicle.user, buyer: curr_user };
+    fetch('https://api.kianm.net/index.php/payment/rentIntent', {
       method: 'post',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
@@ -63,7 +63,7 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
                   <IonCardTitle>Payment</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <RentForm cid={customerID} pid={paymentID} vehicle={vehicle} />
+                  <RentForm cid={customerID} pid={paymentID} vehicle={vehicle} onDismiss={onDismiss} />
                 </IonCardContent>
               </IonCard>
             </Elements>
@@ -75,4 +75,4 @@ const BuyPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, 
   );
 }
 
-export default BuyPage;
+export default RentPage;
