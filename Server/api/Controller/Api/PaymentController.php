@@ -258,7 +258,7 @@ class PaymentController extends BaseController {
               $stripe = new \Stripe\StripeClient('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
 
               $paymentModel = new PaymentModel;
-              $request = $paymentModel->acceptRequest($vehicle_id, $buyer);
+              $request = $paymentModel->acceptRequest($vehicle_id, $buyer, $user);
 
               $customer_id = $request[0]['customer_id'];
               $payment_id = $request[0]['payment_id'];
