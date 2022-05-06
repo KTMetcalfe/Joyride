@@ -8,6 +8,7 @@ require_once '/joyride/PHPMailer/src/SMTP.php';
 
 require_once "/joyride/api/Model/Database.php";
 
+// Account table query functions
 class AccountModel extends Database {
   // Sends a verification email to verify an account
   public function sendVerification($email) {

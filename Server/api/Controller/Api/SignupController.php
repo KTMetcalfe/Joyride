@@ -1,8 +1,10 @@
 <?php
 require '/joyride/api/Model/AccountModel.php';
+// Controls requests sent to the /signup endpoint
 class SignupController extends BaseController {
   /**
-   * "/signup" Endpoint - Gets a token from a user
+   * "/signup" Endpoint - Creates a new user account
+   * returns json boolean "signedUp"
    */
   public function signupAction() {
     $strErrorDesc = '';
@@ -64,7 +66,8 @@ class SignupController extends BaseController {
   }
 
   /**
-   * "/signup/verifyEmail" Endpoint - Gets a token from a user
+   * "/signup/verifyEmail" Endpoint - Verifies a users email
+   * Returns json boolean "verified"
    */
   public function verifyEmailAction() {
     $strErrorDesc = '';

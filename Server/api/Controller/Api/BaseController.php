@@ -1,4 +1,5 @@
 <?php
+// Base class for all endpoint controllers
 class BaseController {
   public function __call($name, $arguments) {
     $this->sendOutput('', array('HTTP/1.1 404 Not Found'));

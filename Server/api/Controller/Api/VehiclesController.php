@@ -1,8 +1,10 @@
 <?php
 require '/joyride/api/Model/VehicleModel.php';
+
+// Controls requests sent to the /vehicles endpoint
 class VehiclesController extends BaseController {
   /**
-   * "/vehicles/list" Endpoint - Gets a token from a user
+   * "/vehicles/list" Endpoint - Returns a json array with a specific amount of vehicles
    */
   public function listAction() {
     $strErrorDesc = '';
@@ -193,7 +195,8 @@ class VehiclesController extends BaseController {
   }
 
   /**
-   * "/vehicles/add" Endpoint - Gets a token from a user
+   * "/vehicles/add" Endpoint - Submits a vehicle for review
+   * Returns json boolean "added"
    */
   public function addAction() {
     $strErrorDesc = '';
@@ -274,7 +277,8 @@ class VehiclesController extends BaseController {
   }
 
   /**
-   * "/vehicles/approve" Endpoint - Gets a token from a user
+   * "/vehicles/approve" Endpoint - Approves a vehicle for public viewing
+   * Returns json boolean "approved"
    */
   public function approveAction() {
     $strErrorDesc = '';
@@ -339,7 +343,8 @@ class VehiclesController extends BaseController {
   }
 
   /**
-   * "/vehicles/remove" Endpoint - Gets a token from a user
+   * "/vehicles/approve" Endpoint - Removes a vehicle from the database
+   * Returns json boolean "removed"
    */
   public function removeAction() {
     $strErrorDesc = '';
@@ -404,7 +409,7 @@ class VehiclesController extends BaseController {
   }
 
   /**
-   * "/vehicles/get" Endpoint - Gets a token from a user
+   * "/vehicles/get" Endpoint - Returns json object of the specific vehicle
    */
   public function getAction() {
     $strErrorDesc = '';
@@ -480,7 +485,8 @@ class VehiclesController extends BaseController {
   }
 
   /**
-   * "/vehicles/submitRating" Endpoint - Gets a token from a user
+   * "/vehicles/submitRating" Endpoint - Adds a rating to a vehicle
+   * Returns json boolean "added"
    */
   public function submitRatingAction() {
     $strErrorDesc = '';
@@ -546,7 +552,8 @@ class VehiclesController extends BaseController {
   }
 
   /**
-   * "/vehicles/removeRating" Endpoint - Gets a token from a user
+   * "/vehicles/removeRating" Endpoint - Removes a rating from a vehicle
+   * Returns json boolean "removed"
    */
   public function removeRatingAction() {
     $strErrorDesc = '';

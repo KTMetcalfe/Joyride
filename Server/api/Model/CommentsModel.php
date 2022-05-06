@@ -1,6 +1,7 @@
 <?php
 require_once "/joyride/api/Model/Database.php";
 
+// Comments table query functions
 class CommentsModel extends Database {
   // Returns a list of comments from matching vehicle id
   public function listComments($vehicle_id) {
@@ -21,12 +22,12 @@ class CommentsModel extends Database {
     return $this->select(sprintf("SELECT * FROM comments WHERE replied_to=%d", $id));
   }
 
-  // Returns a list of comment replies from matching comment id
+  // Returns the information of a specific comment
   public function getComment($id) {
     return $this->select(sprintf("SELECT * FROM comments WHERE id=%d", $id));
   }
 
-  // Reads and adds to the current comment on a matching vehicle
+  // Reads and adds a comment on a matching vehicle
   public function addComment($vehicle_id, $content, $user, $replied_to) {
     if (isset($replied_to)) {
       $this->insert(sprintf("INSERT INTO comments (vehicle_id, content, user, replied_to) VALUES (%d, '%s', '%s', %d)", $vehicle_id, $content, $user, $replied_to));

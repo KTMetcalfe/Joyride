@@ -9,7 +9,11 @@ require '/joyride/api/Model/PaymentModel.php';
 
 \Stripe\Stripe::setApiKey('sk_test_51KrBMoHW1ixNikIwKQlW4FR4teRYa5BiLbcE3eIz6m8IkrgMczPc3kbVA5jRIHZNhSfF2E2mc1yitcfqXnWXYm4y00UvZ0Qvn7');
 
+// Controls requests sent to the /payment endpoint
 class PaymentController extends BaseController {
+  /**
+   * "/payment/listBuyer" Endpoint - Returns a json array of a user's purchase request
+   */
   public function listBuyerAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -62,6 +66,9 @@ class PaymentController extends BaseController {
     }
   }
 
+  /**
+   * "/payment/listSeller" Endpoint - Returns a json array of purchase requests for a user's vehicle
+   */
   public function listSellerAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -114,10 +121,16 @@ class PaymentController extends BaseController {
     }
   }
 
+  /**
+   * "/payment/buyIntent" Endpoint - Follows same logic as a rent intent
+   */
   public function buyIntentAction() {
     $this->rentIntentAction();
   }
 
+  /**
+   * "/payment/rentIntent" Endpoint - Returns Stripe client secret to confirm success
+   */
   public function rentIntentAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -163,6 +176,10 @@ class PaymentController extends BaseController {
     }
   }
 
+  /**
+   * "/payment/request" Endpoint - Creates a purchase request for a vehicle
+   * Returns json boolean "requested"
+   */
   public function requestAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -226,6 +243,10 @@ class PaymentController extends BaseController {
     }
   }
 
+  /**
+   * "/payment/accept" Endpoint - Accepts a purchase request for a vehicle
+   * Returns json boolean "accepted"
+   */
   public function acceptAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -316,6 +337,10 @@ class PaymentController extends BaseController {
     }
   }
 
+  /**
+   * "/payment/cancel" Endpoint - Cancels a purchase request for a vehicle
+   * Returns json boolean "cancelled"
+   */
   public function cancelAction() {
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];

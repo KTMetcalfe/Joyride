@@ -1,5 +1,6 @@
 <?php
 require '/joyride/api/Model/AccountModel.php';
+// Controls requests sent to the /account endpoint
 class AccountController extends BaseController {
   /**
    * "/account/favorites" Endpoint - Returns a json array of a user's favorite vehicles
@@ -124,7 +125,7 @@ class AccountController extends BaseController {
   }
 
   /**
-   * "/account/addFav" Endpoint - Adds a vehicle from a user's favorites 
+   * "/account/addFav" Endpoint - Adds a vehicle to a user's favorites 
    */
   public function addFavoriteAction() {
     $strErrorDesc = '';
@@ -187,7 +188,7 @@ class AccountController extends BaseController {
   }
 
   /**
-   * "/account/ratings" Endpoint - Returns a json array of a user's favorite vehicles
+   * "/account/ratings" Endpoint - Returns a json array of a user's ratings
    */
   public function ratingsAction() {
     $strErrorDesc = '';

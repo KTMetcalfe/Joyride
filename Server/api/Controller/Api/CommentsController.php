@@ -1,9 +1,10 @@
 <?php
 require '/joyride/api/Model/AccountModel.php';
 require '/joyride/api/Model/CommentsModel.php';
+// Controls requests sent to the /comments endpoint
 class CommentsController extends BaseController {
   /**
-   * "/comments/list" Endpoint - Returns a json array of a user's favorite vehicles
+   * "/comments/list" Endpoint - Returns a json array of comments on a vehicle
    */
   public function listAction() {
     $strErrorDesc = '';
@@ -45,7 +46,7 @@ class CommentsController extends BaseController {
   }
 
   /**
-   * "/comments/listReplies" Endpoint - Returns a json array of a user's favorite vehicles
+   * "/comments/listReplies" Endpoint - Returns a json array of replies to a comment
    */
   public function listRepliesAction() {
     $strErrorDesc = '';
@@ -87,7 +88,7 @@ class CommentsController extends BaseController {
   }
 
   /**
-   * "/comments/get" Endpoint - Returns a json array of a user's favorite vehicles
+   * "/comments/get" Endpoint - Returns a specific comments information
    */
   public function getAction() {
     $strErrorDesc = '';
@@ -129,7 +130,8 @@ class CommentsController extends BaseController {
   }
 
   /**
-   * "/comments/add" Endpoint - Removes a vehicle from a user's favorites 
+   * "/comments/add" Endpoint - Adds a comment to a vehicle
+   * Returns json boolean "added"
    */
   public function addAction() {
     $strErrorDesc = '';
@@ -195,7 +197,8 @@ class CommentsController extends BaseController {
   }
 
   /**
-   * "/comments/remove" Endpoint - Adds a vehicle from a user's favorites 
+   * "/comments/remove" Endpoint - Removes a comment from a vehicle
+   * Returns json boolean "removed"
    */
   public function removeAction() {
     $strErrorDesc = '';

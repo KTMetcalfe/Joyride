@@ -1,4 +1,5 @@
 <?php
+// Main database functions
 class Database {
   protected $connection = null;
 

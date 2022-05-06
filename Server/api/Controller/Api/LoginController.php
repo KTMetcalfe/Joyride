@@ -1,5 +1,6 @@
 <?php
 require '/joyride/api/Model/AccountModel.php';
+// Controls requests sent to the /login endpoint
 class LoginController extends BaseController {
   /**
    * "/login/validate" Endpoint - Validates a username and password

@@ -1,7 +1,9 @@
 <?php
 require_once "/joyride/api/Model/Database.php";
 
+// Vehicle table query functions
 class VehicleModel extends Database {
+  // Adds a rating to a vehicle and user's account information
   public function submitRating($id, $rating, $user) {
     // Adding to user
     $ratingElement = ["id" => $id, "rating" => $rating];
@@ -34,6 +36,7 @@ class VehicleModel extends Database {
     }
   }
 
+  // Removes a rating from a vehicle and user's  account information
   public function removeRating($id, $user) {
     // Removing from user
     $accounts = $this->select(sprintf("SELECT ratings FROM accounts WHERE user='%s'", $user));
@@ -63,6 +66,7 @@ class VehicleModel extends Database {
     }
   }
 
+  // Combines filters in to one main SQL query string
   public function concatFilters($filter) {
     $out = "";
 

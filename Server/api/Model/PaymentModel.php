@@ -8,8 +8,9 @@ require_once '/joyride/PHPMailer/src/SMTP.php';
 
 require_once "/joyride/api/Model/Database.php";
 
+// Request table query functions
 class PaymentModel extends Database {
-  // Reads and removes a comment from a matching vehicle
+  // Creates a request for a vehicle
   public function createRequest($customer_id, $payment_id, $vehicle_id, $request_type, $price, $buyer, $seller) {
     return $this->insert(sprintf(
       "INSERT INTO requests (customer_id, payment_id, vehicle_id, request_type, price, buyer, seller) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s')",
@@ -23,20 +24,22 @@ class PaymentModel extends Database {
     ));
   }
 
+  // Returns a list of the purchase requests a user has made
   public function listRequestsBuyer($buyer) {
     return $this->select(sprintf("SELECT vehicle_id, request_type, time_posted, status, price, buyer, seller FROM requests WHERE buyer='%s'", $buyer));
   }
 
+  // Returns a list of the purchase requests for a user's vehicles
   public function listRequestsSeller($seller) {
     return $this->select(sprintf("SELECT vehicle_id, request_type, time_posted, status, price, buyer, seller FROM requests WHERE seller='%s'", $seller));
   }
 
-  // Returns a list of comment replies from matching comment id
+  // Returns a specific requests information
   public function getRequest($vehicle_id, $buyer, $seller) {
     return $this->select(sprintf("SELECT * FROM requests WHERE vehicle_id=%d AND buyer='%s' AND seller='%s'", $vehicle_id, $buyer, $seller));
   }
 
-  // Returns a list of comment replies from matching comment id
+  // Accepts a purchase request
   public function acceptRequest($vehicle_id, $buyer, $seller) {
     $this->insert(sprintf("UPDATE requests SET status='%s' WHERE vehicle_id=%d AND buyer='%s'", "Approved", $vehicle_id, $buyer));
     
@@ -90,7 +93,7 @@ class PaymentModel extends Database {
     return $this->select(sprintf("SELECT * FROM requests WHERE vehicle_id=%d AND buyer='%s'", $vehicle_id, $buyer));
   }
 
-  // Returns a list of comment replies from matching comment id
+  // Cancels a purchase request for a vehicle
   public function cancelRequest($vehicle_id, $buyer) {
     return $this->insert(sprintf("DELETE FROM requests WHERE vehicle_id=%d AND buyer='%s'", $vehicle_id, $buyer));
   }
