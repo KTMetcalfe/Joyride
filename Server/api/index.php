@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', $uri);
 
+// Redirects request to proper controller
 if (isset($uri[2]) && $uri[2] == 'login') {
   require "./Controller/Api/LoginController.php";
 
