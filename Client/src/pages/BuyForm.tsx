@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from "@ionic/react";
+import { IonButton, IonLabel, IonSpinner } from "@ionic/react";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import { curr_pswd, curr_user } from "../components/StorageService";
@@ -6,6 +6,7 @@ import { curr_pswd, curr_user } from "../components/StorageService";
 import './Modal.css';
 import './PaymentForm.css';
 
+// Payment form based off of Stripe API TypeScript documentation
 const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () => void }> = ({ cid, pid, vehicle, onDismiss }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -13,6 +14,7 @@ const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () 
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Runs on updates to Stripe API
   useEffect(() => {
     if (!stripe) {
       return;
@@ -44,12 +46,12 @@ const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () 
     });
   }, [stripe])
 
+  // Runs when user submits a payment
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
@@ -58,8 +60,7 @@ const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () 
     const { setupIntent, error } = await stripe.confirmSetup({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: "http://localhost:8100",
+        return_url: "https://joyride.kianm.net",
       },
       redirect: 'if_required'
     });
@@ -70,11 +71,7 @@ const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () 
         .then(onDismiss);
     }
 
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
+    // Point reached if error in payment
     if (error?.type === "card_error" || error?.type === "validation_error") {
       setMessage(error.message !== undefined ? error.message : '');
     } else if (!setupIntent) {
@@ -84,6 +81,7 @@ const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () 
     setIsLoading(false);
   };
 
+  // Creates a payment intent but does not charge the customer
   const createRequest = async (card: string) => {
     const body = { customer_id: cid, payment_id: card, vehicle_id: vehicle.id, request_type: 'Buy', price: vehicle.price * 100, buyer: curr_user, seller: vehicle.user };
     await fetch("https://api.kianm.net/index.php/payment/request", {
@@ -97,6 +95,7 @@ const BuyForm: React.FC<{ cid: string; pid: string; vehicle: any; onDismiss: () 
     console.log(body);
   }
 
+  // React components
   return (
     <form className="center" id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />

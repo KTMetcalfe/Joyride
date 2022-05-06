@@ -33,6 +33,7 @@ import { onLoad } from './components/StorageService';
 
 setupIonicReact({ swipeBackEnabled: false });
 
+// Main react application component
 const App: React.FC = () => {
     const [busy, setBusy] = useState(true);
 

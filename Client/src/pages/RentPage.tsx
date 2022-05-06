@@ -10,11 +10,13 @@ import RentForm from "./RentForm";
 
 const stripePromise = loadStripe("pk_test_51KrBMoHW1ixNikIwhzdtbDcW3nvQvtrSpv8rsBWPj7bsa19axEl35FvGoGCLzlpdRyMFnNbIoLRmER0XJHmiUUU700iykcFSkV");
 
+// Payment page based off of Stripe API TypeScript documentation
 const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle, onDismiss }) => {
   const [clientSecret, setClientSecret] = useState('');
   const [customerID, setCustomerID] = useState('');
   const [paymentID, setPaymentID] = useState('');
 
+  // Runs on component load
   useEffect(() => {
     const body = { vehicle_id: vehicle.id, cents: vehicle.rent_price * 100, seller: vehicle.user, buyer: curr_user };
     fetch('https://api.kianm.net/index.php/payment/rentIntent', {
@@ -29,6 +31,7 @@ const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle,
       })
   }, []);
 
+  // Stripe UI theme options
   const enum themeOptions {
     Stripe = 'stripe',
     Night = 'night',
@@ -36,6 +39,7 @@ const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle,
     None = 'none'
   };
 
+  // Stripe UI setup
   const appearance = {
     theme: themeOptions.Stripe,
   };
@@ -44,6 +48,7 @@ const RentPage: React.FC<{ vehicle: any; onDismiss: () => void; }> = ({ vehicle,
     appearance,
   };
 
+  // React components
   return (
     <IonPage>
       <IonHeader>

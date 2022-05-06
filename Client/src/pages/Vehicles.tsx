@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, useIonActionSheet, useIonModal } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonPage, IonRow, IonSpinner, useIonActionSheet, useIonModal } from "@ionic/react"
 import { heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
-import React, { useRef } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import { curr_user, curr_pswd, curr_priv, baseFilter, filter, refreshQuery, setRefreshQuery, resetQuery, setResetQuery, email_verified } from "../components/StorageService";
 import VehicleCard from "./VehicleCard";
@@ -8,7 +8,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import './Modal.css';
 
+// Vehicle list component
 const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
+  // State variables for loading vehicles
   const [busy, setBusy] = useState(true);
   const [update, setUpdate] = useState(false);
   const [list, setList] = useState<Array<any>>([]);
@@ -16,8 +18,10 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
   const [ratings, setRatings] = useState<Array<any>>([]);
 
+  // Waits for component to be mounted
   const [waiting, setWaiting] = useState(true);
 
+  // Validates the current vehicle list
   const checkList = async () => {
     return await fetch('https://api.kianm.net/index.php/vehicles/list', {
       method: 'POST',
@@ -29,6 +33,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     })
   }
 
+  // Gets a specified number of vehicles pages off the given list
   const getVehicles = (currList: Array<any>, limit: number) => {
     // Changes fetch if filter is set
     (JSON.stringify(filter) !== JSON.stringify(baseFilter) ?
@@ -59,6 +64,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       })
   }
 
+  // Updates list by specified amount after verifying
   const updateList = (limit: number) => {
     if (list.length > 0) {
       checkList()
@@ -71,6 +77,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     }
   }
 
+  // Runs on inifinite scroll, adds 10 vehicles to the list
   const reloadList = (ev: any) => {
     setTimeout(() => {
       updateList(10);
@@ -81,6 +88,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     }, 500)
   }
 
+  // Gets a list of favorites for a user
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
       method: 'GET',
@@ -95,6 +103,18 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       })
   }
 
+  // Runs on inifinite scroll, adds 10 vehicles to the list
+  const refreshList = () => {
+    if (list.length > 0) {
+      checkList()
+        .then(e => e.json())
+        .then(safeList => {
+          getVehicles([], safeList.length);
+        })
+    }
+  }
+
+  // Gets a list of a user's ratings
   const getRatings = async () => {
     await fetch('https://api.kianm.net/index.php/account/ratings', {
       method: 'GET',
@@ -109,6 +129,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       })
   }
 
+  // Adds a rating to a vehicle
   const submitRating = async (id: number, rating: number) => {
     await fetch('https://api.kianm.net/index.php/vehicles/submitRating', {
       method: 'POST',
@@ -124,6 +145,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       .then(e => getRatings())
   }
 
+  // Removes a rating from a vehicle
   const removeRating = async (id: number) => {
     await fetch('https://api.kianm.net/index.php/vehicles/removeRating', {
       method: 'POST',
@@ -138,16 +160,8 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       .then(e => refreshList())
   }
 
-  const refreshList = () => {
-    if (list.length > 0) {
-      checkList()
-        .then(e => e.json())
-        .then(safeList => {
-          getVehicles([], safeList.length);
-        })
-    }
-  }
 
+  // Runs every state change to (busy, update, refreshQuery, resetQuery)
   useEffect(() => {
     setWaiting(true);
     if (waiting) {
@@ -172,6 +186,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     // eslint-disable-next-line
   }, [busy, update, refreshQuery, resetQuery])
 
+  // Adds a vehicle to a user's favorites list
   const addFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
       method: 'POST',
@@ -185,6 +200,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       .then(() => setUpdate(true))
   }
 
+  // Removes a vehicle from a user's favorites list
   const removeFavorite = ($id: number) => {
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
       method: 'POST',
@@ -198,6 +214,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       .then(() => setUpdate(true))
   }
 
+  // Deletes a vehicle from the database
   const removeVehicle = ($id: number) => {
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
       method: 'POST',
@@ -214,8 +231,10 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       })
   }
 
+  // Tracks the last selected vehicle
   const [selectedID, setSelectedID] = useState(0);
 
+  // Presents vehicle information modal
   const handlePresentVehicle = (id: number) => {
     setSelectedID(id);
     presentVehicle({
@@ -224,18 +243,18 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
       presentingElement: mainRef.current
     });
   };
-
+  // Dismisses vehicle information modal
   const handleDismissVehicle = () => {
     dismissVehicle();
   };
-
+  // Vehicle information modal controller
   const [presentVehicle, dismissVehicle] = useIonModal(VehicleCard, {
     id: selectedID,
     onDismiss: handleDismissVehicle
   })
 
+  // Presents alert before removing vehicle
   const [presentRemove, dismissRemove] = useIonActionSheet();
-
   const handlePresentRemove = (vehicle_id: number) => {
     presentRemove({
       buttons: [
@@ -250,6 +269,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
     });
   }
 
+  // React components
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonContent forceOverscroll={true}>
@@ -359,7 +379,7 @@ const Vehicles: React.FC<{ mainRef: any }> = ({ mainRef }) => {
                           {curr_priv >= 1 ?
                             <IonCol size="1">
                               <IonButtons class='center-buttons'>
-                                <IonButton size='small' fill='clear' color='danger' onClick={e => {handlePresentRemove(v.id); e.stopPropagation()}}>
+                                <IonButton size='small' fill='clear' color='danger' onClick={e => { handlePresentRemove(v.id); e.stopPropagation() }}>
                                   <IonIcon slot='icon-only' icon={removeCircleOutline} />
                                 </IonButton>
                               </IonButtons>

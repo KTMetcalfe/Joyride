@@ -1,3 +1,4 @@
+/* Styles login/signup forms */
 .form-pane {
   margin: auto;
   display: flex;
@@ -7,6 +8,7 @@
   padding: 10%;
 }
 
+/* Styles login/signup forms inner section */
 .form-grid {
   background-color: var(--ion-color-primary);
   border-radius: 10px;
@@ -14,19 +16,23 @@
   max-width: 110%;
 }
 
+/* Styles for input */
 .form-input {
   border-radius: 10px;
 }
 
+/* Styles error output */
 #signup-output, #login-output, #add-output {
   border-radius: 10px;
   display: none;
 }
 
+/* Centers buttons */
 .center-buttons {
   justify-content: center;
 }
 
+/* Centers a component vertically and horizontally */
 .true-center {
   height: 100%;
   display: flex;
@@ -35,12 +41,14 @@
   text-align: center;
 }
 
+/* Centers a component horizontally */
 .center {
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
+/* Styles vehicle image swiper component */
 .swiper-main {
   height: 50vh;
   display: flex;

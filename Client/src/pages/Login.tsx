@@ -6,10 +6,16 @@ import { setCurrentAccount } from "../components/StorageService";
 import './Modal.css';
 import Signup from "./Signup";
 
+// Login component
 const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
+  // Input state variables
   const [user, setUser] = useState<string>('');
   const [pswd, setPswd] = useState<string>('');
 
+  // React component reference
+  const pageRef = useRef();
+
+  // Presents signup modal
   const handlePresentSignup = () => {
     presentSignup({
       mode: 'ios',
@@ -17,16 +23,16 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
       presentingElement: pageRef.current
     })
   };
-
+  // Dismisses signup modal
   const handleCloseSignup = () => {
     dismissSignup();
   }
-
+  // Dismisses signup and login modals
   const handleDismissSignup = () => {
     dismissSignup();
     onDismiss();
   };
-
+  // Signup modal controller
   const [presentSignup, dismissSignup] = useIonModal(Signup, {
     onDismiss: handleDismissSignup,
     onClose: handleCloseSignup,
@@ -34,8 +40,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
     pswdInput: pswd
   })
 
-  const pageRef = useRef();
-
+  // Input check and login validation
   const validateLogin = () => {
     window.document.getElementById('login-output')!.style.display = "none";
     window.document.getElementById('loginErr')!.innerHTML = "";
@@ -62,6 +67,7 @@ const Login: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
       })
   }
 
+  // React components
   return (
     <IonPage ref={pageRef}>
       <IonHeader>

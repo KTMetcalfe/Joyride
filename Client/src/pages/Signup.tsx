@@ -1,15 +1,18 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonButtons } from "@ionic/react";
 import { addCircleOutline } from "ionicons/icons";
 import { useState } from "react";
-import { email_verified, setCurrentAccount } from "../components/StorageService";
+import { setCurrentAccount } from "../components/StorageService";
 
 import './Modal.css';
 
+// Signup component
 const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: string; pswdInput: string; }> = ({ onDismiss, onClose, userInput, pswdInput }) => {
+  // Input state variables
   const [email, setEmail] = useState<string>('');
   const [user, setUser] = useState<string>(userInput === undefined ? '' : userInput);
   const [pswd, setPswd] = useState<string>(pswdInput === undefined ? '' : pswdInput);
 
+  // Checks input and creates user
   const checkSignup = () => {
     window.document.getElementById('signup-output')!.style.display = "none";
     window.document.getElementById('signupErr')!.innerHTML = "";
@@ -38,6 +41,7 @@ const Signup: React.FC<{ onDismiss: () => void; onClose: () => void; userInput: 
       })
   }
 
+  // React components
   return (
     <IonPage>
       <IonHeader>

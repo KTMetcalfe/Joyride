@@ -1,6 +1,5 @@
-import { focusElement } from "@ionic/core/dist/types/utils/helpers";
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonActionSheet, useIonModal } from "@ionic/react"
-import { arrowForward, arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircle, closeCircleOutline, closeOutline, heart, heartOutline, removeCircleOutline, sendOutline, star, starOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonRow, IonText, IonTitle, IonToolbar, useIonActionSheet, useIonModal } from "@ionic/react"
+import { arrowForwardOutline, arrowUndoOutline, checkmarkCircle, closeCircleOutline, heart, heartOutline, removeCircleOutline, star, starOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_priv, curr_pswd, curr_user, email_verified, setRefreshQuery } from "../components/StorageService";
@@ -9,8 +8,12 @@ import './Main.css';
 import BuyPage from "./BuyPage";
 import RentPage from "./RentPage";
 
+// Vehicle information component
 const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }> = ({ mainRef, id, onDismiss }) => {
+  // React component reference
   const pageRef = useRef();
+
+  // Vehicle information state variables
   const [vehicle, setVehicle] = useState<any>({});
   const [favorites, setFavorites] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
@@ -21,6 +24,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
   const [requestsListBuyer, setRequestsListBuyer] = useState<Array<any>>([]);
   const [requestsListSeller, setRequestsListSeller] = useState<Array<any>>([]);
 
+  // Gets a list of a user's favorite vehicles
   const getFavorites = async () => {
     await fetch('https://api.kianm.net/index.php/account/favorites', {
       method: 'GET',
@@ -35,6 +39,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       })
   }
 
+  // Adds a vehicle to a user's favorites
   const addFavorite = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/addFavorite', {
@@ -49,6 +54,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(() => setUpdate(true))
   }
 
+  // Removes a vehicle from a user's favorites
   const removeFavorite = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
@@ -63,6 +69,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(() => setUpdate(true))
   }
 
+  // Gets a list of comments on the vehicle
   const getComments = async () => {
     await fetch('https://api.kianm.net/index.php/comments/list', {
       method: 'POST',
@@ -75,6 +82,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       })
   }
 
+  // Gets the comment that was replied to
   const getRepliedTo = async (comment_id: number) => {
     return await fetch('https://api.kianm.net/index.php/comments/get', {
       method: 'POST',
@@ -83,6 +91,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
     })
   }
 
+  // Submits a comment on a vehicle
   const addComment = (vehicle_id: number, content: string, replied_to?: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/comments/add', {
@@ -97,6 +106,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(() => setUpdate(true))
   }
 
+  // Removes a comment from a vehicle
   const removeComment = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/comments/remove', {
@@ -111,6 +121,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(() => setUpdate(true))
   }
 
+  // Deletes a vehicle from the database
   const removeVehicle = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
@@ -130,6 +141,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       })
   }
 
+  // Gets the vehicle information
   const getVehicle = () => {
     if (curr_priv >= 2) {
       fetch('https://api.kianm.net/index.php/vehicles/get', {
@@ -171,6 +183,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
     }
   }
 
+  // Gets a list of the rating a user has given
   const getRatings = async () => {
     await fetch('https://api.kianm.net/index.php/account/ratings', {
       method: 'GET',
@@ -185,6 +198,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       })
   }
 
+  // Adds a rating to the vehicle
   const submitRating = async (id: number, rating: number) => {
     setRefreshQuery(true);
     await fetch('https://api.kianm.net/index.php/vehicles/submitRating', {
@@ -201,6 +215,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(e => setUpdate(true))
   }
 
+  // Removes a rating from a vehicle
   const removeRating = async (id: number) => {
     setRefreshQuery(true);
     await fetch('https://api.kianm.net/index.php/vehicles/removeRating', {
@@ -216,6 +231,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(e => setUpdate(true))
   }
 
+  // Gets the buy/rent requests made on the vehicle
   const getRequests = () => {
     fetch('https://api.kianm.net/index.php/payment/listBuyer', {
       method: 'GET',
@@ -242,6 +258,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       })
   }
 
+  // Cancels a request made on a vehicle
   const cancelRequest = ($vehicle_id: number, buyer: string, seller: string) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/payment/cancel', {
@@ -255,6 +272,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       .then(() => { getRequests() })
   }
 
+  // Runs on update state change, refreshes a vehicles information
   useEffect(() => {
     if (curr_user !== '' && curr_pswd !== '') {
       getFavorites();
@@ -267,8 +285,9 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
     // eslint-disable-next-line
   }, [update])
 
+  // Deletion alert controller
   const [presentRemove, dismissRemove] = useIonActionSheet();
-
+  // Presents a delete alert for confirmation
   const handlePresentRemove = (vehicle_id: number) => {
     presentRemove({
       buttons: [
@@ -283,6 +302,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
     });
   }
 
+  // Presents rent modal
   const handlePresentRent = () => {
     presentRent({
       mode: 'ios',
@@ -290,17 +310,18 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       presentingElement: pageRef.current
     });
   };
-
+  // Dismisses rent modal
   const handleDismissRent = () => {
     dismissRent();
     setUpdate(true);
   };
-
+  // Rent modal controller
   const [presentRent, dismissRent] = useIonModal(RentPage, {
     vehicle: vehicle,
     onDismiss: handleDismissRent
   })
 
+  // Presents buy modal
   const handlePresentBuy = () => {
     presentBuy({
       mode: 'ios',
@@ -308,17 +329,18 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
       presentingElement: pageRef.current
     });
   };
-
+  // Dismisses buy modal
   const handleDismissBuy = () => {
     dismissBuy();
     setUpdate(true);
   };
-
+  // Buy modal controller
   const [presentBuy, dismissBuy] = useIonModal(BuyPage, {
     vehicle: vehicle,
     onDismiss: handleDismissBuy
   })
 
+  // Custom comment card component
   const CommentCard: React.FC<{ c: any }> = ({ c }) => {
     return (
       <IonRow key={c.id}>
@@ -350,6 +372,7 @@ const VehicleCard: React.FC<{ mainRef: any; id: number; onDismiss: () => void }>
     );
   }
 
+  // React components
   return (
     <IonPage>
       <IonHeader>

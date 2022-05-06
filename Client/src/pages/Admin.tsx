@@ -1,20 +1,23 @@
-import { IonActionSheet, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonList, IonListHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar, useIonActionSheet } from "@ionic/react"
-import { addCircleOutline, checkmarkCircle, removeCircleOutline, star, starOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar, useIonActionSheet } from "@ionic/react"
+import { addCircleOutline, checkmarkCircle, removeCircleOutline } from "ionicons/icons";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { curr_user, curr_pswd, setRefreshQuery } from "../components/StorageService";
 
 import './Modal.css';
 
+// Admin page for checking and approving/denying vehicle submissions 
 const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
+  // State variables for loading vehicles
   const [busy, setBusy] = useState(true);
   const [list, setList] = useState<Array<any>>([]);
   const [update, setUpdate] = useState(false);
   const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
-  const [isRemoveOpen, setIsRemoveOpen] = useState(false);
 
+  // Waits for component to be mounted
   const [waiting, setWaiting] = useState(true);
 
+  // Validates the current vehicle submission list
   const checkList = async () => {
     return await fetch('https://api.kianm.net/index.php/vehicles/list?admin=true', {
       method: 'POST',
@@ -27,6 +30,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     })
   }
 
+  // Gets a specified number of vehicles pages off the given list
   const getVehicles = (currList: Array<any>, limit: number) => {
     fetch('https://api.kianm.net/index.php/vehicles/list?admin=true&offset=' + currList.length + '&limit=' + limit, {
       method: 'GET',
@@ -44,6 +48,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       })
   }
 
+  // Updates list by specified amount after verifying
   const updateList = (limit: number) => {
     if (list.length > 0) {
       checkList()
@@ -56,6 +61,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     }
   }
 
+  // Runs on inifinite scroll, adds 10 vehicles to the list
   const reloadList = (ev: any) => {
     setTimeout(() => {
       updateList(10);
@@ -66,9 +72,11 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     }, 500)
   }
 
+  // Runs every state change to (busy, update)
   useEffect(() => {
     let isMounted = true;
 
+    // Cancels running if no longer mounted
     setWaiting(true);
     if (waiting) {
       let timer = setTimeout(() => {
@@ -88,6 +96,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     // eslint-disable-next-line
   }, [busy, update])
 
+  // Approves selected vehicle submission
   const approveVehicle = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/vehicles/approve', {
@@ -108,6 +117,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       })
   }
 
+  // Removes selected vehicle submission
   const removeVehicle = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/vehicles/remove', {
@@ -128,8 +138,8 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
       })
   }
 
+  // Presents alert before removing vehicle
   const [presentRemove, dismissRemove] = useIonActionSheet();
-
   const handlePresentRemove = (vehicle_id: number) => {
     presentRemove({
       buttons: [
@@ -144,6 +154,7 @@ const AdminPage: React.FC<{ onDismiss: () => void }> = ({ onDismiss }) => {
     });
   }
 
+  // React components
   return busy ? <IonSpinner /> : (
     <IonPage>
       <IonHeader>

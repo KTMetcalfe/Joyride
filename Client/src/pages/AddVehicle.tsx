@@ -5,7 +5,9 @@ import { curr_pswd, curr_user, powertrainOptions, transmissions, vehicleOptionOp
 
 import './Modal.css';
 
+// A page to display inputs for submitting a vehicle
 const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
+  // State variables for input
   const [make, setMake] = useState<string>('');
   const [model, setModel] = useState<string>('');
   const [mileage, setMileage] = useState<string>('');
@@ -20,6 +22,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
   const [description, setDescription] = useState<string>('');
   const [rentPrice, setRentPrice] = useState<string>('');
 
+  // Verifys all information inputed
   const checkAdd = () => {
     window.document.getElementById('add-output')!.style.display = "none";
     window.document.getElementById('addErr')!.innerHTML = "";
@@ -66,6 +69,7 @@ const AddVehicle: React.FC<{ onDismiss: () => void; }> = ({ onDismiss }) => {
       })
   }
 
+  // React components
   return (
     <IonPage>
       <IonHeader>

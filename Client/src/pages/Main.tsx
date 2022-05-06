@@ -1,6 +1,6 @@
-import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, useIonPopover, IonFooter, IonChip, IonRange, IonInput, IonCheckbox, IonAvatar, IonItemDivider } from '@ionic/react';
-import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, closeOutline, starSharp, star, checkboxOutline, checkbox, stopOutline, atCircle, ellipseOutline, checkmarkCircleOutline, checkmarkCircle, power, carSport, carSportOutline, heartDislikeOutline, addCircleOutline } from 'ionicons/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import { IonPage, IonToolbar, IonTitle, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonLabel, IonMenu, IonHeader, IonContent, IonAccordionGroup, IonAccordion, IonList, IonButtons, IonMenuButton, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonButton, useIonModal, IonSelect, IonSelectOption, IonFooter, IonChip, IonInput } from '@ionic/react';
+import { optionsOutline, starOutline, removeCircleOutline, filterOutline, personOutline, star, ellipseOutline, checkmarkCircle, carSportOutline, heartDislikeOutline, addCircleOutline } from 'ionicons/icons';
+import React, { useRef, useState } from 'react';
 import { Redirect, Route } from 'react-router';
 
 import VehiclesPage from './Vehicles';
@@ -12,9 +12,12 @@ import AdminModal from './Admin';
 import './Main.css';
 import VehicleCard from './VehicleCard';
 
+// Main app component
 const Main: React.FC = () => {
+  // React component reference
   const mainRef = useRef();
 
+  // Information list state variables
   const [favoritesList, setFavoritesList] = useState<Array<any>>([]);
   const [requestsListBuyer, setRequestsListBuyer] = useState<Array<any>>([]);
   const [requestsListSeller, setRequestsListSeller] = useState<Array<any>>([]);
@@ -39,6 +42,7 @@ const Main: React.FC = () => {
       )
     )
   }
+
   // Vehicle Type Filter
   const [vehicleTypes, setVehicleTypes] = useState(vehicleTypeOptions);
   const checkVehicleTypesSet = () => {
@@ -58,6 +62,7 @@ const Main: React.FC = () => {
       )
     )
   }
+
   // Vehicle Options Filter
   const [vehicleOptions, setVehicleOptions] = useState(vehicleOptionOptions);
   const checkVehicleOptionsSet = () => {
@@ -105,6 +110,7 @@ const Main: React.FC = () => {
     let powertrainsSelected: Array<string> = [];
     powertrains.map(p => p.isChecked ? powertrainsSelected.push(p.type) : false);
 
+    // Combines filters 
     const newFilter = {
       "year_start": yearStart !== yearMin ? yearStart : null,
       "year_end": yearEnd !== yearMax ? yearEnd : null,
@@ -133,6 +139,7 @@ const Main: React.FC = () => {
     }
   }
 
+  // Gets models from make using NHTSA's vehicle API
   const getModels = (make: string) => {
     setModelList([]);
     if (make !== '') {
@@ -150,6 +157,7 @@ const Main: React.FC = () => {
     }
   }
 
+  // Gets a list of a user's favorited vehicles
   const getFavorites = () => {
     fetch('https://api.kianm.net/index.php/account/favorites', {
       method: 'GET',
@@ -164,6 +172,7 @@ const Main: React.FC = () => {
       })
   }
 
+  // Removes a vehicle from a user's favorite list
   const removeFavorite = ($id: number) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/account/removeFavorite', {
@@ -177,6 +186,7 @@ const Main: React.FC = () => {
       .then(() => { getFavorites() })
   }
 
+  // Gets a list of requests for a sellers vehicle
   const getRequests = () => {
     fetch('https://api.kianm.net/index.php/payment/listBuyer', {
       method: 'GET',
@@ -203,6 +213,7 @@ const Main: React.FC = () => {
       })
   }
 
+  // Denys a request on a given vehicle
   const cancelRequest = ($vehicle_id: number, buyer: string, seller: string) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/payment/cancel', {
@@ -216,6 +227,7 @@ const Main: React.FC = () => {
       .then(() => { getRequests() })
   }
 
+  // Accepts a request on a given vehicle
   const acceptRequest = ($vehicle_id: number, buyer: string) => {
     setRefreshQuery(true);
     fetch('https://api.kianm.net/index.php/payment/accept', {
@@ -229,6 +241,7 @@ const Main: React.FC = () => {
       .then(() => { getRequests() })
   }
 
+  // Presents login modal
   const handlePresentLogin = () => {
     presentLogin({
       mode: 'ios',
@@ -236,15 +249,16 @@ const Main: React.FC = () => {
       presentingElement: mainRef.current
     })
   };
-
+  // Dismisses login modal
   const handleDismissLogin = () => {
     dismissLogin();
   };
-
+  // Login modal controller
   const [presentLogin, dismissLogin] = useIonModal(LoginModal, {
     onDismiss: handleDismissLogin
   })
 
+  // Presents add vehicle modal
   const handlePresentAddVehicle = () => {
     presentAddVehicle({
       mode: 'ios',
@@ -252,15 +266,16 @@ const Main: React.FC = () => {
       presentingElement: mainRef.current
     })
   };
-
+  // Dismisses add vehicle modal
   const handleDismissAddVehicle = () => {
     dismissAddVehicle();
   };
-
+  // Add vehicle modal controller
   const [presentAddVehicle, dismissAddVehicle] = useIonModal(AddVehicle, {
     onDismiss: handleDismissAddVehicle
   })
 
+  // Presents admin modal
   const handlePresentAdmin = () => {
     presentAdmin({
       mode: 'ios',
@@ -268,21 +283,24 @@ const Main: React.FC = () => {
       presentingElement: mainRef.current
     })
   };
-
+  // Dismisses admin modal
   const handleDismissAdmin = () => {
     dismissAdmin();
   };
-
+  // Admin modal controller
   const [presentAdmin, dismissAdmin] = useIonModal(AdminModal, {
     onDismiss: handleDismissAdmin
   })
 
+  // Custom year popover properties
   const customPopoverOptions = {
     className: 'year-pop'
   };
 
+  // Tracks the ID of last clicked vehicle
   const [selectedID, setSelectedID] = useState(0);
 
+  // Presents a specific vehicle's information modal
   const handlePresentVehicle = (id: number) => {
     setSelectedID(id);
     presentVehicle({
@@ -291,16 +309,17 @@ const Main: React.FC = () => {
       presentingElement: mainRef.current
     });
   };
-
+  // Dismisses a vehicle's information modal
   const handleDismissVehicle = () => {
     dismissVehicle();
   };
-
+  // Vehicle information modal controller
   const [presentVehicle, dismissVehicle] = useIonModal(VehicleCard, {
     id: selectedID,
     onDismiss: handleDismissVehicle
   })
 
+  // React components
   return (
     <IonPage ref={mainRef}>
       <IonMenu id='optionsMenu' side='start' contentId='outlet' onIonDidClose={() => updateFilter()}>

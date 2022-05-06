@@ -2,52 +2,58 @@
   height: 200px;
 } */
 
+/* Centers content */
 .center-buttons {
   justify-content: center;
 }
 
+/* Sets color for footers */
 .footer-bg {
   background-color: var(--ion-color-step-50);
 }
 
+/* Size limits for checkbox filter chips */
 .filter-chip {
   width: 45%;
 }
-
-.filter-select {
-  max-width: 100%;
-}
-
 .filter-chip-100 {
   width: 100%;
 }
 
+/* Size limits for selecter filter chips */
+.filter-select {
+  max-width: 100%;
+}
+.filter-select-80 {
+  width: 80%;
+  max-width: 100%;
+}
 .filter-select-100 {
   width: 100%;
   max-width: 100%;
 }
 
-.filter-select-80 {
-  width: 80%;
-  max-width: 100%;
-}
-
+/* Size limit for rating star buttons */
 .rating-button {
   width: 25%;
 }
 
+/* Disables focusing ability for a component */
 .anti-focus {
   --highlight-color-focused: none;
 }
 
+/* Removes background from ion-items */
 ion-item {
   --background: none;
 }
 
+/* Cleans options filter chips */
 .options-chip {
   white-space: nowrap;
 }
 
+/* Styles input items */
 .input-item {
   border: 1px;
   border-radius: 10px;

@@ -2,19 +2,20 @@ import { Storage, StoragePlugin } from '@capacitor/storage';
 
 const storage: StoragePlugin = Storage;
 
+// App-wide state refresher
 export var refreshQuery: boolean = false;
 export const setRefreshQuery = (value: boolean) => {
   refreshQuery = value;
 }
 
-// 
+// Array of options for powertrain type
 export const powertrainOptions = [
   { type: 'Gas', isChecked: false },
   { type: 'Electric', isChecked: false },
   { type: 'Hybrid', isChecked: false },
   { type: 'Hydrogen', isChecked: false }
 ];
-// 
+// Array of options for vehicle type
 export const vehicleTypeOptions = [
   { type: 'Truck', isChecked: false },
   { type: 'Semi', isChecked: false },
@@ -26,7 +27,7 @@ export const vehicleTypeOptions = [
   { type: 'Crossover', isChecked: false },
   { type: 'Compact', isChecked: false }
 ];
-// 
+// Array of options for vehicle options
 export const vehicleOptionOptions = [
   { type: 'A/C', isChecked: false },
   { type: 'Sunroof', isChecked: false },
@@ -91,17 +92,20 @@ export var filter = baseFilter;
 export const setFilter = (value: object) => {
   filter = value;
 }
+// App-wide wipe and refresh query
 export var resetQuery: boolean = false;
 export const setResetQuery = (value: boolean) => {
   resetQuery = value;
 }
 
+// Universal user informaton
 export var curr_email: string = '';
 export var curr_user: string = '';
 export var curr_pswd: string = '';
 export var curr_priv: number = 0;
 export var email_verified: string = '';
 
+// Stores a given user's information
 export const setCurrentAccount = async (email: string, user: string, pswd: string, priv: number, verified: string) => {
   await storage.set({
     key: 'account',
@@ -115,12 +119,14 @@ export const setCurrentAccount = async (email: string, user: string, pswd: strin
   return getCurrentAccount();
 }
 
+// Retrieves current stored account in storage
 export const getCurrentAccount = async () => {
   const { value } = await storage.get({ key: 'account' });
   let account = JSON.parse(value as string);
   return account;
 }
 
+// Runs on app start, loads and checks user information
 export const onLoad = async () => {
   try {
     console.log("Checking user...");
@@ -160,6 +166,7 @@ export const onLoad = async () => {
   }
 }
 
+// Wipes all data in storage
 export const clearStorage = async () => {
   storage.clear();
 }
