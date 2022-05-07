@@ -22,13 +22,9 @@ for both guests, as well as registered users who sign up with an email and passw
 
 <a name="tech"></a>
 ## Technologies
-This project is created with:
-* TypeScript
+This project is mainly created with:
+* React / TypeScript
 * PHP
-* HTML
-* CSS
-* Swift
-* Ruby
 
 <a name="feat"></a>
 ## Features
