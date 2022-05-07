@@ -10,7 +10,7 @@ USER DOCUMENTATION
 
 
 ## Introduction <a name="intro"></a>
-Welcome to the JoyRide Application, in this document you will find out more information on how to use our application to its full potential. The primary goal of our application
+Welcome to the Joyride Application, in this document you will find out more information on how to use our application to its full potential. The primary goal of our application
 is to make buying and selling cars a more fluid and enjoyable experience. With our application a user will be able to log in and then see a library of cars that contain user
 ratings and then be able to make purchases. A helpful feature that we are including with our project is the ability to filter through different vehicle types and the ability to
 filter by rating as well. Being able to see the different ratings will make the user more able to find a car that is enjoyable for their rental. 
@@ -52,6 +52,6 @@ This project is created with:
 
 <a name="status"></a>
 ## Project Status
-This project is currently still under devlopment. The project is through iteration one of a total of three iterations. This project is expected to be completed with development in late spring to early summer. Get ready to have the best experience that you have ever had while renting a car. 
+This project is currently still under devlopment. The project has been through three main iterations, and we met all our deadlines. You can now enjoy the best experience that you have ever had while renting a car at https://joyride.kianm.net.
 
 ![Visualization of the codebase](./diagram.svg)
