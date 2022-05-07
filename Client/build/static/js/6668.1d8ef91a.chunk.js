@@ -1,3 +1,0 @@
-/*! For license information please see 6668.1d8ef91a.chunk.js.LICENSE.txt */
-"use strict";(self.webpackChunkjoyride=self.webpackChunkjoyride||[]).push([[6668],{6668:function(n,r,o){o.r(r),o.d(r,{a:function(){return u},b:function(){return t},p:function(){return c}});var e=o(3431),c=function(n){return console.warn("[Ionic Warning]: ".concat(n))},t=function(n){for(var r=[],o=1;o<arguments.length;o++)r[o-1]=arguments[o];return console.error.apply(console,(0,e.ev)(["[Ionic Error]: ".concat(n)],r,!1))},u=function(n){for(var r=[],o=1;o<arguments.length;o++)r[o-1]=arguments[o];return console.error("<".concat(n.tagName.toLowerCase(),"> must be used inside ").concat(r.join(" or "),"."))}}}]);
-//# sourceMappingURL=6668.1d8ef91a.chunk.js.map
